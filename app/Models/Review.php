@@ -11,5 +11,5 @@ class Review extends Model
 
     protected $table = 'reviews';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

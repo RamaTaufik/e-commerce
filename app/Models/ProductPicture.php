@@ -11,5 +11,5 @@ class ProductPicture extends Model
 
     protected $table = 'product_pictures';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

@@ -12,5 +12,5 @@ class Category extends Model
     protected $table = 'categories';
     protected $primaryKey = 'catefory_code';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

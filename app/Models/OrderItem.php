@@ -11,5 +11,5 @@ class OrderItem extends Model
 
     protected $table = 'order_items';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

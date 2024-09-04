@@ -11,5 +11,5 @@ class Address extends Model
 
     protected $table = 'addresses';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

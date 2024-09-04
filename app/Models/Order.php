@@ -12,5 +12,5 @@ class Order extends Model
     protected $table = 'orders';
     protected $primarykey = 'order_code';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

@@ -11,5 +11,5 @@ class Shipment extends Model
 
     protected $table = 'shipments';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

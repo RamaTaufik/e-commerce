@@ -11,5 +11,5 @@ class Cart extends Model
 
     protected $table = 'carts';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

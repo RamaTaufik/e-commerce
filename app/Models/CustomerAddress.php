@@ -11,5 +11,5 @@ class CustomerAddress extends Model
 
     protected $table = 'customer_addresses';
 
-    protected $guard = [];
+    protected $guarded = [];
 }

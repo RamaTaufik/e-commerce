@@ -11,5 +11,5 @@ class Customer extends Model
 
     protected $table = 'customers';
 
-    protected $guard = [];
+    protected $guarded = [];
 }
