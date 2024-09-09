@@ -17,7 +17,7 @@
 </head>
 <body>
     <div id="app">
-        @include('layouts.components.navbar-admin')
+        @include('layouts.components.navbar-admin', ['page' => $page])
 
         <main class="py-4">
             <div class="row w-100">

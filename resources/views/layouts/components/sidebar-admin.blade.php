@@ -5,12 +5,12 @@
         </div>
         <ul class="nav flex-column nav-pills">
             <li class="nav-item">
-                <a href="{{ route('admin') }}" class="nav-link h5 active">
+                <a href="{{ route('admin') }}" class="nav-link h5  {{ $page == 'home' ? 'active' : ''; }}">
                     <strong><i class="fa-solid fa-house me-2"></i>Dashboard</strong>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin') }}" class="nav-link h5">
+                <a href="{{ route('admin') }}" class="nav-link h5 {{ $page == 'shop' ? 'active' : ''; }}">
                     <strong><i class="fa-solid fa-shop me-2"></i>Tentang Toko</strong>
                 </a>
             </li>
@@ -22,16 +22,16 @@
             </li>
             <div id="order" class="accordion-collapse collapse show mb-3 ps-3">
                 <li class="nav-item">
-                    <a href="/admin/statistic-user" class="nav-link">Kelola Pesanan</a>
+                    <a href="/admin/statistic-user {{ $page == 'order' ? 'active' : ''; }}" class="nav-link">Kelola Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-seller" class="nav-link">Status Pengiriman</a>
+                    <a href="/admin/statistic-seller {{ $page == 'order.status' ? 'active' : ''; }}" class="nav-link">Status Pengiriman</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link">Pembatalan Pesanan</a>
+                    <a href="/admin/statistic-selling {{ $page == 'order.cancel' ? 'active' : ''; }}" class="nav-link">Pembatalan Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link">Ulasan Pembeli</a>
+                    <a href="/admin/statistic-selling {{ $page == 'order.customer_review' ? 'active' : ''; }}" class="nav-link">Ulasan Pembeli</a>
                 </li>
             </div>
             <li class="nav-item">
@@ -42,13 +42,13 @@
             </li>
             <div id="product" class="accordion-collapse collapse show mb-3 ps-3">
                 <li class="nav-item">
-                    <a href="/admin/statistic-user" class="nav-link">Kelola Produk</a>
+                    <a href="{{ route('admin.product') }}" class="nav-link {{ $page == 'product' ? 'active' : ''; }}">Kelola Produk</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-seller" class="nav-link">Arsip Produk</a>
+                    <a href="/admin/statistic-seller" class="nav-link {{ $page == 'product.archive' ? 'active' : ''; }}">Arsip Produk</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link">Ulasan Produk</a>
+                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'product.review' ? 'active' : ''; }}">Ulasan Produk</a>
                 </li>
             </div>
             <li class="nav-item">

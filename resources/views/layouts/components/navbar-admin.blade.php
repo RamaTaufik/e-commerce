@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md position-sticky bg-primary shadow-sm" style="top:0;z-index:2;">
+<nav class="navbar navbar-expand-md position-sticky bg-primary shadow-sm" style="top:0;z-index:2000;">
     <div class="row w-100">
         <div class="col-4 col-md-6 d-flex justify-content-start align-items-center">
             <button class="navbar-toggler ms-3 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle navigation">
