@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -14,13 +15,13 @@ class Product extends Model
 
     protected $guarded = [];
 
-    public function productPicture(): HasMany
-    {
-        return $this->hasMany(ProductPicture::class);
-    }
-
     public function productVariant(): HasMany
     {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_code');
     }
 }

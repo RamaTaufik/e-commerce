@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md sticky-top p-3" style="top:0;box-sizing:border-box;">
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="Sidebar">
         <div class="d-flex flex-column align-items-center mb-3">
-            <img src="{{ asset('image/profile_picture/default-user.jpg') }}" alt="" class="w-25 ratio-1x1 border rounded-circle">
+            <img src="{{ asset('image/profile_pictures/default-user.jpg') }}" alt="" class="w-25 ratio-1x1 border rounded-circle">
         </div>
         <ul class="nav flex-column nav-pills">
             <li class="nav-item">

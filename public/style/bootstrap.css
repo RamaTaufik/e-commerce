@@ -3515,18 +3515,18 @@ fieldset:disabled .btn {
 }
 
 .btn-primary {
-    --bs-btn-color: #000;
+    --bs-btn-color: #ad9fec;
     --bs-btn-bg: #f7ecfc;
     --bs-btn-border-color: #f7ecfc;
-    --bs-btn-hover-color: #000;
+    --bs-btn-hover-color: #ad9fec;
     --bs-btn-hover-bg: #f7dcd6; /* xx,xx-10,xx-26 */
     --bs-btn-hover-border-color: #f7dcd6; /* xx,xx-10,xx-26 */
     --bs-btn-focus-shadow-rgb: 255, 255, 255; /* xx+28,xx+21,xx+20 dec*/
-    --bs-btn-active-color: #000;
+    --bs-btn-active-color: #ad9fec;
     --bs-btn-active-bg: #f7dcd6; /* xx,xx-10,xx-26 */
     --bs-btn-active-border-color: #f7d7d1; /* xx,xx-15,xx-31 */
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #000;
+    --bs-btn-disabled-color: #ad9fec;
     --bs-btn-disabled-bg: #f7ecfc;
     --bs-btn-disabled-border-color: #f7ecfc
 }
@@ -7763,7 +7763,7 @@ fieldset:disabled .btn {
 }
 
 .text-bg-primary {
-    color: #fff !important;
+    color: #999 !important;
     background-color: RGBA(var(--bs-primary-rgb), var(--bs-bg-opacity, 1)) !important
 }
 

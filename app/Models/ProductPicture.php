@@ -14,8 +14,8 @@ class ProductPicture extends Model
 
     protected $guarded = [];
 
-    public function product(): BelongsTo
+    public function productVariant(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(ProductVariant::class);
     }
 }

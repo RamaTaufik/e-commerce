@@ -17,5 +17,10 @@ class CategorySeeder extends Seeder
             'category_code' => 'PLS-FM',
             'name' => 'Fumo'
         ]);
+        
+        Category::create([
+            'category_code' => 'PLS-BN',
+            'name' => 'Bean'
+        ]);
     }
 }

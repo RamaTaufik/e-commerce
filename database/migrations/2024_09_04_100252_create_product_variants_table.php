@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('size(cm)');
             $table->string('weight(g)');
             $table->string('material');
-            $table->string('color')->nullable();
             $table->integer('price');
             $table->integer('stock');
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

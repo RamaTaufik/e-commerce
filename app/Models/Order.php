@@ -11,6 +11,7 @@ class Order extends Model
 
     protected $table = 'orders';
     protected $primarykey = 'order_code';
+    protected $keyType = 'string';
 
     protected $guarded = [];
 }

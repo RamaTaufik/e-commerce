@@ -31,6 +31,7 @@
         </main>
     </div>
 
+    @yield('script')
     <script src="{{ asset('script/fa.js') }}"></script>
     <script src="{{ asset('script/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('script/chart.js') }}"></script>

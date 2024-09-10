@@ -15,26 +15,27 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::create([
+        $product = Product::create([
             'name' => 'Cirno Fumo - Touhou Project',
             'category_code' => 'PLS-FM',
-            'price' => 399000,
-            'stock' => 99,
             'status' => 'public',
         ]);
-        ProductPicture::create([
-            'product_id' => 1,
-            'directory' => '1/main.jpg',
-        ]);
-        ProductPicture::create([
-            'product_id' => 1,
-            'directory' => '1/dis1.jfif',
-        ]);
         ProductVariant::create([
-            'product_variant_code' => '1-1',
+            'product_variant_code' => $product->id.'-1',
             'product_id' => 1,
             'size(cm)' => 'md.14-14-23',
             'weight(g)' => 'md.119',
+            'material' => 'Katun',
+            'price' => 399000,
+            'stock' => 99,
+        ]);
+        ProductPicture::create([
+            'product_variant_code' => '1-1',
+            'directory' => '1-1/main.jpg',
+        ]);
+        ProductPicture::create([
+            'product_variant_code' => '1-1',
+            'directory' => '1-1/dis1.jfif',
         ]);
     }
 }
