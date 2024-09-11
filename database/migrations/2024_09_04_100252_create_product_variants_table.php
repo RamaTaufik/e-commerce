@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('product_variant_code')->primary();
             $table->foreignId('product_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('size(cm)');
-            $table->string('weight(g)');
+            $table->integer('weight(g)');
             $table->string('material');
             $table->integer('price');
             $table->integer('stock');

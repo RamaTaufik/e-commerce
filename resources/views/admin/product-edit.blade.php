@@ -16,8 +16,11 @@ Edit Produk ● Plus-H ADMIN
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('register') }}" class="mb-4" method="POST">
+                    <form action="{{ route('admin.product_variant-create') }}" class="mb-4" method="POST">
                         @csrf
+                        @method('POST')
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                         <div class="row">
                             <div class="col-6 mb-1">
                                 <label for="size(cm)">{{ __('Ukuran (cm)') }}</label>
@@ -73,9 +76,15 @@ Edit Produk ● Plus-H ADMIN
                             <div class="col-12 mb-3">
                                 <label for="stock">{{ __('Stok / Warna') }}</label>
                                 <div class="input-group mb-3">
-                                    <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" value="{{ old('stock') }}" required autocomplete="stock" autofocus>
+                                    <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" placeholder="xx" value="{{ old('stock') }}" required autocomplete="stock" autofocus>
+                                    <input id="color" type="text" class="form-control @error('color') is-invalid @enderror" name="color" placeholder="Biru, Ungu, dll." value="{{ old('color') }}" autocomplete="color" autofocus>
                                 </div>
-                                @error('price')
+                                @error('stock')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                                @error('color')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -94,7 +103,9 @@ Edit Produk ● Plus-H ADMIN
         </div>
     </div>
     <div class="container-fluid py-2 border">
-        <form action="" class="mb-3">
+        <form action="{{ route('admin.product-update', $product->id) }}" method="POST" class="mb-3">
+            @method('PUT')
+            @csrf
             <div class="row">
                 <div class="col-12 col-md-6 mb-3">
                     <label for="name">{{ __('Nama Produk') }}</label>
@@ -120,16 +131,63 @@ Edit Produk ● Plus-H ADMIN
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Ubah</button>
-            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus"></i> Tambah varian</button>
+            <a class="btn btn-secondary" data-bs-toggle="modal" href="#addModal"><i class="fa-solid fa-plus"></i> Tambah varian</a>
         </form>
-        <div class="w-100 p-3 bg-primary rounded">
-            <div class="text-bg-secondary rounded-circle-start">
-                <div class="row">
-                    <div class="col-2 col-md-1 p-2 border-end">
-                        <h1 class="text-center">1-1</h1>
+        <div class="variant-list row">
+            @foreach ($productVariant as $variant)
+            <div class="col-6 col-lg-4 mb-2">
+                <div class="variant-item">
+                    <div class="w-50 p-2 text-bg-secondary rounded-start">
+                        <h2 class="m-0 w-100 text-center"><i class="fa-solid fa-expand"></i> {{$variant['size']}}</h2>
+                        <table>
+                            <tr>
+                                <td><i class="fa-solid fa-up-down"></i></td>
+                                <td>{{$variant['h']}} cm</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-left-right"></i></td>
+                                <td>{{$variant['w']}} cm</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-up-right-and-down-left-from-center"></i></td>
+                                <td>{{$variant['t']}} cm</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-weight-hanging me-1"></i></td>
+                                <td>{{$variant['weight(g)']}} gram</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-industry me-1"></i></td>
+                                <td>{{$variant['material']}}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-tag me-1"></i></td>
+                                <td>Rp{{$variant['price']}}</td>
+                            </tr>
+                        </table>
                     </div>
+                    <div class="d-flex align-items-center justify-content-center w-50 bg-primary rounded-end">
+                        <table>
+                        @if ($variant['color_stock'] != null)
+                        <?php $color_stock = explode(",", $variant['color_stock']); ?>
+                            @foreach ($color_stock as $item)
+                            <?php $i = explode(".", $item); ?>
+                            <tr>
+                                <td class="pe-2">{{$i[0]}}</td>
+                                <td class="badge text-bg-secondary">{{$i[1]}}</td>
+                            </tr>
+                            @endforeach
+                        @endif
+                            <tr>
+                                <td><strong class="me-2">Total Stok</strong></td>
+                                <td><strong class="text-secondary">{{$variant['total_stock']}}</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <a class="variant-item-link" data-bs-toggle="modal" href="#addModal"></a>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
 </div>
@@ -137,5 +195,6 @@ Edit Produk ● Plus-H ADMIN
 
 @section('script')
 <script>
+    function edit($product, $color) {}
 </script>
 @endsection

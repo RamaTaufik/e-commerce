@@ -109,15 +109,20 @@ Kelola Produk ● Plus-H ADMIN
                     <td>{{$item->id}}</td>
                     <td>{{$item->name}}</td>
                     <td>{{$item->category}}</td>
-                    <td>{{$item->avg_price}}</td>
+                    <td>Rp{{$item->avg_price}}</td>
                     <td>{{$item->total_stock}}</td>
                     <td>
                         <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>
                     </td>
                     <td>{{$item->status}}</td>
                     <td>
-                        <button class="btn btn-warning p-0 px-2"><i class="fa-solid fa-pencil"></i></button>
-                        <button class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
+                        <form action="{{ route('admin.product-delete', $item->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.product-archiving', $item->id) }}">Arsipkan</a>
+                            <button class="btn btn-warning p-0 px-2"><i class="fa-solid fa-pencil"></i></button>
+                            <button type="submit" class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach

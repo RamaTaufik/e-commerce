@@ -39,9 +39,13 @@ Kelola Produk ● Plus-H ADMIN
                     <td>{{$item->category}}</td>
                     <td>{{$item->total_variant}}</td>
                     <td>
-                        <button class="btn btn-secondary p-0 px-2">Publikasi</button>
-                        <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a>
-                        <button class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
+                        <form action="{{ route('admin.product-delete', $item->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.product-publishing', $item->id) }}">Publikasi</a>
+                            <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a>
+                            <button type="submit" class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -64,7 +68,7 @@ Kelola Produk ● Plus-H ADMIN
             product['category'],
             '<a href="" class="badge text-bg-secondary">' + variants[0]['size(cm)'].split(".")[0] + "</a>",
             variants[0]['size(cm)'].split(".")[1].split("-").join(" cm x ") + " cm",
-            variants[0]['weight(g)'].split(".")[1] + " gram",
+            variants[0]['weight(g)'] + " gram",
             variants[0]['material'],
             "Rp" + variants[0]['price'].toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
             variants[0]['stock'],

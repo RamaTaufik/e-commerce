@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 
 Route::get('/', function () {
     return view('home');
@@ -24,5 +25,12 @@ Route::post('/otp-validate', [OtpController::class, 'validateOtp'])->name('otp.v
 Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('admin.product');
 Route::get('/admin/product/archive', [ProductController::class, 'archive'])->name('admin.product-archive');
-Route::post('/admin/product/add', [ProductController::class, 'create'])->name('admin.product-create');
+Route::get('/admin/product/archiving/{id}', [ProductController::class, 'archiving'])->name('admin.product-archiving');
+Route::get('/admin/product/publishing/{id}', [ProductController::class, 'publishing'])->name('admin.product-publishing');
 Route::get('/admin/product/archive/{id}', [ProductController::class, 'edit'])->name('admin.product-edit');
+Route::post('/admin/product/add', [ProductController::class, 'create'])->name('admin.product-create');
+Route::put('/admin/product/update/{id}', [ProductController::class, 'update'])->name('admin.product-update');
+Route::delete('/admin/product/delete/{id}', [ProductController::class, 'destroy'])->name('admin.product-delete');
+Route::post('/admin/product_variant/add', [ProductVariantController::class, 'create'])->name('admin.product_variant-create');
+Route::put('/admin/product_variant/update/{id}', [ProductVariantController::class, 'update'])->name('admin.product_variant-update');
+Route::delete('/admin/product_variant/delete/{id}', [ProductVariantController::class, 'destroy'])->name('admin.product_variant-delete');

@@ -24,7 +24,7 @@ class ProductSeeder extends Seeder
             'product_variant_code' => $product->id.'-1',
             'product_id' => 1,
             'size(cm)' => 'md.14-14-23',
-            'weight(g)' => 'md.119',
+            'weight(g)' => 119,
             'material' => 'Katun',
             'price' => 399000,
             'stock' => 99,
