@@ -1,7 +1,7 @@
 @extends('layouts.app-admin', ['page' => 'product.archive'])
 
 @section('title')
-Edit Produk ● Plus-H ADMIN
+Edit "{{$product->name}}" ● Plus-H ADMIN
 @endsection
 
 @section('content')
@@ -193,7 +193,7 @@ Edit Produk ● Plus-H ADMIN
                             </tr>
                         </table>
                     </div>
-                    <a class="variant-item-link" data-bs-toggle="modal" href="#addModal"></a>
+                    <a class="stretched-link" data-bs-toggle="modal" href="#addModal"></a>
                 </div>
             </div>
             @endforeach

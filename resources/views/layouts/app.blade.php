@@ -14,6 +14,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('style/flickity.css') }}">
 
     <style>
         body {
@@ -28,6 +29,8 @@
         @include('layouts.components.navbar')
 
         <main class="py-4">
+            @guest
+            @else
             <div class="btn-group dropup">
                 <button type="button" class="z-1 btn btn-secondary position-fixed bottom-0 end-0 m-4 border-0 rounded-circle" data-bs-toggle="dropdown" aria-expanded="false" style="width:60px;height:60px;">
                     <i class="fa-solid fa-plus"></i>
@@ -41,11 +44,13 @@
                     </button>
                 </div>
             </div>
+            @endguest
             @yield('content')
         </main>
     </div>
 
     <script src="{{ asset('script/fa.js') }}"></script>
     <script src="{{ asset('script/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('script/flickity.pkgd.min.js') }}"></script>
 </body>
 </html>

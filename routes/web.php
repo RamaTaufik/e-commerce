@@ -7,15 +7,17 @@ use App\Http\Controllers\OtpController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\CartController;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [HomeController::class, 'index']);
 
 Auth::routes();
 Route::get('/register-account/{email}', [RegisterController::class, 'registerAccount'])->name('register.customer');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/product/{id}', [HomeController::class, 'product'])->name('product');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 
 Route::post('/otp-request', [OtpController::class, 'requestForOtp'])->name('otp.request');
 Route::post('/otp-resend', [OtpController::class, 'resendOtp'])->name('otp.resend');

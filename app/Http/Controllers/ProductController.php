@@ -26,7 +26,7 @@ class ProductController extends Controller
             foreach($stockPerColor as $variant) {
                 $variant = explode(";", $variant);
                 foreach($variant as $v) {
-                    $p['total_stock'] += explode("/", $v)[0];
+                    $p['total_stock'] += (int)explode("/", $v)[0];
                 }
             }
             // $stockPerColor = explode(";", $p['stock_per_color']);

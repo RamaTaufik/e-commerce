@@ -121,7 +121,7 @@ Kelola Produk ● Plus-H ADMIN
                             @method('DELETE')
                             <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.product-archiving', $item->id) }}">Arsipkan</a>
                             <button class="btn btn-warning p-0 px-2"><i class="fa-solid fa-pencil"></i></button>
-                            <button type="submit" class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
+                            <button type="submit" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>

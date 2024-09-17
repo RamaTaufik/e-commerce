@@ -23,14 +23,14 @@ class ProductVariantController extends Controller
         ]);
         $serial = count(ProductVariant::where('product_id',$request->product_id)->get())+1;
         $color = isset($request->color)?$request->color:"NULL";
-        $variant = ProductVariant::create([
+        ProductVariant::create([
             'product_variant_code' => $request->product_id.'-'.$serial,
             'product_id' => $request->product_id,
             'size_in_cm' => $request->size_in_cm.'.'.$request->h.'-'.$request->w.'-'.$request->t,
             'weight_in_gram' => $request->weight_in_gram,
             'material' => $request->material,
             'price' => $request->price,
-            'stock_per_color' => $request->stock.$color,
+            'stock_per_color' => $request->stock.'/'.$color,
         ]);
 
         if($request->hasFile('image')) {
