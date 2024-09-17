@@ -16,30 +16,30 @@ Edit Produk ● Plus-H ADMIN
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.product_variant-create') }}" class="mb-4" method="POST">
+                    <form action="{{ route('admin.product_variant-create') }}" class="mb-4" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('POST')
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
 
                         <div class="row">
                             <div class="col-6 mb-1">
-                                <label for="size(cm)">{{ __('Ukuran (cm)') }}</label>
-                                <select id="size(cm)" class="form-select @error('size(cm)') is-invalid @enderror" name="size(cm)" value="{{ old('size(cm)') }}" required autocomplete="size(cm)" autofocus>
+                                <label for="size_in_cm">{{ __('Ukuran (cm)') }}</label>
+                                <select id="size_in_cm" class="form-select @error('size_in_cm') is-invalid @enderror" name="size_in_cm" value="{{ old('size_in_cm') }}" required autocomplete="size_in_cm" autofocus>
                                     <option value="sm" title="Small">SM</option>
                                     <option value="md" title="Medium">MD</option>
                                     <option value="lg" title="Large">LG</option>
                                     <option value="xl" title="Extra Large">XL</option>
                                 </select>
-                                @error('size(cm)')
+                                @error('size_in_cm')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                             <div class="col-6 mb-1">
-                                <label for="weight(g)">{{ __('Berat (gram)') }}</label>
-                                <input id="weight(g)" type="number" class="form-control @error('weight(g)') is-invalid @enderror" name="weight(g)" placeholder="Berat" value="{{ old('weight(g)') }}" required autocomplete="weight(g)" autofocus>
-                                @error('size(cm)')
+                                <label for="weight_in_gram">{{ __('Berat (gram)') }}</label>
+                                <input id="weight_in_gram" type="number" class="form-control @error('weight_in_gram') is-invalid @enderror" name="weight_in_gram" placeholder="Berat" value="{{ old('weight_in_gram') }}" required autocomplete="weight_in_gram" autofocus>
+                                @error('size_in_cm')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -75,7 +75,7 @@ Edit Produk ● Plus-H ADMIN
                             </div>
                             <div class="col-12 mb-3">
                                 <label for="stock">{{ __('Stok / Warna') }}</label>
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" placeholder="xx" value="{{ old('stock') }}" required autocomplete="stock" autofocus>
                                     <input id="color" type="text" class="form-control @error('color') is-invalid @enderror" name="color" placeholder="Biru, Ungu, dll." value="{{ old('color') }}" autocomplete="color" autofocus>
                                 </div>
@@ -85,6 +85,15 @@ Edit Produk ● Plus-H ADMIN
                                     </span>
                                 @enderror
                                 @error('color')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-12 mb-5">
+                                <label for="image[]">{{ __('Gambar (min. 1, max. 5)') }}</label>
+                                <input id="image[]" type="file" class="form-control @error('image[]') is_invalid @enderror" name="image[]" required>
+                                @error('image[]')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -154,7 +163,7 @@ Edit Produk ● Plus-H ADMIN
                             </tr>
                             <tr>
                                 <td><i class="fa-solid fa-weight-hanging me-1"></i></td>
-                                <td>{{$variant['weight(g)']}} gram</td>
+                                <td>{{$variant['weight_in_gram']}} gram</td>
                             </tr>
                             <tr>
                                 <td><i class="fa-solid fa-industry me-1"></i></td>
@@ -168,10 +177,10 @@ Edit Produk ● Plus-H ADMIN
                     </div>
                     <div class="d-flex align-items-center justify-content-center w-50 bg-primary rounded-end">
                         <table>
-                        @if ($variant['color_stock'] != null)
-                        <?php $color_stock = explode(",", $variant['color_stock']); ?>
-                            @foreach ($color_stock as $item)
-                            <?php $i = explode(".", $item); ?>
+                        @if (count(explode(";", $variant['stock_per_color'])) > 1)
+                        <?php $stock_per_color = explode(";", $variant['stock_per_color']); ?>
+                            @foreach ($stock_per_color as $item)
+                            <?php $i = explode("/", $item); ?>
                             <tr>
                                 <td class="pe-2">{{$i[0]}}</td>
                                 <td class="badge text-bg-secondary">{{$i[1]}}</td>
@@ -195,6 +204,6 @@ Edit Produk ● Plus-H ADMIN
 
 @section('script')
 <script>
-    function edit($product, $color) {}
+    // function edit($product, $color) {}
 </script>
 @endsection

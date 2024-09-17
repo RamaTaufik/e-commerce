@@ -21,7 +21,19 @@ class ProductController extends Controller
         foreach($product as $p) {
             $p['category'] = $p->category()->pluck('name')->first();
             $p['avg_price'] = number_format(floor($p->productVariant->avg('price')),0,'.',',');
-            $p['total_stock'] = $p->productVariant->sum('stock');
+            $stockPerColor = $p->productVariant->pluck('stock_per_color')->all();
+            $p['total_stock'] = 0;
+            foreach($stockPerColor as $variant) {
+                $variant = explode(";", $variant);
+                foreach($variant as $v) {
+                    $p['total_stock'] += explode("/", $v)[0];
+                }
+            }
+            // $stockPerColor = explode(";", $p['stock_per_color']);
+            // $p['total_stock'] = explode("/", $p->productVariant->pluck('stock_per_color')->first())[0];
+            // foreach($stockPerColor as $colorVariant) {
+            //     $p['total_stock'] += explode("/", (int)$colorVariant)[0];
+            // }
         }
 
         $category = Category::all();
@@ -80,52 +92,19 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-
-        $productVariant = array();
-        $i = 0;
-        $productVariantRaw = $product->productVariant;
-        $productVariantCol = Schema::getColumnListing('product_variants');
-        array_shift($productVariantCol);
-        $productVariantCol[count($productVariantCol)] = 'product_variant_code';
+        $productVariant = $product->productVariant;
         $category = Category::all();
-        foreach($productVariantRaw as $v) {
-            for($index = 0; $index<count($productVariantCol); $index++) {
-                for($id = 0; $id<count($productVariant); $id++) {
-                    if($productVariant[$id]['product_id'] == $v['product_id']) {
-                        if(isset($productVariant[$id]['size(cm)']) && $productVariant[$id]['size(cm)'] == $v['size(cm)']) {
-                            if(isset($productVariant[$id]['color']) && $productVariant[$id]['color'] == $v['color']) {
-                                if(!isset($productVariant[$i]['product_variant_code'])) {
-                                    $productVariant[$i]['product_variant_code'] = $v->product_variant_code;
-                                } else {
-                                    $productVariant[$i]['product_variant_code'] .= ','.$v->product_variant_code;
-                                }
-                                $productVariant[$i]['size'] = explode(".", $v['size(cm)'])[0];
-                                $productVariant[$i]['h'] = explode("-", explode(".", $v['size(cm)'])[1])[0];
-                                $productVariant[$i]['w'] = explode("-", explode(".", $v['size(cm)'])[1])[1];
-                                $productVariant[$i]['t'] = explode("-", explode(".", $v['size(cm)'])[1])[2];
-                                $productVariant[$i]['total_stock'] = $productVariantRaw->where('size(cm)', $v['size(cm)'])->sum('stock');
-                                if(!isset($productVariant[$i]['color_stock'])) {
-                                    $productVariant[$i]['color_stock'] = $v->color.'.'.$v->stock;
-                                } else {
-                                    $productVariant[$i]['color_stock'] .= ','.$v->color.'.'.$v->stock;
-                                }
-                                continue 3;
-                            }
-                        }
-                    }
-                }
-                $productVariant[$i][$productVariantCol[$index]] = $v[$productVariantCol[$index]];
+
+        foreach($productVariant as $variant) {
+            $variant['size'] = explode(".", $variant['size_in_cm'])[0];
+            $variant['h'] = explode("-", explode(".", $variant['size_in_cm'])[1])[0];
+            $variant['w'] = explode("-", explode(".", $variant['size_in_cm'])[1])[1];
+            $variant['t'] = explode("-", explode(".", $variant['size_in_cm'])[1])[2];
+            $stockPerColor = explode(";", $variant['stock_per_color']);
+            $variant['total_stock'] = 0;
+            foreach($stockPerColor as $colorVariant) {
+                $variant['total_stock'] += (int)explode("/", $colorVariant)[0];
             }
-            $productVariant[$i]['size'] = explode(".", $v['size(cm)'])[0];
-            $productVariant[$i]['h'] = explode("-", explode(".", $v['size(cm)'])[1])[0];
-            $productVariant[$i]['w'] = explode("-", explode(".", $v['size(cm)'])[1])[1];
-            $productVariant[$i]['t'] = explode("-", explode(".", $v['size(cm)'])[1])[2];
-            $productVariant[$i]['total_stock'] = $productVariantRaw->where('size(cm)', $v['size(cm)'])->sum('stock');
-            if(!isset($productVariant[$i]['color_stock'])) {
-                $productVariant[$i]['color_stock'] = "";
-            }
-            $productVariant[$i]['color_stock'] .= $v->color.'.'.$v->stock;
-            $i++;
         }
 
         return view('admin.product-edit', compact(['product','productVariant','category']));

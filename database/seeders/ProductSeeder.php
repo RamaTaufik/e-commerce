@@ -23,19 +23,19 @@ class ProductSeeder extends Seeder
         ProductVariant::create([
             'product_variant_code' => $product->id.'-1',
             'product_id' => 1,
-            'size(cm)' => 'md.14-14-23',
-            'weight(g)' => 119,
+            'size_in_cm' => 'md.14-14-23',
+            'weight_in_gram' => 119,
             'material' => 'Katun',
             'price' => 399000,
-            'stock' => 99,
+            'stock_per_color' => "99/NULL",
         ]);
         ProductPicture::create([
             'product_variant_code' => '1-1',
-            'directory' => '1-1/main.jpg',
+            'directory' => '1-1/1.jpg',
         ]);
         ProductPicture::create([
             'product_variant_code' => '1-1',
-            'directory' => '1-1/dis1.jfif',
+            'directory' => '1-1/2.jfif',
         ]);
     }
 }
