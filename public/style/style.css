@@ -31,6 +31,22 @@ body {
 }
 
 
+.table-cart>:not(caption)>*>* {
+    border-bottom-width: 0
+}
+.table-cart>:not(:first-child) {
+    border-top-width: 0
+}
+.table-cart td {
+    height: 75px;
+}
+.table-cart td .product-img {
+    height: 60px;
+    object-fit: cover;
+    aspect-ratio: 100%;
+}
+
+
 .stretched-link {
     position: absolute;
     width: 100%;

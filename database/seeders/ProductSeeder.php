@@ -18,6 +18,7 @@ class ProductSeeder extends Seeder
         $product = Product::create([
             'name' => 'Cirno Fumo - Touhou Project',
             'category_code' => 'PLS-FM',
+            'description' => 'Lorem ipsum dolor sit amet',
             'status' => 'public',
         ]);
         ProductVariant::create([

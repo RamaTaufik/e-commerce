@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('category_code');
             $table->foreign('category_code')->references('category_code')->on('categories')->onUpdate('cascade')->onDelete('cascade');
+            $table->text('description');
             $table->enum('status',['draft','public']);
             $table->timestamps();
         });

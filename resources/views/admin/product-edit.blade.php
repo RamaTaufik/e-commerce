@@ -138,6 +138,15 @@ Edit "{{$product->name}}" ● Plus-H ADMIN
                         </span>
                     @enderror
                 </div>
+                <div class="col-12 mb-3">
+                    <label for="description">{{ __('Deskripsi Produk') }}</label>
+                    <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" required autocomplete="description" autofocus>{{ $product->description }}</textarea>
+                    @error('description')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Ubah</button>
             <a class="btn btn-secondary" data-bs-toggle="modal" href="#addModal"><i class="fa-solid fa-plus"></i> Tambah varian</a>

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -76,14 +78,17 @@ class ProductController extends Controller
         Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'category_code' => ['required'],
+            'description' => ['required'],
         ], [
             'name' => 'Nama produk tidak sesuai',
             'category_code' => 'Harus diisi',
+            'description' => 'Harus diisi',
         ]);
         $product = Product::create([
             'name' => $request['name'],
             'category_code' => $request['category_code'],
-            'status' => 'draft'
+            'description' => $request['description'],
+            'status' => 'draft',
         ]);
 
         return redirect()->route('admin.product-edit', $product->id);
@@ -119,6 +124,10 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
+        $imgDirectory = ProductVariant::where('product_id', '$id')->pluck('product_variant_code')->get();
+        foreach($imgDirectory as $dir) {
+            File::deleteDirectory(public_path('image/products/'.$dir));
+        }
         Product::find($id)->delete();
 
         return redirect()->back();

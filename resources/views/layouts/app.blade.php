@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title')</title>
+    <link rel="shortcut icon" href="{{ asset('image/icon.png') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -29,22 +30,9 @@
         @include('layouts.components.navbar')
 
         <main class="py-4">
-            @guest
-            @else
-            <div class="btn-group dropup">
-                <button type="button" class="z-1 btn btn-secondary position-fixed bottom-0 end-0 m-4 border-0 rounded-circle" data-bs-toggle="dropdown" aria-expanded="false" style="width:60px;height:60px;">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-                <div class="dropdown-menu border-0" style="background-color:rgba(0,0,0,0)!important;">
-                    <button type="button" class="z-1 float-end btn btn-primary border-0 rounded-circle" style="width:60px;height:60px;" title="Tracking">
-                        <i class="fa-solid fa-location-crosshairs"></i>
-                    </button><br>
-                    <button type="button" class="z-1 float-end btn btn-primary border-0 rounded-circle" style="width:60px;height:60px;" title="Keranjang">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </button>
-                </div>
-            </div>
-            @endguest
+            <a href="{{ route('cart') }}" class="z-1 btn btn-secondary position-fixed bottom-0 end-0 m-4 border-0 rounded-circle" style="padding:20px;" title="Keranjang">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
             @yield('content')
         </main>
     </div>
@@ -52,5 +40,6 @@
     <script src="{{ asset('script/fa.js') }}"></script>
     <script src="{{ asset('script/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('script/flickity.pkgd.min.js') }}"></script>
+    @yield('script')
 </body>
 </html>

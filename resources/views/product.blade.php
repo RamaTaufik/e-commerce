@@ -155,15 +155,20 @@
                         @csrf
                         @method('POST')
                         <div class="mb-2">
+                            @if(count($productVariant) > 1)
                             <p class="form-label m-0">Ukuran</p>
-                            @foreach ($productVariant as $variant)
-                            <input type="radio" class="btn-check" name="code" id="{{$variant->product_variant_code}}" value="{{$variant->product_variant_code}}" autocomplete="off">
-                            <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{explode('.',$variant->size_in_cm)[0]}}</label>
-                            @endforeach
+                                @foreach ($productVariant as $variant)
+                                <?php $stock_per_color = explode(";", $variant['stock_per_color']); ?>
+                                <input type="radio" class="btn-check" name="code" id="{{$variant->product_variant_code}}" value="{{$variant->product_variant_code}}" 
+                                 onclick="chooseColorVariant({{json_encode($stock_per_color)}})" autocomplete="off">
+                                <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{explode('.',$variant->size_in_cm)[0]}}</label>
+                                @endforeach
+                            @endif
                         </div>
+                        <div id="colorVariant"></div>
                         <div class="d-flex justify-content-between">
                             <label for="qty" class="form-label m-0">Jumlah Beli</label>
-                            <p class="text-warning text-head m-0">Sisa stok : 50</p>
+                            <p class="text-warning text-head m-0">Sisa stok : <span id="stock">-</span></p>
                         </div>
                         <input type="number" name="qty" id="qty" class="form-control">
                         <div class="form-text my-2"><a href="" class="text-decoration-none text-secondary"><i class="fa-solid fa-pencil"></i> Tambah catatan</a></div>
@@ -180,4 +185,8 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script src="{{ asset('script/variant.js') }}"></script>
 @endsection

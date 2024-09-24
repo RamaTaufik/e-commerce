@@ -32,7 +32,7 @@ Dashboard ● Plus-H
         @foreach ($product as $item)
         <div class="col-4 col-md-3 col-lg-2 p-2 mb-3">
             <div class="card border-0 shadow-sm" title="{{$item->name}}">
-                <img src="{{ asset('image/products/'.$item['display_image']) }}" class="object-fit-cover img-fluid" style="aspect-ratio:1/1;" alt="">
+                <img src="{{ asset('image/products/'.$item['display_image']) }}" class="object-fit-cover img-fluid ratio-1x1 rounded" alt="">
                 <div class="card-body p-2">
                     <h6 class="card-title mb-1 text-dark text-truncate">{{$item->name}}</h6>
                     <p class="card-subtitle text-smaller"><span class="text-warning">

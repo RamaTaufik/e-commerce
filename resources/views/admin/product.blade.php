@@ -65,6 +65,15 @@ Kelola Produk ● Plus-H ADMIN
                                     </span>
                                 @enderror
                             </div>
+                            <div class="col-12 mb-3">
+                                <label for="description">{{ __('Deskripsi Produk') }}</label>
+                                <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" required autocomplete="description" autofocus>{{ old('description') }}</textarea>
+                                @error('description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="d-flex flex justify-content-center">
                             <button type="submit" class="btn btn-primary">
@@ -120,7 +129,7 @@ Kelola Produk ● Plus-H ADMIN
                             @csrf
                             @method('DELETE')
                             <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.product-archiving', $item->id) }}">Arsipkan</a>
-                            <button class="btn btn-warning p-0 px-2"><i class="fa-solid fa-pencil"></i></button>
+                            <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a>
                             <button type="submit" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-danger p-0 px-2"><i class="fa-solid fa-trash"></i></button>
                         </form>
                     </td>

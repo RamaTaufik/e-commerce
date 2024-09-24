@@ -5,7 +5,7 @@ Login
 @endsection
 
 @section('content')
-<a class="position-absolute top-0 start-0 mt-1 ms-2 text-decoration-none text-secondary" href="{{ route('home') }}"><i class="fa-solid fa-circle-arrow-left"></i> Kembali</a>
+<a class="position-absolute top-0 start-0 mt-1 ms-2 fs-5 text-decoration-none text-secondary" href="{{ route('home') }}"><i class="fa-solid fa-circle-arrow-left"></i> Kembali</a>
 <h3 class="w-50 text-center text-head card-title border-bottom my-3 mx-auto">{{ __('LOG IN') }}</h3>
 <div class="card-body">
     <form method="POST" action="{{ route('login') }}" class="mb-4">

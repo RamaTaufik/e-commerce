@@ -19,7 +19,7 @@ class ProductVariant extends Model
 
     public function productPicture(): HasMany
     {
-        return $this->hasMany(ProductPicture::class);
+        return $this->hasMany(ProductPicture::class, 'product_variant_code');
     }
 
     public function product(): BelongsTo
