@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductVariantController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function create(Request $request)
     {
         Validator::make($request->all(), [

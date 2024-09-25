@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -18,6 +19,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{id}', [HomeController::class, 'product'])->name('product');
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/order', [OrderController::class, 'index'])->name('order');
+Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
 
 Route::post('/otp-request', [OtpController::class, 'requestForOtp'])->name('otp.request');
 Route::post('/otp-resend', [OtpController::class, 'resendOtp'])->name('otp.resend');

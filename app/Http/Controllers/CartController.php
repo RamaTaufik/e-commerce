@@ -17,11 +17,12 @@ class CartController extends Controller
                 $data = ProductVariant::where('product_variant_code', $cart_item['product_variant_code'])->first();
                 $cart[$cart_item['product_variant_code']] = [
                     'name' => $data->product->name,
-                    'price' => $data->price,
                     'image' => ProductPicture::where('product_variant_code', $cart_item['product_variant_code'])->first()->directory,
+                    'price' => $data->price,
                 ];
             }
         }
+
         return view('cart', compact('cart'));
     }
 
@@ -40,12 +41,21 @@ class CartController extends Controller
 
     public function remove(Request $request)
     {
-        if($request->has('all')) {
+        $cart = [];
+        foreach(session('cart') as $cartItem) {
+            foreach($request->all() as $item) {
+                if(!ProductVariant::where('product_variant_code',$item)->exists()) {
+                    continue;
+                }
+                if($cartItem['product_variant_code']!=$item) {
+                    $cart[$item] = $cartItem[$item];
+                }
+            }
+        }
+        if($cart == []) {
             session()->flush();
         } else {
-            foreach($request as $item) {
-                session()->forget($item);
-            }
+            session()->put('cart', $cart);
         }
 
         return redirect()->route('cart');

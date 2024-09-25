@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('Lname');
             $table->enum('gender',['m','w']);
             $table->date('date_of_birth');
-            $table->string('phone')->nullable();
+            $table->string('phone');
             $table->string('profile_icon')->default('profile_picture/default-user.jpg');
             $table->timestamps();
         });
