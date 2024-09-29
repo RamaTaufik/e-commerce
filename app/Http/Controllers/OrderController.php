@@ -14,25 +14,20 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        return view('order');
-    }
-
     public function checkout(Request $request)
     {
         $cart = [];
         $total = 0;
-        if(session()->has('cart')) {
-            foreach (session('cart') as $cartItem) {
-                $data = ProductVariant::where('product_variant_code', $cartItem['product_variant_code'])->first();
-                $cart[$cartItem['product_variant_code']] = [
-                    'name' => $data->product->name,
-                    'image' => ProductPicture::where('product_variant_code', $cartItem['product_variant_code'])->first()->directory,
-                    'price' => $data->price,
-                ];
-                $total += $cartItem['qty']*$cart[$cartItem['product_variant_code']]['price'];
-            }
+        foreach($request->cart_item as $cartItem) {
+            $data = ProductVariant::where('product_variant_code', session('cart')[$cartItem])->first();
+            $cart[$cartItem] = [
+                'name' => $data->product->name,
+                'image' => ProductPicture::where('product_variant_code', $cartItem['product_variant_code'])->first()->directory,
+                'price' => $data->price,
+                'size' => explode($data->size_in_cm, '.')[0],
+                'color' => $explode($cartItem,'.')[1],
+            ];
+            $total += $cartItem['qty']*$cart[$cartItem['product_variant_code']]['price'];
         }
         $address['provinsi'] = Address::groupBy('provinsi')->pluck('provinsi');
         foreach($address['provinsi'] as $province) {

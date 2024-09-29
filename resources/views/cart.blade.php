@@ -28,17 +28,25 @@ Keranjang ● Plus-H
                         <tr style="height:5px"></tr>
                         <tr class="shadow align-middle">
                             <td class="px-3 rounded-start-4">
-                                <input type="checkbox" name="cart_item[]" id="{{$cartItem['product_variant_code']}}" value="{{$cartItem['product_variant_code']}}" onchange="check()">
+                                <input type="checkbox" name="cart_item[]" id="{{$cartItem['product_variant_code'].'.'.$cartItem['color']}}" value="{{$cartItem['product_variant_code'].'.'.$cartItem['color']}}" onchange="check()">
                             </td>
                             <td class="border-start">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <img src="{{ asset('image/products/'.$cart[$cartItem['product_variant_code']]['image']) }}" class="product-img" alt="">
-                                        <h5 class="text-end">{{$cart[$cartItem['product_variant_code']]['name']}}</h5>
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('image/products/'.$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['image']) }}" class="product-img" alt="">
+                                    <div class="flex-grow-1">
+                                        <h5 class="text-end">{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['name']}}</h5>
+                                        @if ($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['color']!=NULL)
+                                        <p class="m-0 p-0">
+                                            {{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['size']}} | 
+                                            {{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['color']}}
+                                        </p>
+                                        @endif
+                                    </div>
                                 </div>
                             </td>
                             <td class="border-start">
                                 <h6 class="m-0 p-0 text-center">{{$cartItem['qty']}}x</h6>
-                                <p class="m-0 p-0 text-center">Rp{{number_format($cart[$cartItem['product_variant_code']]['price'],0,'.',',')}}</p>
+                                <p class="m-0 p-0 text-center">Rp{{number_format($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['price'],0,'.',',')}}</p>
                             </td>
                         </tr>
                         @endforeach
@@ -61,8 +69,8 @@ Keranjang ● Plus-H
                 @if(session()->has('cart'))
                     @foreach (session('cart') as $cartItem)
                     <div class="d-flex justify-content-between text-head">
-                        <h6>{{$cart[$cartItem['product_variant_code']]['name']}}</h6>
-                        <h6 class="text-secondary">Rp{{number_format($cart[$cartItem['product_variant_code']]['price'],0,'.',',')}}</h6>
+                        <h6>{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['name']}}</h6>
+                        <h6 class="text-secondary">Rp{{number_format($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['price'],0,'.',',')}}</h6>
                     </div>
                     @endforeach
                 <div class="d-flex justify-content-between text-head">

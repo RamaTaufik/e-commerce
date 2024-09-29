@@ -19,6 +19,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{id}', [HomeController::class, 'product'])->name('product');
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/buy', [CartController::class, 'buy'])->name('cart.buy');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/order', [OrderController::class, 'index'])->name('order');
 Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');

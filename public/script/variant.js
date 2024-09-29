@@ -38,7 +38,7 @@ function chooseColorVariant(colorVariant) {
         option.type = "hidden";
         option.setAttribute("name", "color");
         option.setAttribute("id", colorVariant[0].split("/")[1]);
-        option.value = colorVariant[0].split("/")[1];
+        option.value = NULL;
         
         div.appendChild(option);
     }

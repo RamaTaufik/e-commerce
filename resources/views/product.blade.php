@@ -151,7 +151,7 @@
         <div class="col-12 col-md-3">
             <div class="position-sticky" style="top:100px;">
                 <div class="card border-0 p-3 shadow-sm">
-                    <form action="{{ route('cart.add') }}" method="POST">
+                    <form action="{{ route('cart.buy') }}" method="POST">
                         @csrf
                         @method('POST')
                         <div class="mb-2">
@@ -163,6 +163,8 @@
                                  onclick="chooseColorVariant({{json_encode($stock_per_color)}})" autocomplete="off">
                                 <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{explode('.',$variant->size_in_cm)[0]}}</label>
                                 @endforeach
+                            @else
+                            <input type="hidden" name="code" value="{{$productVariant[0]->product_variant_code}}">
                             @endif
                         </div>
                         <div id="colorVariant"></div>
@@ -176,7 +178,7 @@
                             <h6>Subtotal</h6><h6 class="text-secondary">Rp405.000,00</h6>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <a href="" class="btn btn-primary w-50">Tambah</a>
+                            <input type="submit" formaction="{{ route('cart.add') }}" class="btn btn-primary w-50" value="Tambah">
                             <button type="submit" class="btn btn-secondary w-50">Beli</button>
                         </div>
                     </form>
