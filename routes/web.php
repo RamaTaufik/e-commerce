@@ -21,8 +21,8 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/buy', [CartController::class, 'buy'])->name('cart.buy');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/order', [OrderController::class, 'index'])->name('order');
 Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
+Route::post('/order/buy', [OrderController::class, 'buy'])->name('order.buy');
 
 Route::post('/otp-request', [OtpController::class, 'requestForOtp'])->name('otp.request');
 Route::post('/otp-resend', [OtpController::class, 'resendOtp'])->name('otp.resend');

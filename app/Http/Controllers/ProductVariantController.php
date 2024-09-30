@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
-use Illuminate\Support\Facades\Validator;
 
 class ProductVariantController extends Controller
 {
@@ -16,7 +15,7 @@ class ProductVariantController extends Controller
     
     public function create(Request $request)
     {
-        Validator::make($request->all(), [
+        $request->validate([
             'name' => ['required', 'string'],
             'category_code' => ['required'],
             'image' => ['required', 'max:5']

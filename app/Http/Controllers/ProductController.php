@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductVariant;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -75,7 +73,7 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        Validator::make($request->all(), [
+        $request->validate([
             'name' => ['required', 'string'],
             'category_code' => ['required'],
             'description' => ['required'],

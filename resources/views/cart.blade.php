@@ -36,8 +36,8 @@ Keranjang ● Plus-H
                                     <div class="flex-grow-1">
                                         <h5 class="text-end">{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['name']}}</h5>
                                         @if ($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['color']!=NULL)
-                                        <p class="m-0 p-0">
-                                            {{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['size']}} | 
+                                        <p class="m-0 p-0 text-end">
+                                            <strong>{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['size']}}</strong> | 
                                             {{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['color']}}
                                         </p>
                                         @endif

@@ -19,7 +19,7 @@ class CartController extends Controller
                     'name' => $data->product->name,
                     'image' => ProductPicture::where('product_variant_code', $cart_item['product_variant_code'])->first()->directory,
                     'price' => $data->price,
-                    'size' => explode($data->size_in_cm, '.')[0],
+                    'size' => strtoupper(explode('.', $data->size_in_cm)[0]),
                     'color' => $cart_item['color'],
                 ];
             }
