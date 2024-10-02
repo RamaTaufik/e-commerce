@@ -28,6 +28,17 @@ Pesan ● Plus-H
                 </tr>
                 @endforeach
             </table>
+            <div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="card d-none ongkir">
+                        <div class="card-body">
+                            <ul class="list-group" id="ongkir"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-md-6">
             <div class="card border-0 p-3 shadow-sm position-sticky" style="top:120px;">
@@ -35,36 +46,34 @@ Pesan ● Plus-H
                     @csrf
                     @method('POST')
                     <div class="d-flex justify-content-between text-head">
-                        <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total,0,'.',',')}}</h4>
+                        <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total['price'],0,'.',',')}}</h4>
                     </div>
-                    <select name="myAddress" id="myAddress" class="form-select my-2 border-0">
-                        <option value="" hidden disabled selected> Pilih alamat pengiriman</option>
-                        @foreach ($myAddresses as $myAddress)
-                        <option value="{{$myAddress->id}}">{{$myAddress->address_detail}}</option>
+                    
+                    <table class="table table-cart table-light">
+                        <tr class="shadow-sm position-sticky" style="top:120px;z-index:1;">
+                            <th class="px-3 rounded-start-5"></th>
+                            <th class="border-start"><p class="w-100 m-0 p-0 text-center">Jenis</p></th>
+                            <th class="w-100 border-start"><p class=" m-0 p-0 text-center">Harga</p></th>
+                            <th class="border-start rounded-end-5"><p class="m-0 p-0 px-5 text-center">Estimasi Sampai</p></th>
+                        </tr>
+                        @foreach ($cost[0]['costs'] as $shipmentType)
+                        <tr class="shadow align-middle">
+                            <td class="px-3 rounded-start-4">
+                                <input type="radio" name="shipment_type" id="{{$shipmentType['service']}}" value="{{$shipmentType['service']}}">
+                            </td>
+                            <td class="border-start">
+                                {{$shipmentType['description']}}
+                            </td>
+                            <td class="border-start">
+                                Rp{{number_format($shipmentType['cost'][0]['value'],0,',','.')}}
+                            </td>
+                            <td class="border-start">
+                                {{$shipmentType['cost'][0]['etd']}}
+                            </td>
+                        </tr>
                         @endforeach
-                        <option value="new">Alamat Baru</option>
-                    </select>
-                    <input class="form-control mb-2" list="provinceList" name="provinsi" id="province" placeholder="Provinsi"
-                     onchange="unlockDatalistOption('province','city',{{json_encode($address['kabupaten'])}},'subdistrict',{{json_encode($address['kecamatan'])}})">
-                    <datalist id="provinceList">
-                        @foreach ($address['provinsi'] as $province)
-                        <option value="{{$province}}">{{$province}}</option>
-                        @endforeach
-                    </datalist>
-                    <input class="form-control mb-2" list="cityList" name="kabupaten" id="city" placeholder="Kabupaten"
-                     onchange="unlockDatalistOption('city','subdistrict',{{json_encode($address['kecamatan'])}})" disabled>
-                    <datalist id="cityList"></datalist>
-                    <input class="form-control mb-2" list="subdistrictList" name="kelurahan" id="subdistrict" placeholder="kelurahan" disabled>
-                    <datalist id="subdistrictList"></datalist>
-                    <textarea name="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
-                    <select name="shipment_id" class="form-select mb-3 border-0">
-                        <option value="" hidden disabled selected> Pilih pengiriman</option>
-                        @foreach ($shipments as $shipment)
-                        <option value="{{$shipment->id}}">{{$shipment->shipmen_name}}</option>
-                        @endforeach
-                    </select>
-                    <input type="hidden" name="total_price" value="{{$total}}">
-                    <button type="submit" class="btn btn-primary">Pesan</button>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Check Out</button>
                 </form>
             </div>
         </div>

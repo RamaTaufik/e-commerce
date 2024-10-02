@@ -3,15 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Province;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
+use App\Models\Customer;
+use App\Models\CustomerAddress;
+use App\Models\Shipment;
+use Auth;
 
 class CartController extends Controller
 {
-    public function index()
+    public function index($cost = '', $prevRequest = '')
     {
         $cart = [];
+        $customer_id = Customer::where('user_id', Auth::id())->pluck('id')->first();
+        $myAddresses = CustomerAddress::where('customer_id', $customer_id)->get();
         if(session()->has('cart')) {
             foreach (session('cart') as $cart_item) {
                 $data = ProductVariant::where('product_variant_code', $cart_item['product_variant_code'])->first();
@@ -24,8 +30,18 @@ class CartController extends Controller
                 ];
             }
         }
+        $address['provinsi'] = Province::all();
+        foreach($address['provinsi'] as $province) {
+            $address['kota'][$province->name] = $province->city->all();
+        }
+        $shipments = Shipment::all();
 
-        return view('cart', compact('cart'));
+        if($cost == '') {
+            return view('cart', compact(['cart','myAddresses','address','shipments']));
+        } else {
+            dd($cost);
+            return view('cart', compact(['cart','myAddresses','address','shipments','cost','prevRequest']));
+        }
     }
 
     public function add(Request $request)

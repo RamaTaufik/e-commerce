@@ -1,20 +1,15 @@
-function unlockDatalistOption(from, target, array, secondTarget = "", secondArray = "") {
+function unlockSelectOption(from, target, array) {
     let value = document.getElementById(from).value;
-    let input = document.getElementById(target);
-    let Datalist = document.getElementById(target+"List");
-    input.disabled = false;
-    Datalist.innerHTML = "";
+    let Select = document.getElementById(target);
+    Select.disabled = false;
+    Select.innerHTML = "";
 
     array[value].forEach(data => {
         let option = document.createElement("option");
 
-        option.value = data;
-        option.innerHTML = data;
+        option.value = data['city_id'];
+        option.innerHTML = data['name'];
 
-        Datalist.appendChild(option);
+        Select.appendChild(option);
     });
-
-    if(secondTarget != "" && secondArray != "") {
-        unlockDatalistOption(target, secondTarget, secondArray);
-    }
 }

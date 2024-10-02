@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Kavist\RajaOngkir\Facades\RajaOngkir;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
-use App\Models\Address;
+use App\Models\Customer;
+use App\Models\Province;
 use App\Models\Shipment;
 use App\Models\CustomerAddress;
 use App\Models\Order;
+use Auth;
 
 class OrderController extends Controller
 {
@@ -17,33 +20,65 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
+    // public function checkout(Request $request)
+    // {
+    //     $cart = [];
+    //     $total['price'] = 0;
+    //     $total['weight'] = 0;
+    //     foreach($request->cart_item as $cartItem) {
+    //         $data = ProductVariant::where('product_variant_code', session('cart')[$cartItem])->first();
+    //         $cart[$cartItem] = [
+    //             'name' => $data->product->name,
+    //             'image' => ProductPicture::where('product_variant_code', $cartItem)->pluck('directory')->first(),
+    //             'price' => $data->price,
+    //             'qty' => session('cart')[$cartItem]['qty'],
+    //             'size' => strtoupper(explode('.', $data->size_in_cm)[0]),
+    //             'color' => explode('.', $cartItem)[1],
+    //         ];
+    //         $total['price'] += session('cart')[$cartItem]['qty']*$cart[$cartItem]['price'];
+    //         $total['weight'] += session('cart')[$cartItem]['qty']*ProductVariant::where('product_variant_code', explode('.',$cartItem))->pluck('weight_in_gram')->first();
+    //     }
+    //     $address['provinsi'] = Province::all();
+    //     foreach($address['provinsi'] as $province) {
+    //         $address['kota'][$province->name] = $province->city->all();
+    //     }
+
+    //     return view('order', compact(['cart','myAddresses','address','total','shipments']));
+    // }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function checkout(Request $request)
     {
         $cart = [];
-        $total = 0;
-        $myAddresses = CustomerAddress::where('user_id',Auth::id())->get();
+        $total = [];
+        $total['price'] = 0;
+        $total['weight'] = 0;
+        
         foreach($request->cart_item as $cartItem) {
-            $data = ProductVariant::where('product_variant_code', session('cart')[$cartItem])->first();
+            $variant = ProductVariant::where('product_variant_code', explode('.',$cartItem)[0])->first();
             $cart[$cartItem] = [
-                'name' => $data->product->name,
+                'name' => $variant->product->name,
                 'image' => ProductPicture::where('product_variant_code', $cartItem)->pluck('directory')->first(),
-                'price' => $data->price,
+                'price' => $variant->price,
                 'qty' => session('cart')[$cartItem]['qty'],
-                'size' => strtoupper(explode('.', $data->size_in_cm)[0]),
+                'size' => strtoupper(explode('.', $variant->size_in_cm)[0]),
                 'color' => explode('.', $cartItem)[1],
             ];
-            $total += session('cart')[$cartItem]['qty']*$cart[$cartItem]['price'];
+            $total['price'] += session('cart')[$cartItem]['qty']*$variant->pluck('price')->first();
+            $total['weight'] += session('cart')[$cartItem]['qty']*$variant->pluck('weight_in_gram')->first();
         }
-        $address['provinsi'] = Address::groupBy('provinsi')->pluck('provinsi');
-        // foreach($address['provinsi'] as $province) {
-        //     $address['kabupaten'][$province] = Address::where('provinsi', $province)->groupBy('kabupaten')->pluck('kabupaten');
-        //     foreach($address['kabupaten'][$province] as $city) {
-        //         $address['kecamatan'][$city] = Address::where('kabupaten', $city)->groupBy('kecamatan')->pluck('kecamatan');
-        //     }
-        // }
-        $shipments = Shipment::all();
 
-        return view('order', compact(['cart','myAddresses','address','total','shipments']));
+        $cost = RajaOngkir::ongkosKirim([
+            'origin'        => 22, // ID kota/kabupaten asal
+            'destination'   => $request->city_destination, // ID kota/kabupaten tujuan
+            'weight'        => $total['weight'], // berat barang dalam gram
+            'courier'       => Shipment::find($request->shipment_id)->pluck('shipment_name')->first(), // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
+        ])->get();
+
+        return view('order', compact(['cart','total','cost']));
     }
 
     public function buy(Request $request)
@@ -63,7 +98,7 @@ class OrderController extends Controller
         $address = Address::where('provinsi',$request->provinsi)->andwhere('kabupaten',$request->kabupaten)->andwhere('kelurahan',$request->kelurahan);
         $addressExists = CustomerAddress::where('address_id',$address->id);
 
-        if()
+        // if()
         $product = Order::create([
             'name' => $request['name'],
             'category_code' => $request['category_code'],
