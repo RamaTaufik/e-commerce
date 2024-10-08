@@ -74,6 +74,55 @@ Kelola Produk ● Plus-H ADMIN
                                     </span>
                                 @enderror
                             </div>
+                            <div class="col-12 mb-3">
+                                <label for="weight_in_gram">{{ __('Berat (gram)') }}</label>
+                                <input id="weight_in_gram" type="number" class="form-control @error('weight_in_gram') is-invalid @enderror" name="weight_in_gram" placeholder="Berat" value="{{ old('weight_in_gram') }}" required autocomplete="weight_in_gram" autofocus>
+                                @error('size_in_cm')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="input-group">
+                                    <input id="h" type="number" class="form-control @error('h') is-invalid @enderror" name="h" placeholder="Panjang" value="{{ old('h') }}" required autocomplete="h" autofocus>
+                                    <input id="w" type="number" class="form-control @error('w') is-invalid @enderror" name="w" placeholder="Lebar" value="{{ old('w') }}" required autocomplete="w" autofocus>
+                                    <input id="t" type="number" class="form-control @error('t') is-invalid @enderror" name="t" placeholder="Tinggi" value="{{ old('t') }}" required autocomplete="t" autofocus>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="material">{{ __('Material') }}</label>
+                                <input id="material" type="text" class="form-control @error('material') is-invalid @enderror" name="material" value="{{ old('material') }}" required autocomplete="material" autofocus>
+                                @error('material')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="price">{{ __('Harga') }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ old('price') }}" required autocomplete="price" autofocus>
+                                </div>
+                                @error('price')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="stock">{{ __('Stok') }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Base</span>
+                                    <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" placeholder="xx" value="{{ old('stock') }}" required autocomplete="stock" autofocus>
+                                </div>
+                                @error('stock')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="d-flex flex justify-content-center">
                             <button type="submit" class="btn btn-primary">
@@ -105,7 +154,7 @@ Kelola Produk ● Plus-H ADMIN
                     <th>ID</th>
                     <th>Nama</th>
                     <th>Kategori</th>
-                    <th>Rata-rata Harga</th>
+                    <th>Harga</th>
                     <th>Total Stok</th>
                     <th>Detail & Varian</th>
                     <th>Status</th>
@@ -118,7 +167,7 @@ Kelola Produk ● Plus-H ADMIN
                     <td>{{$item->id}}</td>
                     <td>{{$item->name}}</td>
                     <td>{{$item->category}}</td>
-                    <td>Rp{{$item->avg_price}}</td>
+                    <td>Rp{{$item->price}}</td>
                     <td>{{$item->total_stock}}</td>
                     <td>
                         <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>

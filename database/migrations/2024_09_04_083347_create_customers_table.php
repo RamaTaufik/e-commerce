@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');;
-            $table->string('Fname');
-            $table->string('Lname');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->enum('gender',['m','w']);
             $table->date('date_of_birth');
             $table->string('phone');
-            $table->string('profile_icon')->default('profile_picture/default-user.jpg');
+            $table->string('profile_icon')->default('default-user.jpg');
             $table->timestamps();
         });
     }

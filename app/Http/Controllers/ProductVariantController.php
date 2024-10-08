@@ -15,30 +15,26 @@ class ProductVariantController extends Controller
     
     public function create(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string'],
-            'category_code' => ['required'],
-            'image' => ['required', 'max:5']
-        ], [
-            'name' => 'Nama produk tidak sesuai',
-            'category_code' => 'Harus diisi',
-            'image.required' => 'Harus memilih minimal 1 gambar',
-            'image.max' => 'Maksimum 5 gambar',
-        ]);
-        $serial = count(ProductVariant::where('product_id',$request->product_id)->get())+1;
-        $color = isset($request->color)?$request->color:"NULL";
-        ProductVariant::create([
+        // $request->validate([
+        //     'name' => ['required', 'string'],
+        //     'category_code' => ['required'],
+        //     'image' => ['required', 'max:5']
+        // ], [
+        //     'name' => 'Nama produk tidak sesuai',
+        //     'category_code' => 'Harus diisi',
+        //     'image.required' => 'Harus memilih minimal 1 gambar',
+        //     'image.max' => 'Maksimum 5 gambar',
+        // ]);
+        $serial = count(ProductVariant::where('product_id',$request->product_id)->get()) + 1;
+        $variant = ProductVariant::create([
             'product_variant_code' => $request->product_id.'-'.$serial,
             'product_id' => $request->product_id,
-            'size_in_cm' => $request->size_in_cm.'.'.$request->h.'-'.$request->w.'-'.$request->t,
-            'weight_in_gram' => $request->weight_in_gram,
-            'material' => $request->material,
-            'price' => $request->price,
-            'stock_per_color' => $request->stock.'/'.$color,
+            'variant' => $request->price,
+            'stock' => $request->stock.'/'.$color,
         ]);
 
         if($request->hasFile('image')) {
-            $dir = 'image/products/'.$request->product_id.'-'.$serial.'/';
+            $dir = 'image/products/'.$variant->product_variant_code.'/';
             if(!file_exists($dir) && !is_dir($dir)) {
                 mkdir($dir);
             } 
@@ -47,13 +43,13 @@ class ProductVariantController extends Controller
                 $fileName = (count(scandir(public_path($dir)))-1).'.'.$img->getClientOriginalExtension();
                 $img->move(public_path($dir), $fileName);
                 ProductPicture::create([
-                    'product_variant_code' => $request->product_id.'-'.$serial,
-                    'directory' => $request->product_id.'-'.$serial.'/'.$fileName,
+                    'product_variant_code' => $variant->product_variant_code,
+                    'directory' => $variant->product_variant_code.'/'.$fileName,
                 ]);
             }
         }
 
-        return redirect()->route('admin.product-edit', $request->product_id.'-'.$serial);
+        return redirect()->route('admin.product-edit', $variant->product_id);
     }
 
     public function update(Request $request, $id)

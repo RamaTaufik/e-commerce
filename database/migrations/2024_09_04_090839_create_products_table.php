@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('category_code');
             $table->foreign('category_code')->references('category_code')->on('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
+            $table->string('size_in_cm');
+            $table->integer('weight_in_gram');
+            $table->string('material');
+            $table->integer('price');
             $table->enum('status',['draft','public']);
             $table->timestamps();
         });
