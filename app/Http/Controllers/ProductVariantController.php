@@ -29,8 +29,8 @@ class ProductVariantController extends Controller
         $variant = ProductVariant::create([
             'product_variant_code' => $request->product_id.'-'.$serial,
             'product_id' => $request->product_id,
-            'variant' => $request->price,
-            'stock' => $request->stock.'/'.$color,
+            'variation' => $request->variation,
+            'stock' => $request->stock,
         ]);
 
         if($request->hasFile('image')) {

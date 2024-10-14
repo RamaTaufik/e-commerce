@@ -14,7 +14,10 @@ Keranjang ● Plus-H
                 <table class="table table-cart table-light">
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <a class="mt-1 ms-2 fs-5 text-decoration-none text-secondary" href="{{ route('home') }}"><i class="fa-solid fa-circle-arrow-left"></i> Kembali</a>
-                        <input type="submit" formaction="{{ route('cart.remove') }}" class="btn btn-danger" value="Hapus" />
+                        <div class="d-flex">
+                            <a id="saveChange" class="btn btn-success">Simpan</a>
+                            <input type="submit" formaction="{{ route('cart.remove') }}" class="btn btn-danger" value="Hapus" />
+                        </div>
                     </div>
                     <tr class="shadow-sm position-sticky" style="top:120px;z-index:1;">
                         <th class="px-3 rounded-start-5">
@@ -28,25 +31,23 @@ Keranjang ● Plus-H
                         <tr style="height:5px"></tr>
                         <tr class="shadow align-middle">
                             <td class="px-3 rounded-start-4">
-                                <input type="checkbox" name="cart_item[]" id="{{$cartItem['product_variant_code'].'.'.$cartItem['color']}}" value="{{$cartItem['product_variant_code'].'.'.$cartItem['color']}}" onchange="check()">
+                                <input type="checkbox" name="cart_item[]" id="{{$cartItem['code']}}" value="{{$cartItem['code']}}" onchange="check()">
                             </td>
                             <td class="border-start">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ asset('image/products/'.$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['image']) }}" class="product-img" alt="">
+                                    <img src="{{ asset('image/products/'.$cart[$cartItem['code']]['image']) }}" class="product-img" alt="">
                                     <div class="flex-grow-1">
-                                        <h5 class="text-end">{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['name']}}</h5>
-                                        @if ($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['color']!=NULL)
-                                        <p class="m-0 p-0 text-end">
-                                            <strong>{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['size']}}</strong> | 
-                                            {{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['color']}}
-                                        </p>
-                                        @endif
+                                        <h5 class="text-end">{{$cart[$cartItem['code']]['name']}}</h5>
                                     </div>
                                 </div>
                             </td>
                             <td class="border-start">
-                                <h6 class="m-0 p-0 text-center">{{$cartItem['qty']}}x</h6>
-                                <p class="m-0 p-0 text-center">Rp{{number_format($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['price'],0,'.',',')}}</p>
+                                <h6 class="m-0 p-0 text-center">
+                                    <a onclick="change('qty{{$loop->iteration}}',-1,'{{$cartItem['code']}}')" class="text-secondary"><i class="fa-solid fa-circle-minus"></i></a> 
+                                    <span id="qty{{$loop->iteration}}" class="qty">{{$cartItem['qty']}}</span> 
+                                    <a onclick="change('qty{{$loop->iteration}}',1,'{{$cartItem['code']}}')" class="text-secondary"><i class="fa-solid fa-circle-plus"></i></a>
+                                </h6>
+                                <p class="m-0 p-0 text-center">Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</p>
                             </td>
                         </tr>
                         @endforeach
@@ -68,8 +69,8 @@ Keranjang ● Plus-H
                     @if(session()->has('cart'))
                         @foreach (session('cart') as $cartItem)
                         <div class="d-flex justify-content-between">
-                            <h6>{{$cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['name']}}</h6>
-                            <h6 class="text-secondary">Rp{{number_format($cart[$cartItem['product_variant_code'].'.'.$cartItem['color']]['price'],0,'.',',')}}</h6>
+                            <h6>{{$cart[$cartItem['code']]['name']}}</h6>
+                            <h6 class="text-secondary">Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
                         </div>
                         @endforeach
                     <div>
@@ -94,11 +95,14 @@ Keranjang ● Plus-H
                             <option value="" hidden selected disabled>Pilih Kota</option>
                         </select>
                         <textarea name="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
-                        <select name="shipment_id" class="form-select mb-3">
-                            <option value="" hidden disabled selected> Pilih pengiriman</option>
+                        <select name="shipment_id" id="shipment" class="form-select mb-3">
+                            <option value="" hidden disabled selected> Pilih Pengiriman</option>
                             @foreach ($shipments as $shipment)
                             <option value="{{$shipment->id}}">{{strtoupper($shipment->shipment_name)}}</option>
                             @endforeach
+                        </select>
+                        <select name="ongkir" id="ongkir" class="form-select mb-3">
+                            <option value="" hidden disabled selected> Pilih Paket Pengiriman</option>
                         </select>
                         <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="btn btn-primary" value="Pesan" />
                     </div>
@@ -112,6 +116,25 @@ Keranjang ● Plus-H
 
 @section('script')
 <script src="{{ asset('script/address.js') }}"></script>
+<script src="{{ asset('script/jquery.min.js') }}"></script>
+<script type="text/javascript">
+    $('#shipment').on('change', function() {
+        $.ajax({
+            type: "post",
+            url: "{{ route('order.check-ongkir') }}",
+            data: $('#cart').serialize(),
+            success: function(response) {
+                $('#ongkir').empty();
+                $.each(response[0]['costs'], function(key, value) {
+                    $('#ongkir').append('<option value="'+value.cost[0].value+'"><strong>'+value.service+'</strong> - Rp'+value.cost[0].value+' ('+value.cost[0].etd+' hari)</option>');
+                })
+            },
+            error: function() {
+                alert('Kesalahan berpikir')
+            }
+        })
+    })
+</script>
 <script>
     let cartItems = document.getElementsByName("cart_item[]");
     let allCheckbox = document.getElementById("all");
@@ -131,5 +154,33 @@ Keranjang ● Plus-H
             checkbox.checked = allCheckbox.checked;
         })
     }
+</script>
+<script>
+    var qtyChange = {};
+
+    function change(target, qty, code) {
+        document.getElementById(target).innerHTML = parseInt(document.getElementById(target).innerHTML) + qty;
+        document.getElementById(target).classList.add('text-warning');
+
+        qtyChange[code] = [code,parseInt(document.getElementById(target).innerHTML)];
+    }
+
+    $('#saveChange').on('click', function() {
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('cart.update') }}',
+            data: { 'qtyChange': qtyChange },
+            success: function() {
+                alert('Jumlah beli berhasil diubah')
+                $('.qty').each(element => {
+                    element.classList.remove('text-warning')
+                });
+            },
+            error: function() {
+                alert(qtyChange['1-1'])
+            }
+        })
+    })
+
 </script>
 @endsection

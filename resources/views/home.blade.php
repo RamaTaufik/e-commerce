@@ -24,6 +24,25 @@ Dashboard ● Plus-H
         </div>
     </div>
 </div>
+<div class="container-fluid bg-light p-5">
+    <div class="row">
+        <div class="col-3 d-none d-md-flex flex-column justify-content-evenly p-3 bg-white shadow">
+            <div class="row pb-1">
+                <div class="col-2 d-flex justify-content-center align-items-center"><i class="fa-solid fa-bars"></i></div>
+                <div class="col-10 h6 m-0"><b>Telusuri Kategori</b></div>
+            </div>
+            @foreach ($category as $c)
+            <div class="row">
+                <div class="col-2 d-flex justify-content-center align-items-center"><i class="fa-solid fa-palette"></i></div>
+                <div class="col-10"><a href="" class="text-decoration-none text-dark">{{$c->name}}</a></div>
+            </div>
+            @endforeach
+        </div>
+        <div class="col-12 col-md-9">
+            <img src="{{ asset('image/jumbotron.png') }}" class="object-fit-cover w-100" alt="">
+        </div>
+    </div>
+</div>
 <div class="container-fluid bg-light p-md-5 p-2">
     <div class="d-flex justify-content-between align-items-center">
         <h3>Produk Terbaru</h3>
@@ -43,8 +62,7 @@ Dashboard ● Plus-H
                         <i class="fa-solid fa-star"></i>
                     </span> (10)</p>
                     <h5 class="p-0 m-0 mb-2"><b>
-                        Rp{{number_format($item->productVariant->min('price'),0,'.',',')}} 
-                        @if (count($item->productVariant) > 1) - Rp{{number_format($item->productVariant->max('price'),0,'.',',')}} @endif
+                        Rp{{number_format($item->price,0,'.',',')}} 
                     </b></h5>
                     <p class="m-0 pt-1 mt-1 text-smaller border-top">Terjual 10+</p>
                 </div>

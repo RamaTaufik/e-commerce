@@ -13,20 +13,19 @@ use Auth;
 
 class CartController extends Controller
 {
-    public function index($cost = '', $prevRequest = '')
+    public function index()
     {
         $cart = [];
         $customer_id = Customer::where('user_id', Auth::id())->pluck('id')->first();
         $myAddresses = CustomerAddress::where('customer_id', $customer_id)->get();
         if(session()->has('cart')) {
             foreach (session('cart') as $cart_item) {
-                $data = ProductVariant::where('product_variant_code', $cart_item['product_variant_code'])->first();
-                $cart[$cart_item['product_variant_code'].'.'.$cart_item['color']] = [
+                $data = ProductVariant::where('product_variant_code', $cart_item['code'])->first();
+                $cart[$cart_item['code']] = [
                     'name' => $data->product->name,
-                    'image' => ProductPicture::where('product_variant_code', $cart_item['product_variant_code'])->first()->directory,
-                    'price' => $data->price,
-                    'size' => strtoupper(explode('.', $data->size_in_cm)[0]),
-                    'color' => $cart_item['color'],
+                    'image' => ProductPicture::where('product_variant_code', $cart_item['code'])->first()->directory,
+                    'price' => $data->product->price,
+                    'variation' => $data->variation,
                 ];
             }
         }
@@ -36,35 +35,35 @@ class CartController extends Controller
         }
         $shipments = Shipment::all();
 
-        if($cost == '') {
-            return view('cart', compact(['cart','myAddresses','address','shipments']));
-        } else {
-            dd($cost);
-            return view('cart', compact(['cart','myAddresses','address','shipments','cost','prevRequest']));
-        }
+        return view('cart', compact(['cart','myAddresses','address','shipments']));
     }
 
-    public function add(Request $request)
+    public function add(Request $request, $buy = false)
     {
         $data = session()->get('cart', []);
-        $data[$request->code.'.'.$request->color] = [
-            'product_variant_code' => $request->code,
-            'color' => $request->color,
+        $data[$request->code] = [
+            'code' => $request->code,
             'qty' => $request->qty,
         ];
         session()->put('cart', $data);
 
-        return redirect()->back()->with('Berhasil ditambahkan di keranjang');
+        if($buy) {
+            return redirect()->route('cart');
+        } else {
+            return redirect()->back()->with('Berhasil ditambahkan ke keranjang');
+        }
     }
 
-    public function buy(Request $request)
+    public function update()
     {
+        $qtyChange = $_POST['qtyChange'];
         $data = session()->get('cart', []);
-        $data[$request->code.'.'.$request->color] = [
-            'product_variant_code' => $request->code,
-            'color' => $request->color,
-            'qty' => $request->qty,
-        ];
+        foreach($qtyChange as $item) {
+            $data[$item[0]] = [
+                'code' => $item[0],
+                'qty' => $item[1],
+            ];
+        }
         session()->put('cart', $data);
 
         return redirect()->route('cart');
@@ -78,7 +77,7 @@ class CartController extends Controller
                 if(!ProductVariant::where('product_variant_code',$item)->exists()) {
                     continue;
                 }
-                if($cartItem['product_variant_code']!=$item) {
+                if($cartItem['code']!=$item) {
                     $cart[$item] = $cartItem[$item];
                 }
             }

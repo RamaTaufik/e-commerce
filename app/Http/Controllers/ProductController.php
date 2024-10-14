@@ -73,6 +73,10 @@ class ProductController extends Controller
             'name' => $request['name'],
             'category_code' => $request['category_code'],
             'description' => $request['description'],
+            'size_in_cm' => $request['h'].'-'.$request['w'].'-'.$request['t'],
+            'weight_in_gram' => $request['weight_in_gram'],
+            'material' => $request['material'],
+            'price' => $request['price'],
             'status' => 'draft',
         ]);
 
