@@ -26,7 +26,7 @@ Keranjang ● Plus-H
                         <th class="w-100 border-start"><p class="w-100 m-0 p-0 text-center">Produk</p></th>
                         <th class="border-start rounded-end-5"><p class="m-0 p-0 px-5 text-center">Jumlah/Harga</p></th>
                     </tr>
-                    @if(session()->has('cart'))
+                    @if(session()->has('cart') && count(session('cart')) > 0)
                         @foreach (session('cart') as $cartItem)
                         <tr style="height:5px"></tr>
                         <tr class="shadow align-middle">
@@ -70,31 +70,32 @@ Keranjang ● Plus-H
                         @foreach (session('cart') as $cartItem)
                         <div class="d-flex justify-content-between">
                             <h6>{{$cart[$cartItem['code']]['name']}}</h6>
-                            <h6 class="text-secondary">Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
+                            <h6 class="text-secondary">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
                         </div>
                         @endforeach
                     <div>
                         {{-- <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total,0,'.',',')}}</h4> --}}
-                        <select name="myAddress" id="myAddress" class="form-select my-2">
-                            @if (count($myAddresses) < 1)
+                        <select name="myAddress" id="myAddress" class="form-select my-2" 
+                         onchange="changeAddress({{json_encode($myAddresses)}},{{json_encode($address['kota'])}})">
+                            @if (count($myAddresses) > 0)
                             <option value="" hidden disabled selected> Pilih alamat pengiriman</option>
+                                @foreach ($myAddresses as $myAddress)
+                                <option value="{{$myAddress->id}}">{{$myAddress->address_detail}}</option>
+                                @endforeach
                             @endif
-                            @foreach ($myAddresses as $myAddress)
-                            <option value="{{$myAddress->id}}">{{$myAddress->address_detail}}</option>
-                            @endforeach
                             <option value="new">Alamat Baru</option>
                         </select>
                         <select  name="province_destination" id="province" class="form-select mb-2"
                             onchange="unlockSelectOption('province','city',{{json_encode($address['kota'])}})">
                             <option value="" hidden selected disabled>Pilih Provinsi</option>
                             @foreach ($address['provinsi'] as $province)
-                            <option value="{{$province->name}}">{{$province->name}}</option>
+                            <option value="{{$province->id}}">{{$province->name}}</option>
                             @endforeach
                         </select>
                         <select  name="city_destination" id="city" class="form-select mb-2" disabled>
                             <option value="" hidden selected disabled>Pilih Kota</option>
                         </select>
-                        <textarea name="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
+                        <textarea name="address_detail" id="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
                         <select name="shipment_id" id="shipment" class="form-select mb-3">
                             <option value="" hidden disabled selected> Pilih Pengiriman</option>
                             @foreach ($shipments as $shipment)
@@ -167,17 +168,21 @@ Keranjang ● Plus-H
 
     $('#saveChange').on('click', function() {
         $.ajax({
-            type: 'POST',
-            url: '{{ route('cart.update') }}',
+            type: "post",
+            url: "{{ route('cart.update') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             data: { 'qtyChange': qtyChange },
             success: function() {
-                alert('Jumlah beli berhasil diubah')
-                $('.qty').each(element => {
-                    element.classList.remove('text-warning')
-                });
+                alert('Jumlah beli berhasil diubah');
+                var elements = document.getElementsByClassName('qty');
+                for(let i=0;i < elements.length;i++) {
+                    document.getElementById('qty' + (i+1)).classList.remove('text-warning')
+                };
             },
             error: function() {
-                alert(qtyChange['1-1'])
+                alert('Kesalahan berpikir')
             }
         })
     })

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-{{$product->name}} ● Plus-H
+{{$products->name}} ● Plus-H
 @endsection
 
 @section('content')
@@ -9,26 +9,17 @@
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-12 col-md-9">
+            <a class="mt-1 ms-2 fs-5 text-decoration-none text-secondary" href="{{ route('home') }}"><i class="fa-solid fa-circle-arrow-left"></i> Kembali</a>
             <div class="row">
                 <div class="col-12 col-md-5">
                     <div class="position-sticky pt-3" style="top:100px;">
                         <div id="productImagesCarousel" class="carousel slide">
                             <div class="carousel-inner" style="height:350px;">
-                                <div class="carousel-item active">
-                                    <img src="../style/asset/image/test.png" class="d-block w-100 object-fit-cover" style="height:350px;" alt="...">
+                                @foreach ($productPictures as $picture)
+                                <div class="carousel-item @if ($loop->iteration = 1) active @endif">
+                                    <img src="{{ asset('image/products/'.$picture->directory) }}" class="mx-auto img-fluid object-fit-cover" style="height:350px;" alt="...">
                                 </div>
-                                <div class="carousel-item">
-                                    <img src="../style/asset/image/test.jpg" class="d-block w-100 object-fit-cover" style="height:350px;" alt="...">
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="../style/asset/image/test.jfif" class="d-block w-100 object-fit-cover" style="height:350px;" alt="...">
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="../style/asset/image/test1.jfif" class="d-block w-100 object-fit-cover" style="height:350px;" alt="...">
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="../style/asset/image/test1.jpg" class="d-block w-100 object-fit-cover" style="height:350px;" alt="...">
-                                </div>
+                                @endforeach
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -40,27 +31,17 @@
                             </button>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="button" data-bs-target="#productImagesCarousel" data-bs-slide-to="0" class="btn" aria-current="true" aria-label="Slide 1">
-                                <img src="../style/asset/image/test.png" class="d-block object-fit-cover" style="aspect-ratio:1/1;height:50px;" alt="...">
+                            @foreach ($productPictures as $picture)
+                            <button type="button" data-bs-target="#productImagesCarousel" data-bs-slide-to="{{$loop->iteration - 1}}" class="btn" aria-current="true" aria-label="Slide 1">
+                                <img src="{{ asset('image/products/'.$picture->directory) }}" class="d-block object-fit-cover" style="aspect-ratio:1/1;height:50px;" alt="...">
                             </button>
-                            <button type="button" data-bs-target="#productImagesCarousel" data-bs-slide-to="1" class="btn" aria-label="Slide 2">
-                                <img src="../style/asset/image/test.jpg" class="d-block object-fit-cover" style="aspect-ratio:1/1;height:50px;" alt="...">
-                            </button>
-                            <button type="button" data-bs-target="#productImagesCarousel" data-bs-slide-to="2" class="btn" aria-label="Slide 3">
-                                <img src="../style/asset/image/test.jfif" class="d-block object-fit-cover" style="aspect-ratio:1/1;height:50px;" alt="...">
-                            </button>
-                            <button type="button" data-bs-target="#productImagesCarousel" data-bs-slide-to="3" class="btn" aria-label="Slide 4">
-                                <img src="../style/asset/image/test1.jfif" class="d-block object-fit-cover" style="aspect-ratio:1/1;height:50px;" alt="...">
-                            </button>
-                            <button type="button" data-bs-target="#productImagesCarousel" data-bs-slide-to="4" class="btn" aria-label="Slide 5">
-                                <img src="../style/asset/image/test1.jpg" class="d-block object-fit-cover" style="aspect-ratio:1/1;height:50px;" alt="...">
-                            </button>
+                            @endforeach
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-7 px-5">
-                    <div class="position-sticky border-bottom bg-light pt-3 mb-3" style="top:100px;z-index:1;">
-                        <h3 class="text-head">Tipis-tipis abangku, menyala, tetap ilmu padi king</h3>
+                <div class="col-12 col-md-7 p-5 bg-light">
+                    <div class="position-sticky border-bottom mb-3" style="top:100px;z-index:1;">
+                        <h3 class="text-head">{{$products->name}}</h3>
                         <p class="card-subtitle mb-2 h6"><span class="text-warning">
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
@@ -68,55 +49,29 @@
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                         </span> (10 ulasan) <span class="mx-2">•</span> Terjual 10+</p>
-                        <h6 class="">di <span><a href="/customer/search" class="text-dark"><strong>Kategori</strong></a></span></h6>
-                        <h4 class="text-end"><strong>Rp405.000,00</strong></h4>
+                        <h6 class="">di <span><a href="/customer/search" class="text-dark"><strong>{{$products->category->name}}</strong></a></span></h6>
+                        <h4 class="text-end"><strong>Rp{{number_format($products->price,0,',','.')}}</strong></h4>
                     </div>
                     <h6><strong>Deskripsi Produk</strong></h6>
                     <dl class="row">
                         <dd class="col-2 text-head">Bahan</dd>
-                        <dd class="col-10">Besi</dd>
+                        <dd class="col-10">{{$products->material}}</dd>
                         <dd class="col-2 text-head">Ukuran</dd>
-                        <dd class="col-10">15 cm</dd>
+                        <dd class="col-10">{{str_replace('.',' cm x ',$products->size_in_cm).' cm'}}</dd>
                         <dd class="col-2 text-head">Berat</dd>
-                        <dd class="col-10">119 gram</dd>
+                        <dd class="col-10">{{$products->weight_in_gram}} gram</dd>
                     </dl>
-                    <p>
-                        tipis tipis abangkuh 🔥🔥<br>
-                        sesekali 🙌🏼<br>
-                        kelas abangkuh 🔥🔝<br>
-                        izin abangkuh 🔥<br>
-                        panutan 🔝✊🏼🙌🏼<br>
-                        kelas abangda 🔥🫡<br>
-                        rispeekk 👍🏼🙌🏼<br>
-                        manyala ilmu padi 🌾<br>
-                        kelas boskuuuh 🔥👍🏼<br>
-                        kalau diatas jgn lupa merunduk<br>
-                        tetep ilmu padi 🌾🌾<br>
-                        kasih paham tipis tipis 🤝🏼<br>
-                        top abangku 👍🏼👍🏼<br>
-                        eh yg punya setengah indo nih ee 😜😜<br>
-                        kelas banget kanda 🙏🏼🕺🏻<br>
-                        manyala capt 🔥🔥<br>
-                        abang idola panutan ini 😘😘<br>
-                        top 🔝<br>
-                        jangan kasih kendor ee 🕺🏻🕺🏻<br>
-                        idola 🙌🏼🙌🏼<br>
-                        capt idolaa 🔥🙌🏼🔝<br>
-                        kasih paham capt 🔥💯🙌🏼<br>
-                        apotik tutup captain 🔥🔥💯🔝<br>
-                        lanjutkan abangkuuhh 🔥🔝💥<br>
-                        jangan kasi longgar king 🔝💯🔥🙌🏼<br>
-                        eitsss pondasi bangsa abangkuuhh 🔥🔝🙌🏼</p>
+                    <p>{{$products->description}}</p>
                 </div>
                 <div class="col-12">
-                    <div class="accordion accordion-custom" id="productInfo">
-                        <a class="accordion-btn" role="button" data-bs-toggle="collapse" href="#reviews" aria-expanded="true" aria-controls="reviews">
+                    <div class="accordion nav-tabs" id="productInfo">
+                        <a class="d-inline nav-link active" role="button" data-bs-toggle="collapse" href="#reviews" aria-expanded="true" aria-controls="reviews">
                             Ulasan
                         </a>
-                        <a class="accordion-btn collapsed" role="button" data-bs-toggle="collapse" href="#moreInformations" aria-expanded="false" aria-controls="moreInformations">
+                        <a class="d-inline nav-link collapsed" role="button" data-bs-toggle="collapse" href="#moreInformations" aria-expanded="false" aria-controls="moreInformations">
                             Informasi Tambahan
                         </a>
-                        <div class="accordion-item">
+                        <div class="bg-white">
                             <div id="reviews" class="accordion-collapse collapse show" data-bs-parent="#productInfo">
                                 <div class="accordion-body">
                                     <div class="position-relative bg-white mb-2 p-2 shadow">
@@ -155,22 +110,22 @@
                         @csrf
                         @method('POST')
                         <div class="mb-2">
-                            @if(count($productVariant) > 1)
+                            @if(count($productVariants) > 1)
                             <p class="form-label m-0">Variasi</p>
-                                @foreach ($productVariant as $variant)
+                                @foreach ($productVariants as $variant)
                                 <input type="radio" class="btn-check" name="code" id="{{$variant->product_variant_code}}" value="{{$variant->product_variant_code}}" 
                                  onclick="changeStock({{json_encode($variant->stock)}})" autocomplete="off">
                                 <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{$variant->variation}}</label>
                                 @endforeach
                             @else
-                            <input type="hidden" name="code" value="{{$productVariant[0]->product_variant_code}}">
+                            <input type="hidden" name="code" value="{{$productVariants[0]->product_variant_code}}">
                             @endif
                         </div>
                         <div class="d-flex justify-content-between">
                             <label for="qty" class="form-label m-0">Jumlah Beli</label>
                             <p class="text-warning text-head m-0">
                                 Sisa stok : 
-                                <span id="stock">@if(count($productVariant) > 1) - @else {{$productVariant[0]->stock}} @endif</span>
+                                <span id="stock">@if(count($productVariants) > 1) - @else {{$productVariants[0]->stock}} @endif</span>
                             </p>
                         </div>
                         <input type="number" name="qty" id="qty" class="form-control">

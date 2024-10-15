@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Province;
+use App\Models\City;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
 use App\Models\Customer;
@@ -16,7 +17,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = [];
-        $customer_id = Customer::where('user_id', Auth::id())->pluck('id')->first();
+        $customer_id = Customer::where('user_id', Auth::id())->first()->id;
         $myAddresses = CustomerAddress::where('customer_id', $customer_id)->get();
         if(session()->has('cart')) {
             foreach (session('cart') as $cart_item) {
@@ -24,15 +25,14 @@ class CartController extends Controller
                 $cart[$cart_item['code']] = [
                     'name' => $data->product->name,
                     'image' => ProductPicture::where('product_variant_code', $cart_item['code'])->first()->directory,
+                    'qty' => $cart_item['qty'],
                     'price' => $data->product->price,
                     'variation' => $data->variation,
                 ];
             }
         }
         $address['provinsi'] = Province::all();
-        foreach($address['provinsi'] as $province) {
-            $address['kota'][$province->name] = $province->city->all();
-        }
+        $address['kota'] = City::all();
         $shipments = Shipment::all();
 
         return view('cart', compact(['cart','myAddresses','address','shipments']));
@@ -73,20 +73,14 @@ class CartController extends Controller
     {
         $cart = [];
         foreach(session('cart') as $cartItem) {
-            foreach($request->all() as $item) {
-                if(!ProductVariant::where('product_variant_code',$item)->exists()) {
-                    continue;
-                }
+            foreach($request->cart_item as $item) {
                 if($cartItem['code']!=$item) {
-                    $cart[$item] = $cartItem[$item];
+                    $cart[$cartItem['code']] = $cartItem;
+                    continue(2);
                 }
             }
         }
-        if($cart == []) {
-            session()->flush();
-        } else {
-            session()->put('cart', $cart);
-        }
+        session()->put('cart', $cart);
 
         return redirect()->route('cart');
     }

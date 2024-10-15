@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class HomeController extends Controller
 {
@@ -20,7 +22,7 @@ class HomeController extends Controller
         $product = Product::where('status', 'public')->get();
 
         foreach($product as $item) {
-            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->pluck('directory')->first();
+            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
         }
 
         $category = Category::all();
@@ -35,7 +37,7 @@ class HomeController extends Controller
                           ->where('name', 'LIKE', '%'.$index.'%')->get();
 
         foreach($product as $item) {
-            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->pluck('directory')->first();
+            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
         }
 
         return view('search', compact(['product','index']));
@@ -43,8 +45,33 @@ class HomeController extends Controller
 
     public function product($id)
     {
-        $product = Product::find($id);
-        $productVariant = ProductVariant::where('product_id', $id)->get();
-        return view('product', compact(['product','productVariant']));
+        $products = Product::find($id);
+        $productVariants = ProductVariant::where('product_id', $id)->get();
+        $productPictures = ProductPicture::where('product_variant_code', 'LIKE', $id.'-%')->get();
+        return view('product', compact(['products','productVariants','productPictures']));
+    }
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+        if($hashed == $request->signature_key) {
+            if($request->transaction_status == 'capture') {
+                $order = Order::find($request->order_id);
+                $order->update([
+                    'status' => 'Paid',
+                    'payment_date' => now(),
+                ]);
+
+                $orderItems = OrderItem::where('order_code', $order->order_code)->get();
+
+                foreach($orderItems as $item) {
+                    $product = ProductVariant::find($item->product_variant_code);
+                    $product->update([
+                        'stock' => $product->stock - $item->qty,
+                    ]);
+                }
+            }
+        }
     }
 }

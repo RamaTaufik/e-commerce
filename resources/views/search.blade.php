@@ -14,7 +14,11 @@ Cari "{{$index}}" ● Plus-H
         @foreach ($product as $item)
         <div class="col-4 col-md-3 col-lg-2 p-2 mb-3">
             <div class="card border-0 shadow-sm" title="{{$item->name}}">
-                <img src="{{ asset('image/products/'.$item['display_image']) }}" class="object-fit-cover img-fluid ratio-1x1 rounded" alt="">
+                <div class="position-relative w-100" style="padding-bottom:100%;">
+                    <div class="position-absolute top-50 start-50 translate-middle w-100">
+                        <img src="{{ asset('image/products/'.$item['display_image']) }}" class="w-100 rounded" alt="">
+                    </div>
+                </div>
                 <div class="card-body p-2">
                     <h6 class="card-title mb-1 text-dark text-truncate">{{$item->name}}</h6>
                     <p class="card-subtitle text-smaller"><span class="text-warning">
@@ -25,7 +29,7 @@ Cari "{{$index}}" ● Plus-H
                         <i class="fa-solid fa-star"></i>
                     </span> (10)</p>
                     <h5 class="p-0 m-0 mb-2"><b>
-                        Rp{{number_format($item->productVariant->min('price'),0,'.',',')}} 
+                        Rp{{number_format($item->price)}} 
                         @if (count($item->productVariant) > 1) - Rp{{number_format($item->productVariant->max('price'),0,'.',',')}} @endif
                     </b></h5>
                     <p class="m-0 pt-1 mt-1 text-smaller border-top">Terjual 10+</p>

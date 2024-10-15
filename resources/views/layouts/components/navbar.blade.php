@@ -1,4 +1,4 @@
-<div class="w-100 position-sticky navbar-top">
+<div class="w-100 position-sticky navbar-top z-1">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <ul class="list-inline text-secondary">
             <li class="list-inline-item">
@@ -9,7 +9,7 @@
         </ul>
     </div>
 </div>
-<nav class="navbar navbar-expand-md position-sticky bg-primary shadow-sm" style="top:0;z-index:2;">
+<nav class="navbar navbar-expand-md position-sticky bg-primary shadow-sm z-2" style="top:0;">
     <div class="row w-100">
         <div class="col-2 col-md-3 d-flex justify-content-center align-items-center">
             <img src="{{ asset('image/icon.png') }}" style="aspect-ratio:1/1;height:50px;" alt="">
