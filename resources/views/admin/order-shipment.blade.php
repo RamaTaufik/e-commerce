@@ -1,0 +1,105 @@
+@extends('layouts.app-admin', ['page' => 'order-shipment'])
+
+@section('title')
+Status Pengiriman Pesanan ● Plus-H ADMIN
+@endsection
+
+@section('content')
+<h6 class="mb-0 pb-0">Admin / Order / Shipment</h6>
+<h1>Status Pengiriman Pesanan</h1>
+<div class="container fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.order') }}">Kelola Pesanan</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page">Status Pengiriman</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Pembatalan Pesanan</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Ulasan Pembeli</a>
+        </li>
+    </ul>
+    <div class="container-fluid pt-2 border border-top-0">
+        <table class="table">
+            <thead class="align-middle">
+                <tr>
+                    <th>Kode</th>
+                    <th>Pembeli</th>
+                    <th>Alamat Pembeli</th>
+                    <th>Total Harga</th>
+                    <th>Status Pembayaran</th>
+                    <th>Status Pengiriman</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($orders as $order)
+                <tr>
+                    <td>{{$order->order_code}}</td>
+                    <td>{{$order->customer->first_name.' '.$order->customer->last_name}}</td>
+                    <td>{{$order->customerAddress->address_detail}}</td>
+                    <td>Rp{{number_format($order->total_price + $order->shipping_cost,0,'.',',')}}</td>
+                    <td>{{$order->status}}</td>
+                    {{-- <td>
+                        <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>
+                    </td> --}}
+                    <td>{{$order->shipment_status}}</td>
+                    <td>
+                        <form action="" method="POST">
+                            @csrf
+                            <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.order-ship', $order->order_code) }}">Kirim</a>
+                            {{-- <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a> --}}
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
+
+@section('script')
+<script>
+    var table = document.getElementById("productData");
+    
+    const data_list = ["Kategori","Ukuran","Dimensi","Berat","Material","Harga","Stok","Warna"];
+
+    function detail(product,variants,images) {
+        table.innerHTML = "";
+
+        const data = [
+            product['category'],
+            '<a href="" class="badge text-bg-secondary">' + variants[0]['size(cm)'].split(".")[0] + "</a>",
+            variants[0]['size(cm)'].split(".")[1].split("-").join(" cm x ") + " cm",
+            variants[0]['weight(g)'].split(".")[1] + " gram",
+            variants[0]['material'],
+            "Rp" + variants[0]['price'].toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+            variants[0]['stock'],
+            variants[0]['color']
+        ];
+
+        document.getElementById("productName").innerHTML = product['name'];
+
+        data.forEach((item,i) => {
+            if(item != null) {
+                var row = document.createElement("tr");
+                var col = document.createElement("td");
+                var col_separator = document.createElement("td");
+                var col_value = document.createElement("td");
+                col_separator.innerHTML = ":";
+                
+                col.innerHTML = data_list[i];
+                col_value.innerHTML = item;
+                row.append(col);
+                row.append(col_separator);
+                row.append(col_value);
+                table.appendChild(row);
+            }
+        });
+    }
+</script>
+@endsection

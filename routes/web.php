@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\CartController;
@@ -34,6 +35,9 @@ Route::post('/otp-validate', [OtpController::class, 'validateOtp'])->name('otp.v
 
 // ADMIN
 Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+Route::get('/admin/order', [AdminOrderController::class, 'index'])->name('admin.order');
+Route::get('/admin/order/shipment', [AdminOrderController::class, 'shipment'])->name('admin.order-shipment');
+Route::get('/admin/order/ship/{id}', [AdminOrderController::class, 'ship'])->name('admin.order-ship');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('admin.product');
 Route::get('/admin/product/archive', [ProductController::class, 'archive'])->name('admin.product-archive');
 Route::get('/admin/product/archiving/{id}', [ProductController::class, 'archiving'])->name('admin.product-archiving');

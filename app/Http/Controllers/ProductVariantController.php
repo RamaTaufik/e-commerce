@@ -34,7 +34,7 @@ class ProductVariantController extends Controller
         ]);
 
         if($request->hasFile('image')) {
-            $dir = 'image/products/'.$variant->product_variant_code.'/';
+            $dir = 'image/products/'.$request->product_id.'-'.$serial.'/';
             if(!file_exists($dir) && !is_dir($dir)) {
                 mkdir($dir);
             } 
@@ -43,8 +43,8 @@ class ProductVariantController extends Controller
                 $fileName = (count(scandir(public_path($dir)))-1).'.'.$img->getClientOriginalExtension();
                 $img->move(public_path($dir), $fileName);
                 ProductPicture::create([
-                    'product_variant_code' => $variant->product_variant_code,
-                    'directory' => $variant->product_variant_code.'/'.$fileName,
+                    'product_variant_code' => $request->product_id.'-'.$serial,
+                    'directory' => $request->product_id.'-'.$serial.'/'.$fileName,
                 ]);
             }
         }

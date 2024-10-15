@@ -23,7 +23,7 @@ return new class extends Migration
             $table->bigInteger('total_price');
             $table->enum('status',['Unpaid','Paid']);
             $table->date('payment_date')->nullable();
-            $table->enum('shipment_status',['processing','shipping','arrived']);
+            $table->enum('shipment_status',['Processing','Shipping','Arrived']);
             $table->timestamps();
         });
     }

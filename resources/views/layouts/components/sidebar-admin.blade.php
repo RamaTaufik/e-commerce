@@ -39,16 +39,16 @@
             </li>
             <div id="order" class="accordion-collapse collapse show mb-3 ps-3">
                 <li class="nav-item">
-                    <a href="/admin/statistic-user {{ $page == 'order' ? 'active' : ''; }}" class="nav-link">Kelola Pesanan</a>
+                    <a href="{{ route('admin.order') }}" class="nav-link {{ $page == 'order' ? 'active' : ''; }}">Kelola Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-seller {{ $page == 'order.status' ? 'active' : ''; }}" class="nav-link">Status Pengiriman</a>
+                    <a href="/admin/statistic-seller" class="nav-link {{ $page == 'order.status' ? 'active' : ''; }}">Status Pengiriman</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling {{ $page == 'order.cancel' ? 'active' : ''; }}" class="nav-link">Pembatalan Pesanan</a>
+                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.cancel' ? 'active' : ''; }}">Pembatalan Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling {{ $page == 'order.customer_review' ? 'active' : ''; }}" class="nav-link">Ulasan Pembeli</a>
+                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.customer_review' ? 'active' : ''; }}">Ulasan Pembeli</a>
                 </li>
             </div>
             <li class="nav-item">
