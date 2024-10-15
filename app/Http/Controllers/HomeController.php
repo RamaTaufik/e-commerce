@@ -6,19 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -32,7 +23,22 @@ class HomeController extends Controller
             $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->pluck('directory')->first();
         }
 
-        return view('home', compact('product'));
+        $category = Category::all();
+
+        return view('home', compact(['product','category']));
+    }
+
+    public function search(Request $request)
+    {
+        $index = $request['index'];
+        $product = Product::where('status', 'public')
+                          ->where('name', 'LIKE', '%'.$index.'%')->get();
+
+        foreach($product as $item) {
+            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->pluck('directory')->first();
+        }
+
+        return view('search', compact(['product','index']));
     }
 
     public function product($id)

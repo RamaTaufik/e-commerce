@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductVariant;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -22,20 +20,7 @@ class ProductController extends Controller
         $product = Product::all()->where('status','public');
         foreach($product as $p) {
             $p['category'] = $p->category()->pluck('name')->first();
-            $p['avg_price'] = number_format(floor($p->productVariant->avg('price')),0,'.',',');
-            $stockPerColor = $p->productVariant->pluck('stock_per_color')->all();
-            $p['total_stock'] = 0;
-            foreach($stockPerColor as $variant) {
-                $variant = explode(";", $variant);
-                foreach($variant as $v) {
-                    $p['total_stock'] += (int)explode("/", $v)[0];
-                }
-            }
-            // $stockPerColor = explode(";", $p['stock_per_color']);
-            // $p['total_stock'] = explode("/", $p->productVariant->pluck('stock_per_color')->first())[0];
-            // foreach($stockPerColor as $colorVariant) {
-            //     $p['total_stock'] += explode("/", (int)$colorVariant)[0];
-            // }
+            $p['total_stock'] = $p->productVariant->pluck('stock')->sum();
         }
 
         $category = Category::all();
@@ -75,7 +60,7 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        Validator::make($request->all(), [
+        $request->validate([
             'name' => ['required', 'string'],
             'category_code' => ['required'],
             'description' => ['required'],
@@ -88,6 +73,10 @@ class ProductController extends Controller
             'name' => $request['name'],
             'category_code' => $request['category_code'],
             'description' => $request['description'],
+            'size_in_cm' => $request['h'].'-'.$request['w'].'-'.$request['t'],
+            'weight_in_gram' => $request['weight_in_gram'],
+            'material' => $request['material'],
+            'price' => $request['price'],
             'status' => 'draft',
         ]);
 
@@ -100,17 +89,10 @@ class ProductController extends Controller
         $productVariant = $product->productVariant;
         $category = Category::all();
 
-        foreach($productVariant as $variant) {
-            $variant['size'] = explode(".", $variant['size_in_cm'])[0];
-            $variant['h'] = explode("-", explode(".", $variant['size_in_cm'])[1])[0];
-            $variant['w'] = explode("-", explode(".", $variant['size_in_cm'])[1])[1];
-            $variant['t'] = explode("-", explode(".", $variant['size_in_cm'])[1])[2];
-            $stockPerColor = explode(";", $variant['stock_per_color']);
-            $variant['total_stock'] = 0;
-            foreach($stockPerColor as $colorVariant) {
-                $variant['total_stock'] += (int)explode("/", $colorVariant)[0];
-            }
-        }
+        $product['h'] = explode("-", $product['size_in_cm'])[0];
+        $product['w'] = explode("-", $product['size_in_cm'])[1];
+        $product['t'] = explode("-", $product['size_in_cm'])[2];
+        $product['total_stock'] = $productVariant->pluck('stock')->sum();
 
         return view('admin.product-edit', compact(['product','productVariant','category']));
     }

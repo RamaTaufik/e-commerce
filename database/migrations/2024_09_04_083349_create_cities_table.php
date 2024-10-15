@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_variants', function (Blueprint $table) {
-            $table->string('product_variant_code')->primary();
-            $table->foreignId('product_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('variation');
-            $table->integer('stock');
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('province_id');
+            $table->unsignedInteger('city_id');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variants');
+        Schema::dropIfExists('cities');
     }
 };

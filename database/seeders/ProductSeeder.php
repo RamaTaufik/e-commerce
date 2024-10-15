@@ -19,24 +19,25 @@ class ProductSeeder extends Seeder
             'name' => 'Cirno Fumo - Touhou Project',
             'category_code' => 'PLS-FM',
             'description' => 'Lorem ipsum dolor sit amet',
+            'size_in_cm' => '14-14-23',
+            'weight_in_gram' => 119,
+            'material' => 'Katun',
+            'price' => 399000,
             'status' => 'public',
         ]);
         ProductVariant::create([
             'product_variant_code' => $product->id.'-1',
             'product_id' => 1,
-            'size_in_cm' => 'md.14-14-23',
-            'weight_in_gram' => 119,
-            'material' => 'Katun',
-            'price' => 399000,
-            'stock_per_color' => "99/NULL",
+            'variation' => 'base',
+            'stock' => "99",
         ]);
         ProductPicture::create([
-            'product_variant_code' => '1-1',
-            'directory' => '1-1/1.jpg',
+            'product_variant_code' => $product->id.'-1',
+            'directory' => $product->id.'-1/1.jpg',
         ]);
         ProductPicture::create([
-            'product_variant_code' => '1-1',
-            'directory' => '1-1/2.jfif',
+            'product_variant_code' => $product->id.'-1',
+            'directory' => $product->id.'-1/2.jfif',
         ]);
     }
 }

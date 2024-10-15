@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderItem extends Model
+class City extends Model
 {
     use HasFactory;
 
-    protected $table = 'order_items';
+    protected $table = 'cities';
 
     protected $guarded = [];
 
-    public function productVariant(): BelongsTo
+    public function province(): BelongsTo
     {
-        return $this->belongsTo(ProductVariant::class, 'product_variant_code');
+        return $this->belongsTo(Province::class);
     }
 }

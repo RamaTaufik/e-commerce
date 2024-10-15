@@ -18,13 +18,14 @@
             </a>
         </div>
         <div class="col-8 col-md-6 d-flex align-items-center">
-            <form action="" class="w-100">
+            <form action="{{ route('search') }}" method="get" class="w-100">
+                @method('GET')
                 <div class="input-group" style="height:35px;">
-                    <input type="text" class="form-control rounded-start-pill border-0" placeholder="Cari">
+                    <input type="text" name="index" class="form-control rounded-start-pill border-0" placeholder="Cari" value="@yield('search-index')">
                     <button type="button" class="d-none d-lg-block btn btn-light border-start bg-white" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="false" aria-controls="category">
                         Kategori <i class="fa-solid fa-caret-down"></i>
                     </button>
-                    <a role="button" href="/customer/search" class="btn btn-secondary border-0 rounded-end-circle" id="button-addon1"><i class="fa-solid fa-magnifying-glass"></i></a>
+                    <button type="submit" class="btn btn-secondary border-0 rounded-end-circle" id="button-addon1"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </form>
         </div>
@@ -50,6 +51,11 @@
                             </li>
                         @endif
                     @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('order.tracking') }}" title="Tracking">
+                                <i class="fa-solid fa-location-crosshairs"></i> <span>Tracking</span>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="" title="Notifikasi">
                                 <i class="fa-solid fa-bell"></i> <span>Notifikasi</span>

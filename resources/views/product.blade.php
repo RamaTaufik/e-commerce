@@ -151,24 +151,27 @@
         <div class="col-12 col-md-3">
             <div class="position-sticky" style="top:100px;">
                 <div class="card border-0 p-3 shadow-sm">
-                    <form action="{{ route('cart.add') }}" method="POST">
+                    <form method="POST">
                         @csrf
                         @method('POST')
                         <div class="mb-2">
                             @if(count($productVariant) > 1)
-                            <p class="form-label m-0">Ukuran</p>
+                            <p class="form-label m-0">Variasi</p>
                                 @foreach ($productVariant as $variant)
-                                <?php $stock_per_color = explode(";", $variant['stock_per_color']); ?>
                                 <input type="radio" class="btn-check" name="code" id="{{$variant->product_variant_code}}" value="{{$variant->product_variant_code}}" 
-                                 onclick="chooseColorVariant({{json_encode($stock_per_color)}})" autocomplete="off">
-                                <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{explode('.',$variant->size_in_cm)[0]}}</label>
+                                 onclick="changeStock({{json_encode($variant->stock)}})" autocomplete="off">
+                                <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{$variant->variation}}</label>
                                 @endforeach
+                            @else
+                            <input type="hidden" name="code" value="{{$productVariant[0]->product_variant_code}}">
                             @endif
                         </div>
-                        <div id="colorVariant"></div>
                         <div class="d-flex justify-content-between">
                             <label for="qty" class="form-label m-0">Jumlah Beli</label>
-                            <p class="text-warning text-head m-0">Sisa stok : <span id="stock">-</span></p>
+                            <p class="text-warning text-head m-0">
+                                Sisa stok : 
+                                <span id="stock">@if(count($productVariant) > 1) - @else {{$productVariant[0]->stock}} @endif</span>
+                            </p>
                         </div>
                         <input type="number" name="qty" id="qty" class="form-control">
                         <div class="form-text my-2"><a href="" class="text-decoration-none text-secondary"><i class="fa-solid fa-pencil"></i> Tambah catatan</a></div>
@@ -176,8 +179,8 @@
                             <h6>Subtotal</h6><h6 class="text-secondary">Rp405.000,00</h6>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <a href="" class="btn btn-primary w-50">Tambah</a>
-                            <button type="submit" class="btn btn-secondary w-50">Beli</button>
+                            <input type="submit" formaction="{{ route('cart.add') }}" class="btn btn-primary w-50" value="Tambah">
+                            <input type="submit" formaction="{{ route('cart.add', ['buy' => true]) }}" class="btn btn-secondary w-50" value="Beli">
                         </div>
                     </form>
                 </div>

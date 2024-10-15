@@ -12,15 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if(!Schema::hasTable('addresses')) {
-            DB::unprepared(file_get_contents('database/migrations/tbl_kodepos_bps.sql'));
-        }
+        // if(!Schema::hasTable('addresses')) {
+        //     DB::unprepared(file_get_contents('database/migrations/tbl_kodepos_bps.sql'));
+        // }
 
         Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('address_id');
-            $table->foreign('address_id')->references('id')->on('addresses')->onUpdate('cascade')->onDelete('cascade');
+            // $table->integer('address_id');
+            // $table->foreign('address_id')->references('id')->on('addresses')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('address_detail');
             $table->timestamps();
         });
