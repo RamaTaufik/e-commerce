@@ -38,7 +38,7 @@ Verifikasi OTP
         <h6 class="m-0 p-0 mb-3">
             Tidak menerima kode? 
             <span id="resend"></span>
-            <a id="resend-link" href="https://fgo.gamepress.gg/servant/space-ereshkigal" style="display:none">Kirim ulang</a>
+            <a id="resend-link" href="" style="display:none">Kirim ulang</a>
         </h6>
     </form>
 </div>

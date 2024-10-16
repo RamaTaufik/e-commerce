@@ -73,6 +73,12 @@ Keranjang ● Plus-H
                             <h6 class="text-secondary">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
                         </div>
                         @endforeach
+                    @endif
+                    @guest
+                    <div>
+                        <a href="{{ route('login') }}" class="w-100 btn btn-primary">Pesan</a>
+                    </div>
+                    @else
                     <div>
                         {{-- <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total,0,'.',',')}}</h4> --}}
                         <select name="myAddress" id="myAddress" class="form-select my-2" 
@@ -107,7 +113,7 @@ Keranjang ● Plus-H
                         </select>
                         <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="btn btn-primary" value="Pesan" />
                     </div>
-                    @endif
+                    @endguest
                 </div>
             </div>
         </div>

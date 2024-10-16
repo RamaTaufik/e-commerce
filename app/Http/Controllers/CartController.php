@@ -17,8 +17,12 @@ class CartController extends Controller
     public function index()
     {
         $cart = [];
-        $customer_id = Customer::where('user_id', Auth::id())->first()->id;
-        $myAddresses = CustomerAddress::where('customer_id', $customer_id)->get();
+        $customer_id = '';
+        $myAddresses = [];
+        if(Auth::check()) {
+            $customer_id = Customer::where('user_id', Auth::id())->first()->id;
+            $myAddresses = CustomerAddress::where('customer_id', $customer_id)->get();
+        }
         if(session()->has('cart')) {
             foreach (session('cart') as $cart_item) {
                 $data = ProductVariant::where('product_variant_code', $cart_item['code'])->first();

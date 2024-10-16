@@ -23,7 +23,7 @@ class OtpController extends Controller
     {
         $email = $request->input('email');
         $verification_type=$request->input('ver_type');
-        $con = mysqli_connect("localhost","root","","plush");
+        $con = mysqli_connect("localhost","root","","plus_h");
 
         if(mysqli_connect_errno()) {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -90,7 +90,7 @@ class OtpController extends Controller
     {
         $email = $request->input('email');
         $verification_type=$request->input('ver_type');
-        $con = mysqli_connect("localhost","root","","plush");
+        $con = mysqli_connect("localhost","root","","plus_h");
 
         if(mysqli_connect_errno()) {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
