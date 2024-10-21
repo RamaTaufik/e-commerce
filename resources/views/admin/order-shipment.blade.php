@@ -32,7 +32,6 @@ Status Pengiriman Pesanan ● Plus-H ADMIN
                     <th>Total Harga</th>
                     <th>Status Pembayaran</th>
                     <th>Status Pengiriman</th>
-                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,13 +46,6 @@ Status Pengiriman Pesanan ● Plus-H ADMIN
                         <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>
                     </td> --}}
                     <td>{{$order->shipment_status}}</td>
-                    <td>
-                        <form action="" method="POST">
-                            @csrf
-                            <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.order-ship', $order->order_code) }}">Kirim</a>
-                            {{-- <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a> --}}
-                        </form>
-                    </td>
                 </tr>
                 @endforeach
             </tbody>

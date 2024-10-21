@@ -10,8 +10,10 @@ use App\Models\Customer;
 use App\Models\Province;
 use App\Models\Shipment;
 use App\Models\CustomerAddress;
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\City;
 use Auth;
 
 class OrderController extends Controller
@@ -19,6 +21,14 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function getDistrict(City $city)
+    {
+        $districts['districts'] = Address::select('kecamatan')->where('kabupaten', $city->name)->groupBy('kecamatan')->get();
+        $districts['subdistricts'] = Address::select('id','kelurahan','kecamatan')->where('kabupaten', $city->name)->get();
+
+        return $districts;
     }
 
     public function checkOngkir(Request $request)

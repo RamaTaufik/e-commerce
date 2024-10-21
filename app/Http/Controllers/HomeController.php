@@ -19,15 +19,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $product = Product::where('status', 'public')->get();
+        $products = Product::where('status', 'public')->get();
 
-        foreach($product as $item) {
+        foreach($products as $item) {
             $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
         }
 
-        $category = Category::all();
+        $categories = Category::all();
 
-        return view('home', compact(['product','category']));
+        return view('home', compact(['products','categories']));
     }
 
     public function search(Request $request)

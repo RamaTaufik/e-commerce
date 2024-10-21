@@ -82,24 +82,27 @@ Keranjang ● Plus-H
                     <div>
                         {{-- <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total,0,'.',',')}}</h4> --}}
                         <select name="myAddress" id="myAddress" class="form-select my-2" 
-                         onchange="changeAddress({{json_encode($myAddresses)}},{{json_encode($address['kota'])}})">
+                         onchange="changeAddress({{json_encode($myAddresses)}},{{json_encode($addresses)}})">
                             @if (count($myAddresses) > 0)
                             <option value="" hidden disabled selected> Pilih alamat pengiriman</option>
                                 @foreach ($myAddresses as $myAddress)
-                                <option value="{{$myAddress->id}}">{{$myAddress->address_detail}}</option>
+                                <option value="{{$myAddress->id}}">{{$myAddress->address_name}}</option>
                                 @endforeach
                             @endif
                             <option value="new">Alamat Baru</option>
                         </select>
-                        <select  name="province_destination" id="province" class="form-select mb-2"
-                            onchange="unlockSelectOption('province','city',{{json_encode($address['kota'])}})">
-                            <option value="" hidden selected disabled>Pilih Provinsi</option>
-                            @foreach ($address['provinsi'] as $province)
-                            <option value="{{$province->id}}">{{$province->name}}</option>
+                        <input type="text" name="address_name" id="address_name" class="form-control mb-2"" placeholder="'kantor', 'rumah', dll.">
+                        <select  name="province_city" id="province_city" class="form-select mb-2">
+                            <option value="" hidden selected disabled>Pilih Kabupaten/Kota</option>
+                            @foreach ($addresses as $address)
+                            <option value="{{$address->id}}">{{$address->province->name}} - {{$address->name}}</option>
                             @endforeach
                         </select>
-                        <select  name="city_destination" id="city" class="form-select mb-2" disabled>
-                            <option value="" hidden selected disabled>Pilih Kota</option>
+                        <select  name="district" id="district" class="form-select mb-2" disabled>
+                            <option value="" hidden selected disabled>Pilih Kecamatan</option>
+                        </select>
+                        <select  name="subdistrict" id="subdistrict" class="form-select mb-2" disabled>
+                            <option value="" hidden selected disabled>Pilih Kelurahan</option>
                         </select>
                         <textarea name="address_detail" id="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
                         <select name="shipment_id" id="shipment" class="form-select mb-3">
@@ -193,5 +196,33 @@ Keranjang ● Plus-H
         })
     })
 
+</script>
+<script>
+    $('#province_city').on('change', function() {
+        $.ajax({
+            type: "post",
+            url: "{{ route('order.get-district') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: { 'city': $('#province_city').value },
+            success: function(response) {
+                $('#district').disabled = false;
+                $('#district').innerHTML = '';
+                response['districts'].forEach(item => {
+                    let option = document.createElement("option");
+
+                    option.value = item['kecamatan'];
+                    option.innerHTML = item['kecamatan'];
+
+                    $('#district').appendChild(option);
+                });
+                // $('#district').on('change', function() {});
+            },
+            error: function() {
+                alert('Kesalahan berpikir');
+            }
+        })
+    })
 </script>
 @endsection

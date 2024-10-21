@@ -30,16 +30,15 @@ class CartController extends Controller
                     'name' => $data->product->name,
                     'image' => ProductPicture::where('product_variant_code', $cart_item['code'])->first()->directory,
                     'qty' => $cart_item['qty'],
-                    'price' => $data->product->price,
+                    'price' => $data->price,
                     'variation' => $data->variation,
                 ];
             }
         }
-        $address['provinsi'] = Province::all();
-        $address['kota'] = City::all();
+        $addresses = City::orderBy('province_id')->get();
         $shipments = Shipment::all();
 
-        return view('cart', compact(['cart','myAddresses','address','shipments']));
+        return view('cart', compact(['cart','myAddresses','addresses','shipments']));
     }
 
     public function add(Request $request, $buy = false)

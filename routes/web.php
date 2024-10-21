@@ -19,10 +19,13 @@ Route::get('/register-account/{email}', [RegisterController::class, 'registerAcc
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/product/{id}', [HomeController::class, 'product'])->name('product');
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
+Route::post('/order/get-district', [OrderController::class, 'getDistrict'])->name('order.get-district');
 Route::post('/order/check-ongkir', [OrderController::class, 'checkOngkir'])->name('order.check-ongkir');
 Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
 Route::post('/order/buy', [OrderController::class, 'buy'])->name('order.buy');
