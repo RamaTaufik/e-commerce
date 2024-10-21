@@ -50,16 +50,16 @@
                             <i class="fa-solid fa-star"></i>
                         </span> (10 ulasan) <span class="mx-2">•</span> Terjual 10+</p>
                         <h6 class="">di <span><a href="/customer/search" class="text-dark"><strong>{{$products->category->name}}</strong></a></span></h6>
-                        <h4 class="text-end"><strong>Rp{{number_format($products->price,0,',','.')}}</strong></h4>
+                        <h4 class="text-end"><strong>Rp{{number_format($products->productVariant->first()->price,0,',','.')}}</strong></h4>
                     </div>
                     <h6><strong>Deskripsi Produk</strong></h6>
                     <dl class="row">
                         <dd class="col-2 text-head">Bahan</dd>
                         <dd class="col-10">{{$products->material}}</dd>
                         <dd class="col-2 text-head">Ukuran</dd>
-                        <dd class="col-10">{{str_replace('.',' cm x ',$products->size_in_cm).' cm'}}</dd>
+                        <dd class="col-10">{{str_replace('-',' cm x ',$products->productVariant->first()->size_in_cm).' cm'}}</dd>
                         <dd class="col-2 text-head">Berat</dd>
-                        <dd class="col-10">{{$products->weight_in_gram}} gram</dd>
+                        <dd class="col-10">{{$products->productVariant->first()->weight_in_gram}} gram</dd>
                     </dl>
                     <p>{{$products->description}}</p>
                 </div>

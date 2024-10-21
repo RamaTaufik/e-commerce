@@ -30,6 +30,9 @@ class ProductVariantController extends Controller
             'product_variant_code' => $request->product_id.'-'.$serial,
             'product_id' => $request->product_id,
             'variation' => $request->variation,
+            'size_in_cm' => $request['h'].'-'.$request['w'].'-'.$request['t'],
+            'weight_in_gram' => $request['weight_in_gram'],
+            'price' => $request['price'],
             'stock' => $request->stock,
         ]);
 

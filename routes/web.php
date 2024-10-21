@@ -48,6 +48,6 @@ Route::get('/admin/product/archive/{id}', [ProductController::class, 'edit'])->n
 Route::post('/admin/product/add', [ProductController::class, 'create'])->name('admin.product-create');
 Route::put('/admin/product/update/{id}', [ProductController::class, 'update'])->name('admin.product-update');
 Route::delete('/admin/product/delete/{id}', [ProductController::class, 'destroy'])->name('admin.product-delete');
-Route::post('/admin/product_variant/add', [ProductVariantController::class, 'create'])->name('admin.product_variant-create');
+Route::post('/admin/product_variant/add', 'App\Http\Controllers\ProductVariantController@create')->name('admin.product_variant-create');
 Route::put('/admin/product_variant/update/{id}', [ProductVariantController::class, 'update'])->name('admin.product_variant-update');
 Route::delete('/admin/product_variant/delete/{id}', [ProductVariantController::class, 'destroy'])->name('admin.product_variant-delete');

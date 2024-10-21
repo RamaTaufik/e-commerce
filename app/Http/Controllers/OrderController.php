@@ -23,12 +23,13 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function getDistrict(City $city)
+    public function getDistrict()
     {
+        $city = City::find($_POST['cityId']);
         $districts['districts'] = Address::select('kecamatan')->where('kabupaten', $city->name)->groupBy('kecamatan')->get();
         $districts['subdistricts'] = Address::select('id','kelurahan','kecamatan')->where('kabupaten', $city->name)->get();
 
-        return $districts;
+        return response()->json($districts);
     }
 
     public function checkOngkir(Request $request)

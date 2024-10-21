@@ -31,9 +31,37 @@ Edit "{{$product->name}}" ● Plus-H ADMIN
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
+                                <label for="weight_in_gram">{{ __('Berat (gram)') }}</label>
+                                <input id="weight_in_gram" type="number" class="form-control @error('weight_in_gram') is-invalid @enderror" name="weight_in_gram" placeholder="Berat" value="{{ $product->weight_in_gram }}" required autocomplete="weight_in_gram" autofocus>
+                                @error('size_in_cm')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="input-group">
+                                    <input id="h" type="number" class="form-control @error('h') is-invalid @enderror" name="h" placeholder="Panjang" value="{{ $product->h }}" required autocomplete="h" autofocus>
+                                    <input id="w" type="number" class="form-control @error('w') is-invalid @enderror" name="w" placeholder="Lebar" value="{{ $product->w }}" required autocomplete="w" autofocus>
+                                    <input id="t" type="number" class="form-control @error('t') is-invalid @enderror" name="t" placeholder="Tinggi" value="{{ $product->t }}" required autocomplete="t" autofocus>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
                                 <label for="stock">{{ __('Stok') }}</label>
                                 <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror" name="stock" value="{{ old('stock') }}" required autocomplete="stock" autofocus>
                                 @error('stock')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="price">{{ __('Harga') }}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">Rp</span>
+                                    <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ $product->price }}" required autocomplete="price" autofocus>
+                                </div>
+                                @error('price')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -97,37 +125,9 @@ Edit "{{$product->name}}" ● Plus-H ADMIN
                     @enderror
                 </div>
                 <div class="col-12 mb-3">
-                    <label for="weight_in_gram">{{ __('Berat (gram)') }}</label>
-                    <input id="weight_in_gram" type="number" class="form-control @error('weight_in_gram') is-invalid @enderror" name="weight_in_gram" placeholder="Berat" value="{{ $product->weight_in_gram }}" required autocomplete="weight_in_gram" autofocus>
-                    @error('size_in_cm')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="col-12 mb-3">
-                    <div class="input-group">
-                        <input id="h" type="number" class="form-control @error('h') is-invalid @enderror" name="h" placeholder="Panjang" value="{{ $product->h }}" required autocomplete="h" autofocus>
-                        <input id="w" type="number" class="form-control @error('w') is-invalid @enderror" name="w" placeholder="Lebar" value="{{ $product->w }}" required autocomplete="w" autofocus>
-                        <input id="t" type="number" class="form-control @error('t') is-invalid @enderror" name="t" placeholder="Tinggi" value="{{ $product->t }}" required autocomplete="t" autofocus>
-                    </div>
-                </div>
-                <div class="col-12 mb-3">
                     <label for="material">{{ __('Material') }}</label>
                     <input id="material" type="text" class="form-control @error('material') is-invalid @enderror" name="material" value="{{ $product->material }}" required autocomplete="material" autofocus>
                     @error('material')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="col-12 mb-3">
-                    <label for="price">{{ __('Harga') }}</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp</span>
-                        <input id="price" type="number" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ $product->price }}" required autocomplete="price" autofocus>
-                    </div>
-                    @error('price')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

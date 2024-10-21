@@ -68,8 +68,6 @@ class CartController extends Controller
             ];
         }
         session()->put('cart', $data);
-
-        return redirect()->route('cart');
     }
 
     public function remove(Request $request)

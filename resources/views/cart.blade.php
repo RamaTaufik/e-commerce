@@ -205,19 +205,47 @@ Keranjang ● Plus-H
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            data: { 'city': $('#province_city').value },
+            data: { 'cityId': document.getElementById("province_city").value },
             success: function(response) {
-                $('#district').disabled = false;
-                $('#district').innerHTML = '';
+                let districtSelect = document.getElementById("district");
+                districtSelect.disabled = false;
+                districtSelect.innerHTML = '';
                 response['districts'].forEach(item => {
                     let option = document.createElement("option");
 
                     option.value = item['kecamatan'];
                     option.innerHTML = item['kecamatan'];
 
-                    $('#district').appendChild(option);
+                    districtSelect.appendChild(option);
                 });
-                // $('#district').on('change', function() {});
+                let subdistrictSelect = document.getElementById("subdistrict");
+                subdistrictSelect.disabled = false;
+                subdistrictSelect.innerHTML = '';
+                response['subdistricts'].forEach(item => {
+                    if(item['kecamatan'] == districtSelect.value) {
+                        let option = document.createElement("option");
+
+                        option.value = item['id'];
+                        option.innerHTML = item['kelurahan'];
+
+                        subdistrictSelect.appendChild(option);
+                    }
+                });
+                districtSelect.onchange = function() {
+                    let subdistrictSelect = document.getElementById("subdistrict");
+                    subdistrictSelect.disabled = false;
+                    subdistrictSelect.innerHTML = '';
+                    response['subdistricts'].forEach(item => {
+                        if(item['kecamatan'] == districtSelect.value) {
+                            let option = document.createElement("option");
+
+                            option.value = item['id'];
+                            option.innerHTML = item['kelurahan'];
+
+                            subdistrictSelect.appendChild(option);
+                        }
+                    });
+                };
             },
             error: function() {
                 alert('Kesalahan berpikir');
