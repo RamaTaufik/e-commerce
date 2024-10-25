@@ -24,13 +24,13 @@ Pesan ● Plus-H
                 @foreach ($cart['items'] as $cartItem)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>
-                        {{$cartItem->productVariant->product->name}}
+                    <td class="d-flex flex-column justify-content-center">
+                        <p class="m-0 p-0">{{$cartItem->productVariant->product->name}}</p>
                         @if ($cartItem->productVariant->variation != 'base')
-                        <br>{{$cartItem->productVariant->variation}}
+                        <span class="text-body-tertiary">{{$cartItem->productVariant->variation}}</span>
                         @endif
                     </td>
-                    <td>Rp{{number_format($cartItem->productVariant->product->price,0,'.',',')}} x {{$cartItem->qty}}</td>
+                    <td>Rp{{number_format($cartItem->productVariant->price,0,'.',',')}} x {{$cartItem->qty}}</td>
                 </tr>
                 @endforeach
             </table>

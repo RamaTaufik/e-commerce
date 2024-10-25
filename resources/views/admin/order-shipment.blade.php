@@ -27,25 +27,18 @@ Status Pengiriman Pesanan ● Plus-H ADMIN
             <thead class="align-middle">
                 <tr>
                     <th>Kode</th>
-                    <th>Pembeli</th>
-                    <th>Alamat Pembeli</th>
-                    <th>Total Harga</th>
-                    <th>Status Pembayaran</th>
+                    <th>Detail Pesanan</th>
                     <th>Status Pengiriman</th>
+                    <th>Detail Pengiriman</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($orders as $order)
                 <tr>
                     <td>{{$order->order_code}}</td>
-                    <td>{{$order->customer->first_name.' '.$order->customer->last_name}}</td>
-                    <td>{{$order->customerAddress->address_detail}}</td>
-                    <td>Rp{{number_format($order->total_price + $order->shipping_cost,0,'.',',')}}</td>
+                    <td><a href="">Lihat detail <i class="fa-solid fa-eye"></i></a></td>
                     <td>{{$order->status}}</td>
-                    {{-- <td>
-                        <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>
-                    </td> --}}
-                    <td>{{$order->shipment_status}}</td>
+                    <td><a href="">Lihat detail pengiriman <i class="fa-solid fa-eye"></i></a></td>
                 </tr>
                 @endforeach
             </tbody>

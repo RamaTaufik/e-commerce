@@ -13,7 +13,7 @@ return new class extends Migration
     {
         if(!Schema::hasTable('provinces')) {
             Schema::create('provinces', function (Blueprint $table) {
-                $table->id();
+                $table->unsignedInteger('id')->primary();
                 $table->string('name');
                 $table->timestamps();
             });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('provinces');
+        Schema::dropIfExists('provinces');
     }
 };

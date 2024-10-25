@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-{{$products->name}} ● Plus-H
+{{$product->name}} ● Plus-H
 @endsection
 
 @section('content')
@@ -41,27 +41,27 @@
                 </div>
                 <div class="col-12 col-md-7 p-5 bg-light">
                     <div class="position-sticky border-bottom mb-3" style="top:100px;z-index:1;">
-                        <h3 class="text-head">{{$products->name}}</h3>
+                        <h3 class="text-head">{{$product->name}}</h3>
                         <p class="card-subtitle mb-2 h6"><span class="text-warning">
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
                             <i class="fa-solid fa-star"></i>
-                        </span> (10 ulasan) <span class="mx-2">•</span> Terjual 10+</p>
-                        <h6 class="">di <span><a href="/customer/search" class="text-dark"><strong>{{$products->category->name}}</strong></a></span></h6>
-                        <h4 class="text-end"><strong>Rp{{number_format($products->productVariant->first()->price,0,',','.')}}</strong></h4>
+                        </span> ({{$product['rating_amount']}} ulasan) <span class="mx-2">•</span> Terjual {{$product['sold']}}</p>
+                        <h6 class="">di <span><a href="/customer/search" class="text-dark"><strong>{{$product->category->name}}</strong></a></span></h6>
+                        <h4 class="text-end"><strong id="price">Rp{{number_format($productVariants->first()->price,0,',','.')}}</strong></h4>
                     </div>
                     <h6><strong>Deskripsi Produk</strong></h6>
                     <dl class="row">
                         <dd class="col-2 text-head">Bahan</dd>
-                        <dd class="col-10">{{$products->material}}</dd>
+                        <dd class="col-10">{{$product->material}}</dd>
                         <dd class="col-2 text-head">Ukuran</dd>
-                        <dd class="col-10">{{str_replace('-',' cm x ',$products->productVariant->first()->size_in_cm).' cm'}}</dd>
+                        <dd class="col-10" id="size">{{str_replace('-',' cm x ',$productVariants->first()->size_in_cm).' cm'}}</dd>
                         <dd class="col-2 text-head">Berat</dd>
-                        <dd class="col-10">{{$products->productVariant->first()->weight_in_gram}} gram</dd>
+                        <dd class="col-10" id="weight">{{$productVariants->first()->weight_in_gram}} gram</dd>
                     </dl>
-                    <p>{{$products->description}}</p>
+                    <p>{{$product->description}}</p>
                 </div>
                 <div class="col-12">
                     <div class="accordion nav-tabs" id="productInfo">
@@ -114,8 +114,10 @@
                             <p class="form-label m-0">Variasi</p>
                                 @foreach ($productVariants as $variant)
                                 <input type="radio" class="btn-check" name="code" id="{{$variant->product_variant_code}}" value="{{$variant->product_variant_code}}" 
-                                 onclick="changeStock({{json_encode($variant->stock)}})" autocomplete="off">
-                                <label class="btn btn-secondary" for="{{$variant->product_variant_code}}">{{$variant->variation}}</label>
+                                 onclick="changeVariant(this,{{json_encode($variant)}})" autocomplete="off">
+                                <label class="btn @if ($loop->first) btn-primary @else btn-secondary @endif variant-label" id="label-{{$variant->product_variant_code}}" for="{{$variant->product_variant_code}}">
+                                    {{$variant->variation}}
+                                </label>
                                 @endforeach
                             @else
                             <input type="hidden" name="code" value="{{$productVariants[0]->product_variant_code}}">
@@ -125,14 +127,11 @@
                             <label for="qty" class="form-label m-0">Jumlah Beli</label>
                             <p class="text-warning text-head m-0">
                                 Sisa stok : 
-                                <span id="stock">@if(count($productVariants) > 1) - @else {{$productVariants[0]->stock}} @endif</span>
+                                <span id="stock">{{$productVariants[0]->stock}}</span>
                             </p>
                         </div>
                         <input type="number" name="qty" id="qty" class="form-control">
                         <div class="form-text my-2"><a href="" class="text-decoration-none text-secondary"><i class="fa-solid fa-pencil"></i> Tambah catatan</a></div>
-                        <div class="d-flex justify-content-between text-head">
-                            <h6>Subtotal</h6><h6 class="text-secondary">Rp405.000,00</h6>
-                        </div>
                         <div class="d-flex justify-content-between">
                             <input type="submit" formaction="{{ route('cart.add') }}" class="btn btn-primary w-50" value="Tambah">
                             <input type="submit" formaction="{{ route('cart.add', ['buy' => true]) }}" class="btn btn-secondary w-50" value="Beli">

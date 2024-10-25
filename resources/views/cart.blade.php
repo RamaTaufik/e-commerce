@@ -36,8 +36,11 @@ Keranjang ● Plus-H
                             <td class="border-start">
                                 <div class="d-flex align-items-center">
                                     <img src="{{ asset('image/products/'.$cart[$cartItem['code']]['image']) }}" class="product-img" alt="">
-                                    <div class="flex-grow-1">
-                                        <h5 class="text-end">{{$cart[$cartItem['code']]['name']}}</h5>
+                                    <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                        <h5 class="m-0 p-0 text-end">{{$cart[$cartItem['code']]['name']}}</h5>
+                                        @if ($cart[$cartItem['code']]['variation'] != 'base')
+                                        <p class="m-0 p-0 text-end">{{$cart[$cartItem['code']]['variation']}}</p>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -69,8 +72,8 @@ Keranjang ● Plus-H
                     @if(session()->has('cart'))
                         @foreach (session('cart') as $cartItem)
                         <div class="d-flex justify-content-between">
-                            <h6>{{$cart[$cartItem['code']]['name']}}</h6>
-                            <h6 class="text-secondary">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
+                            <h6 class="text-truncate">{{$cart[$cartItem['code']]['name']}}</h6>
+                            <h6 class="text-secondary text-nowrap">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
                         </div>
                         @endforeach
                     @endif
@@ -114,7 +117,7 @@ Keranjang ● Plus-H
                         <select name="ongkir" id="ongkir" class="form-select mb-3">
                             <option value="" hidden disabled selected> Pilih Paket Pengiriman</option>
                         </select>
-                        <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="btn btn-primary" value="Pesan" />
+                        <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="w-100 btn btn-primary" value="Pesan" />
                     </div>
                     @endguest
                 </div>

@@ -40,8 +40,9 @@ Kelola Produk ● Plus-H ADMIN
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.product-create') }}" class="mb-4" method="POST">
+                    <form action="{{ route('admin.product-create') }}" class="mb-4" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('POST')
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="name">{{ __('Nama Produk') }}</label>

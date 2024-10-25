@@ -30,6 +30,7 @@ Route::post('/order/check-ongkir', [OrderController::class, 'checkOngkir'])->nam
 Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
 Route::post('/order/buy', [OrderController::class, 'buy'])->name('order.buy');
 Route::get('/order/tracking', [OrderController::class, 'tracking'])->name('order.tracking');
+Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
 
 Route::post('/otp-request', [OtpController::class, 'requestForOtp'])->name('otp.request');
 Route::post('/otp-resend', [OtpController::class, 'resendOtp'])->name('otp.resend');

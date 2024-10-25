@@ -9,6 +9,7 @@ use App\Models\ProductPicture;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Review;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,10 @@ class HomeController extends Controller
 
         foreach($products as $item) {
             $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
+            $item['rating'] = Review::avg('rating');
+            $orderItems = OrderItem::where('product_variant_code', 'like', $item->id.'-%');
+            $item['sold'] = $orderItems->sum('qty');
+            $item['rating_amount'] = count($orderItems->get());
         }
 
         $categories = Category::all();
@@ -38,6 +43,10 @@ class HomeController extends Controller
 
         foreach($product as $item) {
             $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
+            $item['rating'] = Review::avg('rating');
+            $orderItems = OrderItem::where('product_variant_code', 'like', $item->id.'-%');
+            $item['sold'] = $orderItems->sum('qty');
+            $item['rating_amount'] = count($orderItems->get());
         }
 
         return view('search', compact(['product','index']));
@@ -45,10 +54,14 @@ class HomeController extends Controller
 
     public function product($id)
     {
-        $products = Product::find($id);
+        $product = Product::find($id);
         $productVariants = ProductVariant::where('product_id', $id)->get();
         $productPictures = ProductPicture::where('product_variant_code', 'LIKE', $id.'-%')->get();
-        return view('product', compact(['products','productVariants','productPictures']));
+        $product['rating'] = Review::avg('rating');
+        $orderItems = OrderItem::where('product_variant_code', 'like', $product->id.'-%');
+        $product['sold'] = $orderItems->sum('qty');
+        $product['rating_amount'] = count($orderItems->get());
+        return view('product', compact(['product','productVariants','productPictures']));
     }
 
     public function callback(Request $request)
@@ -59,7 +72,7 @@ class HomeController extends Controller
             if($request->transaction_status == 'capture') {
                 $order = Order::find($request->order_id);
                 $order->update([
-                    'status' => 'Paid',
+                    'payment_status' => 'Paid',
                     'payment_date' => now(),
                 ]);
 

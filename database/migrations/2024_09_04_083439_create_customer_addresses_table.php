@@ -18,8 +18,8 @@ return new class extends Migration
 
         Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address_name');
             $table->foreignId('customer_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->string('address_name');
             $table->integer('address_id');
             $table->foreign('address_id')->references('id')->on('addresses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('address_detail');

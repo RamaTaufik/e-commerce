@@ -37,7 +37,7 @@
                     <a href="{{ route('admin.order') }}" class="nav-link {{ $page == 'order' ? 'active' : ''; }}">Kelola Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-seller" class="nav-link {{ $page == 'order.status' ? 'active' : ''; }}">Status Pengiriman</a>
+                    <a href="{{ route('admin.order-shipment') }}" class="nav-link {{ $page == 'order.status' ? 'active' : ''; }}">Status Pengiriman</a>
                 </li>
                 <li class="nav-item">
                     <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.cancel' ? 'active' : ''; }}">Pembatalan Pesanan</a>

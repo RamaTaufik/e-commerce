@@ -13,8 +13,9 @@ return new class extends Migration
     {
         if(!Schema::hasTable('cities')) {
             Schema::create('cities', function (Blueprint $table) {
-                $table->id();
+                $table->unsignedInteger('id')->primary();
                 $table->unsignedInteger('province_id');
+                $table->foreign('province_id')->references('id')->on('provinces')->onUpdate('cascade')->onDelete('cascade');
                 $table->string('name');
                 $table->timestamps();
             });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('cities');
+        Schema::dropIfExists('cities');
     }
 };

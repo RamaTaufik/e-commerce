@@ -30,7 +30,6 @@ Kelola Pesanan ● Plus-H ADMIN
                     <th>Pembeli</th>
                     <th>Alamat Pembeli</th>
                     <th>Total Barang & Harga</th>
-                    <th>Status Pembayaran</th>
                     <th>Status Pengiriman</th>
                     <th>Aksi</th>
                 </tr>
@@ -55,7 +54,6 @@ Kelola Pesanan ● Plus-H ADMIN
                     {{-- <td>
                         <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>
                     </td> --}}
-                    <td>{{$order->shipment_status}}</td>
                     <td>
                         <form action="" method="POST">
                             @csrf

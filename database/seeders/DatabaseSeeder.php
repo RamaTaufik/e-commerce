@@ -21,11 +21,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            // RajaOngkirSeeder::class,
+            RajaOngkirSeeder::class,
             UserSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
             ShipmentSeeder::class,
+            PaymentSeeder::class,
         ]);
     }
 }

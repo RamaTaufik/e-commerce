@@ -21,7 +21,7 @@ class ProductController extends Controller
         $product = Product::all()->where('status','public');
         foreach($product as $p) {
             $p['category'] = $p->category()->pluck('name')->first();
-            $p['total_stock'] = $p->productVariant->pluck('stock')->sum();
+            $p['total_stock'] = $p->productVariant->sum('stock');
         }
 
         $category = Category::all();

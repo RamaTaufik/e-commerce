@@ -54,12 +54,12 @@ Dashboard ● Plus-H
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-star"></i>
-                    </span> (10)</p>
+                    </span> ({{$item['rating_amount']}})</p>
                     <h5 class="p-0 m-0 mb-2"><b>
                         Rp{{number_format($item->productVariant->min('price'),0,'.',',')}} 
                         @if (count($item->productVariant) > 1) - Rp{{number_format($item->productVariant->max('price'),0,'.',',')}} @endif
                     </b></h5>
-                    <p class="m-0 pt-1 mt-1 text-smaller border-top">Terjual 10+</p>
+                    <p class="m-0 pt-1 mt-1 text-smaller border-top">Terjual {{$item['sold']}}</p>
                 </div>
                 <a href="{{ route('product', $item->id) }}" class="stretched-link"></a>
             </div>

@@ -16,7 +16,7 @@ class AdminOrderController extends Controller
 
     public function index()
     {
-        $orders = Order::where('shipment_status','Processing')->get();
+        $orders = Order::where('status','Processing')->get();
         $orderItems = [];
 
         foreach($orders as $order) {
@@ -28,7 +28,19 @@ class AdminOrderController extends Controller
 
     protected function shipment()
     {
-        $orders = Order::where('shipment_status','Shipping')->orWhere('shipment_status','Arrived')->get();
+        $orders = Order::where('status','!=','Processing')->where('status','!=','Cancelled')->get();
+        $orderItems = [];
+
+        foreach($orders as $order) {
+            $orderItems[$order->order_code] = OrderItem::where('order_code',$order->order_code)->get();
+        }
+
+        return view('admin.order-shipment', compact('orders','orderItems'));
+    }
+
+    protected function cancelled()
+    {
+        $orders = Order::where('status','Cancelled')->get();
         $orderItems = [];
 
         foreach($orders as $order) {
@@ -41,7 +53,7 @@ class AdminOrderController extends Controller
     protected function ship($code)
     {
         $order = Order::find($code);
-        $order->shipment_status = 'Shipping';
+        $order->status = 'Shipping';
         $order->save();
 
         return redirect()->route('admin.order-shipment');

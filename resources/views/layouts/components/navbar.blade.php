@@ -53,7 +53,7 @@
                     @else
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('order.tracking') }}" title="Tracking">
-                                <i class="fa-solid fa-location-crosshairs"></i> <span>Tracking</span>
+                                <i class="fa-solid fa-bag-shopping"></i> <span>Pesanan</span>
                             </a>
                         </li>
                         <li class="nav-item">

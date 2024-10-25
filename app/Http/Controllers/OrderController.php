@@ -37,13 +37,13 @@ class OrderController extends Controller
         $total['weight'] = 0;
         
         foreach($request->cart_item as $cartItem) {
-            $variant = ProductVariant::where('product_variant_code', $cartItem)->first();
-            $total['weight'] += session('cart')[$cartItem]['qty']*$variant->product->weight_in_gram;
+            $variant = ProductVariant::find($cartItem);
+            $total['weight'] += session('cart')[$cartItem]['qty']*$variant->weight_in_gram;
         }
 
         $cost = RajaOngkir::ongkosKirim([
-            'origin'        => 64, // ID kota/kabupaten asal
-            'destination'   => $request->city_destination, // ID kota/kabupaten tujuan
+            'origin'        => 22, // ID kota/kabupaten asal
+            'destination'   => $request->province_city, // ID kota/kabupaten tujuan
             'weight'        => $total['weight'], // berat barang dalam gram
             'courier'       => Shipment::find($request->shipment_id)->shipment_name, // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
         ])->get();
@@ -60,19 +60,18 @@ class OrderController extends Controller
         $order = '';
         $cart['total_price'] = 0;
         $customer = Customer::where('user_id',Auth::id())->first();
-        $address = CustomerAddress::where('customer_id',$customer->id)
-                    ->where('city_id',$request['city_destination'])
-                    ->where('address_detail',$request['address_detail'])->first();
+        $address = CustomerAddress::find($request['myAddress']);
         if($address == NULL) {
             $address = CustomerAddress::create([
                 'customer_id' => $customer->id,
-                'city_id' => $request['city_destination'],
+                'address_name' => $request['address_name'],
+                'address_id' => $request['subdistrict'],
                 'address_detail' => $request['address_detail'],
             ]);
         }
 
-        if(Order::where('customer_id', $customer->id)->where('status', 'Unpaid')->exists()) {
-            $order = Order::where('customer_id', $customer->id)->where('status', 'Unpaid')->first()->delete();
+        if(Order::where('customer_id', $customer->id)->where('payment_status', 'Unpaid')->exists()) {
+            Order::where('customer_id', $customer->id)->where('payment_status', 'Unpaid')->first()->delete();
         }
         $order = Order::create([
             'order_code' => str_replace('/','',date('Y/m/d/H/i/s')).rand(pow(10,3),pow(10,4)-1),
@@ -84,8 +83,8 @@ class OrderController extends Controller
             'shipping_cost' => $request['ongkir'],
             'note' => '',
             'total_price' => 0,
-            'status' => 'Unpaid',
-            'shipment_status' => 'processing',
+            'payment_status' => 'Unpaid',
+            'status' => 'processing',
         ]);
         
         foreach($request->cart_item as $cartItem) {
@@ -96,7 +95,7 @@ class OrderController extends Controller
                     'qty' => session('cart')[$cartItem]['qty'],
                 ]);
             }
-            $cart['total_price'] += session('cart')[$cartItem]['qty']*$cart['items'][$cartItem]->productVariant->product->price;
+            $cart['total_price'] += session('cart')[$cartItem]['qty']*$cart['items'][$cartItem]->productVariant->price;
         }
 
         Order::find($order->order_code)->update([
@@ -134,13 +133,31 @@ class OrderController extends Controller
     {
         $customer = Customer::where('user_id',Auth::id())->first();
         $orders = Order::where('customer_id', $customer->id)
-                       ->where('status', 'Paid')->get();
+                       ->where('payment_status', 'Paid')
+                       ->where('status', '!=', 'Confirmed')
+                       ->where('status', '!=', 'Cancelled')->get();
         $orderItems = [];
 
         foreach($orders as $order) {
             $orderItems[$order->order_code] = OrderItem::where('order_code',$order->order_code)->get();
         }
 
-        return view('tracking', compact(['orders','orderItems']));
+        return view('order-tracking', compact(['orders','orderItems']));
+    }
+
+    public function history()
+    {
+        $customer = Customer::where('user_id',Auth::id())->first();
+        $orders = Order::where('customer_id', $customer->id)
+                       ->where('payment_status', 'Paid')
+                       ->where('status', 'Confirmed')
+                       ->orWhere('status', 'Cancelled')->get();
+        $orderItems = [];
+
+        foreach($orders as $order) {
+            $orderItems[$order->order_code] = OrderItem::where('order_code',$order->order_code)->get();
+        }
+
+        return view('order-history', compact(['orders','orderItems']));
     }
 }
