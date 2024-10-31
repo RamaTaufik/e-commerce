@@ -1,4 +1,4 @@
-@extends('layouts.app-admin', ['page' => 'order-shipment'])
+@extends('layouts.app-admin', ['page' => 'order.status'])
 
 @section('title')
 Status Pengiriman Pesanan ● Plus-H ADMIN
@@ -16,7 +16,7 @@ Status Pengiriman Pesanan ● Plus-H ADMIN
             <a class="nav-link active" aria-current="page">Status Pengiriman</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Pembatalan Pesanan</a>
+            <a class="nav-link" href="{{ route('admin.order-cancelled') }}">Pembatalan Pesanan</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Ulasan Pembeli</a>

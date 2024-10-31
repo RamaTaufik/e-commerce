@@ -40,10 +40,10 @@
                     <a href="{{ route('admin.order-shipment') }}" class="nav-link {{ $page == 'order.status' ? 'active' : ''; }}">Status Pengiriman</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.cancel' ? 'active' : ''; }}">Pembatalan Pesanan</a>
+                    <a href="{{ route('admin.order-cancelled') }}" class="nav-link {{ $page == 'order.cancel' ? 'active' : ''; }}">Pembatalan Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.customer_review' ? 'active' : ''; }}">Ulasan Pembeli</a>
+                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.review' ? 'active' : ''; }}">Ulasan Pembeli</a>
                 </li>
             </div>
             <li class="nav-item">

@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-7 p-5 bg-light">
-                    <div class="position-sticky border-bottom mb-3" style="top:100px;z-index:1;">
+                    <div class="position-sticky bg-light border-bottom mb-3" style="top:100px;z-index:1;">
                         <h3 class="text-head">{{$product->name}}</h3>
                         <p class="card-subtitle mb-2 h6"><span class="text-warning">
                             <i class="fa-solid fa-star"></i>
@@ -74,23 +74,28 @@
                         <div class="bg-white">
                             <div id="reviews" class="accordion-collapse collapse show" data-bs-parent="#productInfo">
                                 <div class="accordion-body">
+                                    @foreach ($reviews as $review)
                                     <div class="position-relative bg-white mb-2 p-2 shadow">
-                                        <h4 class="position-absolute" style="top:20px;right:20px;"><sup class="float-end"><i class="fa-solid fa-ellipsis-vertical"></i></sup></h4>
+                                        {{-- <h4 class="position-absolute" style="top:20px;right:20px;"><sup class="float-end"><i class="fa-solid fa-ellipsis-vertical"></i></sup></h4> --}}
                                         <div class="d-flex align-items-center">
-                                            <img src="../style/asset/image/icon.jpg" alt="" class="rounded-circle" style="aspect-ratio:1/1;height:35px;">
+                                            <img src="{{ asset('image/profile_pictures/default-user.jpg') }}" alt="" class="rounded-circle" style="aspect-ratio:1/1;height:35px;">
                                             <div class="ms-2">
-                                                <p class="text-smaller m-0"><strong><a href="/customer/other-account" class="text-dark text-decoration-none">Pengguna Lain</a></strong></p>
-                                                <p class="text-smaller m-0 text-warning">
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                </p>
+                                                <p class="text-smaller m-0"><strong>{{$review->orderItem->order->customer->first_name}}</strong></p>
+                                                <div class="d-flex text-warning" style="width:200px;">
+                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <p class="m-0 p-0">Sekarang dah tukar jadi hitam, mantap!</p>
+                                        <div class="d-flex">
+                                            <img src="{{ asset('image/reviews/'.$review->picture) }}" alt="" class="img-fluid object-fit-cover" style="height:120px;">
+                                            <p class="m-0 p-0">{{$review->customer_review}}</p>
+                                        </div>
                                     </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div id="moreInformations" class="accordion-collapse collapse" data-bs-parent="#productInfo">

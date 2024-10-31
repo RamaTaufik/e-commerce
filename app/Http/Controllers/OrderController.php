@@ -62,6 +62,13 @@ class OrderController extends Controller
         $customer = Customer::where('user_id',Auth::id())->first();
         $address = CustomerAddress::find($request['myAddress']);
         if($address == NULL) {
+            $request->validate([
+                'address_name' => ['required','string','unique:customer_addresses,address_name'],
+            ],[
+                'address_name' => 'Nama alamat tidak sesuai',
+                'address_name.unique' => 'Sudah ada alamat dengan nama tersebut',
+            ]);
+
             $address = CustomerAddress::create([
                 'customer_id' => $customer->id,
                 'address_name' => $request['address_name'],
@@ -135,7 +142,7 @@ class OrderController extends Controller
         $orders = Order::where('customer_id', $customer->id)
                        ->where('payment_status', 'Paid')
                        ->where('status', '!=', 'Confirmed')
-                       ->where('status', '!=', 'Cancelled')->get();
+                       ->Where('status', '!=', 'Cancelled')->get();
         $orderItems = [];
 
         foreach($orders as $order) {
@@ -159,5 +166,32 @@ class OrderController extends Controller
         }
 
         return view('order-history', compact(['orders','orderItems']));
+    }
+
+    public function confirm(Request $request)
+    {
+        $order = order::find($request->order_code);
+        $order->update([
+            'status' => 'Confirmed',
+        ]);
+
+        return redirect()->route('order.history')->with('Konfirmasi berhasil');
+    }
+
+    public function cancel(Request $request)
+    {
+        $order = order::find($request->order_code);
+        $status = 'Returning';
+
+        if($order->status == 'Processing') {
+            $status = 'Cancelled';
+        }
+
+        $order->update([
+            'status' => $status,
+            'note' => $request->note,
+        ]);
+
+        return back()->with('Pesanan berhasil dibatalkan');
     }
 }

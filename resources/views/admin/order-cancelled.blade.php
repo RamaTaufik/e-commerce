@@ -1,22 +1,22 @@
-@extends('layouts.app-admin', ['page' => 'order'])
+@extends('layouts.app-admin', ['page' => 'order.cancel'])
 
 @section('title')
-Kelola Pesanan ● Plus-H ADMIN
+Pembatalan Pesanan ● Plus-H ADMIN
 @endsection
 
 @section('content')
-<h6 class="mb-0 pb-0">Admin / Order</h6>
-<h1>Kelola Pesanan</h1>
+<h6 class="mb-0 pb-0">Admin / Order / Cancelled</h6>
+<h1>Pembatalan / Pengembalian Pesanan</h1>
 <div class="container fluid">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page">Kelola Pesanan</a>
+            <a class="nav-link" href="{{ route('admin.order') }}">Kelola Pesanan</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.order-shipment') }}">Status Pengiriman</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.order-cancelled') }}">Pembatalan Pesanan</a>
+            <a class="nav-link active" aria-current="page">Pembatalan Pesanan</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Ulasan Pembeli</a>
@@ -27,10 +27,9 @@ Kelola Pesanan ● Plus-H ADMIN
             <thead class="align-middle">
                 <tr>
                     <th>Kode</th>
-                    <th>Pembeli</th>
-                    <th>Alamat Pembeli</th>
-                    <th>Total Barang & Harga</th>
+                    <th>Detail Pesanan</th>
                     <th>Status Pengiriman</th>
+                    <th>Alasan Pembatalan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -38,29 +37,10 @@ Kelola Pesanan ● Plus-H ADMIN
                 @foreach ($orders as $order)
                 <tr>
                     <td>{{$order->order_code}}</td>
-                    <td>{{$order->customer->first_name.' '.$order->customer->last_name}}</td>
-                    <td>{{$order->customerAddress->address_detail}}</td>
-                    <div class="dropdown">
-                        <td>
-                            <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Rp{{number_format($order->total_price + $order->shipping_cost,0,'.',',')}}</a>
-                            <ul class="dropdown-menu px-2">
-                                @foreach ($orderItems[$order->order_code] as $item)
-                                    <li>{{$item->productVariant->product->name.' x'.$item->qty}}</li>
-                                @endforeach
-                            </ul>
-                        </td>
-                    </div>
+                    <td><a href="">Lihat detail <i class="fa-solid fa-eye"></i></a></td>
                     <td>{{$order->status}}</td>
-                    {{-- <td>
-                        <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>
-                    </td> --}}
-                    <td>
-                        <form action="" method="POST">
-                            @csrf
-                            <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.order-ship', $order->order_code) }}">Kirim</a>
-                            {{-- <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a> --}}
-                        </form>
-                    </td>
+                    <td>{{$order->note}}</td>
+                    <td><a href="{{ route('admin.order-resend', $order) }}" class="btn btn-success">Kirim Ulang</i></a></td>
                 </tr>
                 @endforeach
             </tbody>

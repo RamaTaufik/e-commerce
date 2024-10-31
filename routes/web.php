@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -31,6 +32,10 @@ Route::post('/order/checkout', [OrderController::class, 'checkout'])->name('orde
 Route::post('/order/buy', [OrderController::class, 'buy'])->name('order.buy');
 Route::get('/order/tracking', [OrderController::class, 'tracking'])->name('order.tracking');
 Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
+Route::post('/order/confirm', [OrderController::class, 'confirm'])->name('order.confirm');
+Route::post('/order/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
+
+Route::post('/order/review', [ReviewController::class, 'add'])->name('review.add');
 
 Route::post('/otp-request', [OtpController::class, 'requestForOtp'])->name('otp.request');
 Route::post('/otp-resend', [OtpController::class, 'resendOtp'])->name('otp.resend');
@@ -41,6 +46,8 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 Route::get('/admin/order', [AdminOrderController::class, 'index'])->name('admin.order');
 Route::get('/admin/order/shipment', [AdminOrderController::class, 'shipment'])->name('admin.order-shipment');
 Route::get('/admin/order/ship/{id}', [AdminOrderController::class, 'ship'])->name('admin.order-ship');
+Route::get('/admin/order/cancelled', [AdminOrderController::class, 'cancelled'])->name('admin.order-cancelled');
+Route::get('/admin/order/resend/{order}', [AdminOrderController::class, 'resend'])->name('admin.order-resend');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('admin.product');
 Route::get('/admin/product/archive', [ProductController::class, 'archive'])->name('admin.product-archive');
 Route::get('/admin/product/archiving/{id}', [ProductController::class, 'archiving'])->name('admin.product-archiving');
