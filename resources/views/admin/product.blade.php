@@ -40,8 +40,9 @@ Kelola Produk ● Plus-H ADMIN
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.product-create') }}" class="mb-4" method="POST">
+                    <form action="{{ route('admin.product-create') }}" class="mb-4" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('POST')
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="name">{{ __('Nama Produk') }}</label>
@@ -123,6 +124,15 @@ Kelola Produk ● Plus-H ADMIN
                                     </span>
                                 @enderror
                             </div>
+                            <div class="col-12 mb-3">
+                                <label for="image[]">{{ __('Gambar (min. 1, max. 5)') }}</label>
+                                <input id="image[]" type="file" class="form-control @error('image[]') is_invalid @enderror" name="image[]" required>
+                                @error('image[]')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="d-flex flex justify-content-center">
                             <button type="submit" class="btn btn-primary">
@@ -154,7 +164,6 @@ Kelola Produk ● Plus-H ADMIN
                     <th>ID</th>
                     <th>Nama</th>
                     <th>Kategori</th>
-                    <th>Harga</th>
                     <th>Total Stok</th>
                     <th>Detail & Varian</th>
                     <th>Status</th>
@@ -167,7 +176,6 @@ Kelola Produk ● Plus-H ADMIN
                     <td>{{$item->id}}</td>
                     <td>{{$item->name}}</td>
                     <td>{{$item->category}}</td>
-                    <td>Rp{{$item->price}}</td>
                     <td>{{$item->total_stock}}</td>
                     <td>
                         <button type="button" class="btn btn-secondary p-0 px-2" onclick="detail({{ json_encode($item) }}, {{ json_encode($item->productVariant) }}, {{ json_encode($item->productVariant) }})" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fa-regular fa-eye"></i></button>

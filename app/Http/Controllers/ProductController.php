@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductVariant;
+use App\Models\ProductPicture;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -20,7 +21,7 @@ class ProductController extends Controller
         $product = Product::all()->where('status','public');
         foreach($product as $p) {
             $p['category'] = $p->category()->pluck('name')->first();
-            $p['total_stock'] = $p->productVariant->pluck('stock')->sum();
+            $p['total_stock'] = $p->productVariant->sum('stock');
         }
 
         $category = Category::all();
@@ -73,12 +74,39 @@ class ProductController extends Controller
             'name' => $request['name'],
             'category_code' => $request['category_code'],
             'description' => $request['description'],
-            'size_in_cm' => $request['h'].'-'.$request['w'].'-'.$request['t'],
-            'weight_in_gram' => $request['weight_in_gram'],
             'material' => $request['material'],
-            'price' => $request['price'],
             'status' => 'draft',
         ]);
+        
+        $request['product_id'] = $product->id;
+        $request['variation'] = 'Base';
+
+        $serial = count(ProductVariant::where('product_id',$request->product_id)->get()) + 1;
+        ProductVariant::create([
+            'product_variant_code' => $request->product_id.'-'.$serial,
+            'product_id' => $request->product_id,
+            'variation' => $request->variation,
+            'size_in_cm' => $request['h'].'-'.$request['w'].'-'.$request['t'],
+            'weight_in_gram' => $request['weight_in_gram'],
+            'price' => $request['price'],
+            'stock' => $request->stock,
+        ]);
+
+        if($request->hasFile('image')) {
+            $dir = 'image/products/'.$request->product_id.'-'.$serial.'/';
+            if(!file_exists($dir) && !is_dir($dir)) {
+                mkdir($dir);
+            } 
+            $image = $request->file('image');
+            foreach($image as $img) {
+                $fileName = (count(scandir(public_path($dir)))-1).'.'.$img->getClientOriginalExtension();
+                $img->move(public_path($dir), $fileName);
+                ProductPicture::create([
+                    'product_variant_code' => $request->product_id.'-'.$serial,
+                    'directory' => $request->product_id.'-'.$serial.'/'.$fileName,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.product-edit', $product->id);
     }
@@ -88,10 +116,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $productVariant = $product->productVariant;
         $category = Category::all();
-
-        $product['h'] = explode("-", $product['size_in_cm'])[0];
-        $product['w'] = explode("-", $product['size_in_cm'])[1];
-        $product['t'] = explode("-", $product['size_in_cm'])[2];
+        
         $product['total_stock'] = $productVariant->pluck('stock')->sum();
 
         return view('admin.product-edit', compact(['product','productVariant','category']));

@@ -31,7 +31,7 @@
     <div id="app">
         @include('layouts.components.navbar')
 
-        <main class="py-4">
+        <main>
             <a href="{{ route('cart') }}" class="z-1 btn btn-secondary position-fixed bottom-0 end-0 m-4 border-0 rounded-circle" style="padding:20px;" title="Keranjang">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>

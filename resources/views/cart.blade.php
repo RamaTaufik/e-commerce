@@ -26,7 +26,7 @@ Keranjang ● Plus-H
                         <th class="w-100 border-start"><p class="w-100 m-0 p-0 text-center">Produk</p></th>
                         <th class="border-start rounded-end-5"><p class="m-0 p-0 px-5 text-center">Jumlah/Harga</p></th>
                     </tr>
-                    @if(session()->has('cart'))
+                    @if(session()->has('cart') && count(session('cart')) > 0)
                         @foreach (session('cart') as $cartItem)
                         <tr style="height:5px"></tr>
                         <tr class="shadow align-middle">
@@ -36,8 +36,11 @@ Keranjang ● Plus-H
                             <td class="border-start">
                                 <div class="d-flex align-items-center">
                                     <img src="{{ asset('image/products/'.$cart[$cartItem['code']]['image']) }}" class="product-img" alt="">
-                                    <div class="flex-grow-1">
-                                        <h5 class="text-end">{{$cart[$cartItem['code']]['name']}}</h5>
+                                    <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                        <h5 class="m-0 p-0 text-end">{{$cart[$cartItem['code']]['name']}}</h5>
+                                        @if ($cart[$cartItem['code']]['variation'] != 'base')
+                                        <p class="m-0 p-0 text-end">{{$cart[$cartItem['code']]['variation']}}</p>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -69,32 +72,42 @@ Keranjang ● Plus-H
                     @if(session()->has('cart'))
                         @foreach (session('cart') as $cartItem)
                         <div class="d-flex justify-content-between">
-                            <h6>{{$cart[$cartItem['code']]['name']}}</h6>
-                            <h6 class="text-secondary">Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
+                            <h6 class="text-truncate">{{$cart[$cartItem['code']]['name']}}</h6>
+                            <h6 class="text-secondary text-nowrap">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
                         </div>
                         @endforeach
+                    @endif
+                    @guest
+                    <div>
+                        <a href="{{ route('login') }}" class="w-100 btn btn-primary">Pesan</a>
+                    </div>
+                    @else
                     <div>
                         {{-- <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total,0,'.',',')}}</h4> --}}
-                        <select name="myAddress" id="myAddress" class="form-select my-2">
-                            @if (count($myAddresses) < 1)
+                        <select name="myAddress" id="myAddress" class="form-select my-2" 
+                         onchange="changeAddress({{json_encode($myAddresses)}},{{json_encode($addresses)}})">
+                            @if (count($myAddresses) > 0)
                             <option value="" hidden disabled selected> Pilih alamat pengiriman</option>
+                                @foreach ($myAddresses as $myAddress)
+                                <option value="{{$myAddress->id}}">{{$myAddress->address_name}}</option>
+                                @endforeach
                             @endif
-                            @foreach ($myAddresses as $myAddress)
-                            <option value="{{$myAddress->id}}">{{$myAddress->address_detail}}</option>
-                            @endforeach
                             <option value="new">Alamat Baru</option>
                         </select>
-                        <select  name="province_destination" id="province" class="form-select mb-2"
-                            onchange="unlockSelectOption('province','city',{{json_encode($address['kota'])}})">
-                            <option value="" hidden selected disabled>Pilih Provinsi</option>
-                            @foreach ($address['provinsi'] as $province)
-                            <option value="{{$province->name}}">{{$province->name}}</option>
+                        <input type="text" name="address_name" id="address_name" class="form-control mb-2"" placeholder="'kantor', 'rumah', dll.">
+                        <select  name="province_city" id="province_city" class="form-select mb-2">
+                            <option value="" hidden selected disabled>Pilih Kabupaten/Kota</option>
+                            @foreach ($addresses as $address)
+                            <option value="{{$address->id}}">{{$address->province->name}} - {{$address->name}}</option>
                             @endforeach
                         </select>
-                        <select  name="city_destination" id="city" class="form-select mb-2" disabled>
-                            <option value="" hidden selected disabled>Pilih Kota</option>
+                        <select  name="district" id="district" class="form-select mb-2" disabled>
+                            <option value="" hidden selected disabled>Pilih Kecamatan</option>
                         </select>
-                        <textarea name="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
+                        <select  name="subdistrict" id="subdistrict" class="form-select mb-2" disabled>
+                            <option value="" hidden selected disabled>Pilih Kelurahan</option>
+                        </select>
+                        <textarea name="address_detail" id="address_detail" placeholder="Detail alamat" class="form-control mb-2"></textarea>
                         <select name="shipment_id" id="shipment" class="form-select mb-3">
                             <option value="" hidden disabled selected> Pilih Pengiriman</option>
                             @foreach ($shipments as $shipment)
@@ -104,9 +117,9 @@ Keranjang ● Plus-H
                         <select name="ongkir" id="ongkir" class="form-select mb-3">
                             <option value="" hidden disabled selected> Pilih Paket Pengiriman</option>
                         </select>
-                        <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="btn btn-primary" value="Pesan" />
+                        <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="w-100 btn btn-primary" value="Pesan" />
                     </div>
-                    @endif
+                    @endguest
                 </div>
             </div>
         </div>
@@ -167,20 +180,80 @@ Keranjang ● Plus-H
 
     $('#saveChange').on('click', function() {
         $.ajax({
-            type: 'POST',
-            url: '{{ route('cart.update') }}',
+            type: "post",
+            url: "{{ route('cart.update') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             data: { 'qtyChange': qtyChange },
             success: function() {
-                alert('Jumlah beli berhasil diubah')
-                $('.qty').each(element => {
-                    element.classList.remove('text-warning')
-                });
+                alert('Jumlah beli berhasil diubah');
+                var elements = document.getElementsByClassName('qty');
+                for(let i=0;i < elements.length;i++) {
+                    document.getElementById('qty' + (i+1)).classList.remove('text-warning')
+                };
             },
             error: function() {
-                alert(qtyChange['1-1'])
+                alert('Kesalahan berpikir')
             }
         })
     })
 
+</script>
+<script>
+    $('#province_city').on('change', function() {
+        $.ajax({
+            type: "post",
+            url: "{{ route('order.get-district') }}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: { 'cityId': document.getElementById("province_city").value },
+            success: function(response) {
+                let districtSelect = document.getElementById("district");
+                districtSelect.disabled = false;
+                districtSelect.innerHTML = '';
+                response['districts'].forEach(item => {
+                    let option = document.createElement("option");
+
+                    option.value = item['kecamatan'];
+                    option.innerHTML = item['kecamatan'];
+
+                    districtSelect.appendChild(option);
+                });
+                let subdistrictSelect = document.getElementById("subdistrict");
+                subdistrictSelect.disabled = false;
+                subdistrictSelect.innerHTML = '';
+                response['subdistricts'].forEach(item => {
+                    if(item['kecamatan'] == districtSelect.value) {
+                        let option = document.createElement("option");
+
+                        option.value = item['id'];
+                        option.innerHTML = item['kelurahan'];
+
+                        subdistrictSelect.appendChild(option);
+                    }
+                });
+                districtSelect.onchange = function() {
+                    let subdistrictSelect = document.getElementById("subdistrict");
+                    subdistrictSelect.disabled = false;
+                    subdistrictSelect.innerHTML = '';
+                    response['subdistricts'].forEach(item => {
+                        if(item['kecamatan'] == districtSelect.value) {
+                            let option = document.createElement("option");
+
+                            option.value = item['id'];
+                            option.innerHTML = item['kelurahan'];
+
+                            subdistrictSelect.appendChild(option);
+                        }
+                    });
+                };
+            },
+            error: function() {
+                alert('Kesalahan berpikir');
+            }
+        })
+    })
 </script>
 @endsection

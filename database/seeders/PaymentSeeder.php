@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Payment;
 
 class PaymentSeeder extends Seeder
 {
@@ -12,6 +13,9 @@ class PaymentSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Payment::create([
+            'payment_type' => 'credit_card',
+            'payment_name' => 'Visa',
+        ]);
     }
 }

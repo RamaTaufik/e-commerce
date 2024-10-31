@@ -21,9 +21,9 @@ return new class extends Migration
             $table->integer('shipping_cost');
             $table->string('note');
             $table->bigInteger('total_price');
-            $table->enum('status',['Unpaid','Paid']);
+            $table->enum('payment_status',['Unpaid','Paid']);
             $table->date('payment_date')->nullable();
-            $table->enum('shipment_status',['processing','shipping','arrived']);
+            $table->enum('status',['Processing','Shipping','Arrived','Confirmed','Cancelled','Returning']);
             $table->timestamps();
         });
     }

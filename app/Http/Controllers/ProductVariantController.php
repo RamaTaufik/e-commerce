@@ -30,11 +30,14 @@ class ProductVariantController extends Controller
             'product_variant_code' => $request->product_id.'-'.$serial,
             'product_id' => $request->product_id,
             'variation' => $request->variation,
+            'size_in_cm' => $request['h'].'-'.$request['w'].'-'.$request['t'],
+            'weight_in_gram' => $request['weight_in_gram'],
+            'price' => $request['price'],
             'stock' => $request->stock,
         ]);
 
         if($request->hasFile('image')) {
-            $dir = 'image/products/'.$variant->product_variant_code.'/';
+            $dir = 'image/products/'.$request->product_id.'-'.$serial.'/';
             if(!file_exists($dir) && !is_dir($dir)) {
                 mkdir($dir);
             } 
@@ -43,8 +46,8 @@ class ProductVariantController extends Controller
                 $fileName = (count(scandir(public_path($dir)))-1).'.'.$img->getClientOriginalExtension();
                 $img->move(public_path($dir), $fileName);
                 ProductPicture::create([
-                    'product_variant_code' => $variant->product_variant_code,
-                    'directory' => $variant->product_variant_code.'/'.$fileName,
+                    'product_variant_code' => $request->product_id.'-'.$serial,
+                    'directory' => $request->product_id.'-'.$serial.'/'.$fileName,
                 ]);
             }
         }

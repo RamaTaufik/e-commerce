@@ -7,6 +7,9 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductPicture;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Review;
 
 class HomeController extends Controller
 {
@@ -17,15 +20,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $product = Product::where('status', 'public')->get();
+        $products = Product::where('status', 'public')->get();
 
-        foreach($product as $item) {
-            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->pluck('directory')->first();
+        foreach($products as $item) {
+            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
+            $item['rating'] = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                                       ->where('order_items.product_variant_code', 'LIKE', $item->id.'-%')
+                                       ->avg('rating');
+            $item['rating_amount'] = count(Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                                                 ->where('order_items.product_variant_code', 'LIKE', $item->id.'-%')
+                                                 ->get());
+            $item['sold'] = OrderItem::where('product_variant_code', 'like', $item->id.'-%')->sum('qty');
         }
 
-        $category = Category::all();
+        $categories = Category::all();
 
-        return view('home', compact(['product','category']));
+        return view('home', compact(['products','categories']));
     }
 
     public function search(Request $request)
@@ -35,7 +45,12 @@ class HomeController extends Controller
                           ->where('name', 'LIKE', '%'.$index.'%')->get();
 
         foreach($product as $item) {
-            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->pluck('directory')->first();
+            $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
+            $item['rating'] = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                                       ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
+                                       ->avg('rating');
+            $item['rating_amount'] = count(Review::get());
+            $item['sold'] = OrderItem::where('product_variant_code', 'like', $product->id.'-%')->sum('qty');
         }
 
         return view('search', compact(['product','index']));
@@ -44,7 +59,40 @@ class HomeController extends Controller
     public function product($id)
     {
         $product = Product::find($id);
-        $productVariant = ProductVariant::where('product_id', $id)->get();
-        return view('product', compact(['product','productVariant']));
+        $productVariants = ProductVariant::where('product_id', $id)->get();
+        $productPictures = ProductPicture::where('product_variant_code', 'LIKE', $id.'-%')->get();
+        $product['rating'] = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                                   ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
+                                   ->avg('rating');
+        $product['rating_amount'] = count(Review::get());
+        $product['sold'] = OrderItem::where('product_variant_code', 'like', $product->id.'-%')->sum('qty');
+        $reviews = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                         ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
+                         ->get();
+        return view('product', compact(['product','productVariants','productPictures','reviews']));
+    }
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+        if($hashed == $request->signature_key) {
+            if($request->transaction_status == 'capture') {
+                $order = Order::find($request->order_id);
+                $order->update([
+                    'payment_status' => 'Paid',
+                    'payment_date' => now(),
+                ]);
+
+                $orderItems = OrderItem::where('order_code', $order->order_code)->get();
+
+                foreach($orderItems as $item) {
+                    $product = ProductVariant::find($item->product_variant_code);
+                    $product->update([
+                        'stock' => $product->stock - $item->qty,
+                    ]);
+                }
+            }
+        }
     }
 }

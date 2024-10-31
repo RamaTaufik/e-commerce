@@ -15,12 +15,14 @@ class CategorySeeder extends Seeder
     {
         Category::create([
             'category_code' => 'PLS-FM',
-            'name' => 'Fumo'
+            'name' => 'Fumo',
+            'image_directory' => 'fumo.jpg'
         ]);
         
         Category::create([
             'category_code' => 'PLS-BN',
-            'name' => 'Bean'
+            'name' => 'Bean',
+            'image_directory' => 'bean.png'
         ]);
     }
 }
