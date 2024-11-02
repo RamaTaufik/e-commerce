@@ -13,7 +13,6 @@ Cari "{{$filter['index']}}" ● Plus-H
     <div class="row">
         <div class="col-12 col-md-3 position-sticky">
             <form action="search" method="get">
-                @csrf
                 <label for="categorySelect" class="form-label">Kategori</label>
                 <select name="category_code" id="categorySelect" class="form-select mb-3">
                     @foreach ($categories as $category)
@@ -23,10 +22,10 @@ Cari "{{$filter['index']}}" ● Plus-H
                     @endforeach
                 </select>
                 <label class="form-label">Rentang Harga</label>
-                <div class="input-group">
-                    <input type="number" name="minPrice" class="form-control" value="{{$filter['minPrice']}}">
+                <div class="input-group mb-3">
+                    <input type="number" name="minPrice" class="form-control" value="{{$filter['minPrice']}}" step="50000">
                     <span class="input-group-text"> - </span>
-                    <input type="number" name="maxPrice" class="form-control" value="{{$filter['maxPrice']}}">
+                    <input type="number" name="maxPrice" class="form-control" value="{{$filter['maxPrice']}}" step="50000">
                 </div>
                 <button type="submit" class="btn btn-secondary w-100">Filter</button>
                 @method('GET')

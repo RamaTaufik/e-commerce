@@ -64,45 +64,42 @@
                     <p>{{$product->description}}</p>
                 </div>
                 <div class="col-12">
-                    <div class="accordion nav-tabs" id="productInfo">
-                        <a class="d-inline nav-link active" role="button" data-bs-toggle="collapse" href="#reviews" aria-expanded="true" aria-controls="reviews">
-                            Ulasan
-                        </a>
-                        <a class="d-inline nav-link collapsed" role="button" data-bs-toggle="collapse" href="#moreInformations" aria-expanded="false" aria-controls="moreInformations">
-                            Informasi Tambahan
-                        </a>
-                        <div class="bg-white">
-                            <div id="reviews" class="accordion-collapse collapse show" data-bs-parent="#productInfo">
-                                <div class="accordion-body">
-                                    @foreach ($reviews as $review)
-                                    <div class="position-relative bg-white mb-2 p-2 shadow">
-                                        {{-- <h4 class="position-absolute" style="top:20px;right:20px;"><sup class="float-end"><i class="fa-solid fa-ellipsis-vertical"></i></sup></h4> --}}
-                                        <div class="d-flex align-items-center">
-                                            <img src="{{ asset('image/profile_pictures/default-user.jpg') }}" alt="" class="rounded-circle" style="aspect-ratio:1/1;height:35px;">
-                                            <div class="ms-2">
-                                                <p class="text-smaller m-0"><strong>{{$review->orderItem->order->customer->first_name}}</strong></p>
-                                                <div class="d-flex text-warning" style="width:200px;">
-                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
-                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
-                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
-                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
-                                                    <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex">
-                                            <img src="{{ asset('image/reviews/'.$review->picture) }}" alt="" class="img-fluid object-fit-cover" style="height:120px;">
-                                            <p class="m-0 p-0">{{$review->customer_review}}</p>
+                    <div class="mt-5 bg-white border rounded">
+                        @if (count($reviews) > 0)
+                        <h3 class="mt-2">Ulasan</h3>
+                            @foreach ($reviews as $review)
+                            <div class="position-relative bg-white mb-2 p-2 shadow">
+                                {{-- <h4 class="position-absolute" style="top:20px;right:20px;"><sup class="float-end"><i class="fa-solid fa-ellipsis-vertical"></i></sup></h4> --}}
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('image/profile_pictures/default-user.jpg') }}" alt="" class="rounded-circle" style="aspect-ratio:1/1;height:35px;">
+                                    <div class="ms-2">
+                                        <p class="text-smaller m-0"><strong>{{$review->orderItem->order->customer->first_name}}</strong></p>
+                                        <div class="d-flex text-warning" style="width:200px;">
+                                            <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                            <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                            <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                            <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
+                                            <div class="overflow-x-hidden" style="width:20%;"><i class="fa-solid fa-star"></i></div>
                                         </div>
                                     </div>
-                                    @endforeach
+                                </div>
+                                <div class="d-flex">
+                                    <img src="{{ asset('image/reviews/'.$review->picture) }}" alt="" class="img-fluid object-fit-cover" style="height:120px;">
+                                    <p class="m-0 p-0">{{$review->customer_review}}</p>
                                 </div>
                             </div>
-                            <div id="moreInformations" class="accordion-collapse collapse" data-bs-parent="#productInfo">
-                                <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                            </div>
+                            @endforeach
+                        @else
+                        <h3 class="w-100 my-3 text-center">Belum ada ulasan apapun.</h3>
+                        @endif
+                    </div>
+                    <div id="reviews" class="accordion-collapse collapse show" data-bs-parent="#productInfo">
+                        <div class="accordion-body">
+                        </div>
+                    </div>
+                    <div id="moreInformations" class="accordion-collapse collapse" data-bs-parent="#productInfo">
+                        <div class="accordion-body">
+                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                         </div>
                     </div>
                 </div>

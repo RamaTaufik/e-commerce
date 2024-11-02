@@ -10,6 +10,9 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Review;
+use App\Models\Customer;
+use App\Models\CustomerAddress;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -50,10 +53,10 @@ class HomeController extends Controller
         if($filter['category'] != '') {
             $product = $product->where('category_code', $filter['category']);
         }
-        if($filter['price'] != 0) {
-            $product = $product->join('product_variants','products.id','product_variants.product_id')
-                               ->where('product_variants.price', '=>', $filter['minPrice'])
-                               ->where('product_variants.price', '=<', $filter['maxPrice']);
+        $product = $product->join('product_variants','products.id','product_variants.product_id')
+                            ->where('product_variants.price', '>', $filter['minPrice']);
+        if($filter['maxPrice'] != '') {
+            $product = $product->where('product_variants.price', '<', $filter['maxPrice']);
         }
 
         $product = $product->get();
@@ -90,6 +93,16 @@ class HomeController extends Controller
                          ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
                          ->get();
         return view('product', compact(['product','productVariants','productPictures','reviews']));
+    }
+
+    public function profile()
+    {
+        $this->middleware('auth');
+
+        $customer = Customer::where('user_id',Auth::id())->first();
+        $addresses = CustomerAddress::where('customer_id',$customer->id)->get();
+
+        return view('profile', compact(['customer','addresses']));
     }
 
     public function callback(Request $request)

@@ -129,6 +129,7 @@ Tracking Pesanan ● Plus-H
                             @else
                                 @if ($order->status == 'Arrived')
                                 <a href="#confirmModal" class="btn btn-success ms-auto" data-bs-toggle="modal" onclick="changeOrderStatus('confirm',{{json_encode($order->order_code)}})">Konfirmasi Sampai</a>
+                                <a href="#cancelModal" class="btn btn-danger ms-auto" data-bs-toggle="modal" onclick="changeOrderStatus('cancel',{{json_encode($order->order_code)}})">Batalkan Pesanan</a>
                                 @endif
                             @endif
                         </div>

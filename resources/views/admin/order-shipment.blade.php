@@ -30,6 +30,7 @@ Status Pengiriman Pesanan ● Plus-H ADMIN
                     <th>Detail Pesanan</th>
                     <th>Status Pengiriman</th>
                     <th>Detail Pengiriman</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +40,13 @@ Status Pengiriman Pesanan ● Plus-H ADMIN
                     <td><a href="">Lihat detail <i class="fa-solid fa-eye"></i></a></td>
                     <td>{{$order->status}}</td>
                     <td><a href="">Lihat detail pengiriman <i class="fa-solid fa-eye"></i></a></td>
+                    <td>
+                        <form action="" method="POST">
+                            @csrf
+                            <a class="btn btn-secondary p-0 px-2" href="{{ route('admin.order-arrived', $order->order_code) }}">Sampai</a>
+                            {{-- <a class="btn btn-warning p-0 px-2" href="{{ route("admin.product-edit", $item->id) }}"><i class="fa-solid fa-pencil"></i></a> --}}
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

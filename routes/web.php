@@ -20,6 +20,7 @@ Route::get('/register-account/{email}', [RegisterController::class, 'registerAcc
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/product/{id}', [HomeController::class, 'product'])->name('product');
+Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -46,6 +47,7 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 Route::get('/admin/order', [AdminOrderController::class, 'index'])->name('admin.order');
 Route::get('/admin/order/shipment', [AdminOrderController::class, 'shipment'])->name('admin.order-shipment');
 Route::get('/admin/order/ship/{id}', [AdminOrderController::class, 'ship'])->name('admin.order-ship');
+Route::get('/admin/order/arrived/{id}', [AdminOrderController::class, 'arrived'])->name('admin.order-arrived');
 Route::get('/admin/order/cancelled', [AdminOrderController::class, 'cancelled'])->name('admin.order-cancelled');
 Route::get('/admin/order/resend/{order}', [AdminOrderController::class, 'resend'])->name('admin.order-resend');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('admin.product');

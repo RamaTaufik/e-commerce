@@ -62,6 +62,15 @@ class AdminOrderController extends Controller
         return view('admin.order-cancelled', compact('orders','orderItems'));
     }
 
+    public function arrived($code)
+    {
+        $order = Order::find($code);
+        $order->status = 'Arrived';
+        $order->save();
+
+        return redirect()->route('admin.order-shipment');
+    }
+
     public function resend(Order $order)
     {
         $order->status = 'Shipping';

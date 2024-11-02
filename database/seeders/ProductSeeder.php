@@ -75,5 +75,18 @@ class ProductSeeder extends Seeder
             'product_variant_code' => $product3->id.'-1',
             'directory' => $product3->id.'-1/1.webp',
         ]);
+        ProductVariant::create([
+            'product_variant_code' => $product3->id.'-2',
+            'product_id' => 3,
+            'variation' => 'smaller',
+            'size_in_cm' => '19-25-33',
+            'weight_in_gram' => 500,
+            'price' => 197000,
+            'stock' => "42",
+        ]);
+        ProductPicture::create([
+            'product_variant_code' => $product3->id.'-2',
+            'directory' => $product3->id.'-2/1.webp',
+        ]);
     }
 }
