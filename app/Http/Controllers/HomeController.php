@@ -40,20 +40,38 @@ class HomeController extends Controller
 
     public function search(Request $request)
     {
-        $index = $request['index'];
+        $filter['index'] = $request['index'];
+        $filter['category'] = $request['category_code'];
+        $filter['minPrice'] = $request['minPrice'];
+        $filter['maxPrice'] = $request['maxPrice'];
         $product = Product::where('status', 'public')
-                          ->where('name', 'LIKE', '%'.$index.'%')->get();
+                          ->where('name', 'LIKE', '%'.$filter['index'].'%');
+
+        if($filter['category'] != '') {
+            $product = $product->where('category_code', $filter['category']);
+        }
+        if($filter['price'] != 0) {
+            $product = $product->join('product_variants','products.id','product_variants.product_id')
+                               ->where('product_variants.price', '=>', $filter['minPrice'])
+                               ->where('product_variants.price', '=<', $filter['maxPrice']);
+        }
+
+        $product = $product->get();
 
         foreach($product as $item) {
             $item['display_image'] = ProductPicture::where('product_variant_code', $item->id.'-1')->first()->directory;
             $item['rating'] = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
-                                       ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
-                                       ->avg('rating');
-            $item['rating_amount'] = count(Review::get());
-            $item['sold'] = OrderItem::where('product_variant_code', 'like', $product->id.'-%')->sum('qty');
+                                    ->where('order_items.product_variant_code', 'LIKE', $item->id.'-%')
+                                    ->avg('rating');
+            $item['rating_amount'] = count(Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                                                 ->where('order_items.product_variant_code', 'LIKE', $item->id.'-%')
+                                                 ->get());
+            $item['sold'] = OrderItem::where('product_variant_code', 'like', $item->id.'-%')->sum('qty');
         }
 
-        return view('search', compact(['product','index']));
+        $categories = Category::all();
+
+        return view('search', compact(['product','filter','categories']));
     }
 
     public function product($id)
@@ -64,7 +82,9 @@ class HomeController extends Controller
         $product['rating'] = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
                                    ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
                                    ->avg('rating');
-        $product['rating_amount'] = count(Review::get());
+        $product['rating_amount'] = count(Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
+                                   ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')
+                                   ->get());
         $product['sold'] = OrderItem::where('product_variant_code', 'like', $product->id.'-%')->sum('qty');
         $reviews = Review::join('order_items', 'reviews.order_item_id', 'order_items.id')
                          ->where('order_items.product_variant_code', 'LIKE', $product->id.'-%')

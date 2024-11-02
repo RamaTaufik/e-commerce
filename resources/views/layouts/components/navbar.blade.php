@@ -22,9 +22,14 @@
                 @method('GET')
                 <div class="input-group" style="height:35px;">
                     <input type="text" name="index" class="form-control rounded-start-pill border-0" placeholder="Cari" value="@yield('search-index')">
-                    <button type="button" class="d-none d-lg-block btn btn-light border-start bg-white" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="false" aria-controls="category">
+                    {{-- <button type="button" class="d-none d-lg-block btn btn-light border-start bg-white" data-bs-toggle="collapse" data-bs-target="#category" aria-expanded="false" aria-controls="category">
                         Kategori <i class="fa-solid fa-caret-down"></i>
-                    </button>
+                    </button> --}}
+                    {{-- <select name="category_code" class="d-none d-lg-block px-4 border-0 border-start">
+                        <option value="" selected disabled hidden>Kategori</option>
+                        <option value="PLS-BN">Bean</option>
+                        <option value="PLS-FM">Fumo</option>
+                    </select> --}}
                     <button type="submit" class="btn btn-secondary border-0 rounded-end-circle" id="button-addon1"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </form>
