@@ -11,6 +11,8 @@ use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -20,7 +22,9 @@ Route::get('/register-account/{email}', [RegisterController::class, 'registerAcc
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/product/{id}', [HomeController::class, 'product'])->name('product');
-Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+Route::put('/profile/update/{id}', [ProfileController::class, 'update'])->name('profile-update');
+Route::post('/profile/address/add', [ProfileController::class, 'addressAdd'])->name('profile-address-add');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -61,3 +65,7 @@ Route::delete('/admin/product/delete/{id}', [ProductController::class, 'destroy'
 Route::post('/admin/product_variant/add', 'App\Http\Controllers\ProductVariantController@create')->name('admin.product_variant-create');
 Route::put('/admin/product_variant/update/{id}', [ProductVariantController::class, 'update'])->name('admin.product_variant-update');
 Route::delete('/admin/product_variant/delete/{id}', [ProductVariantController::class, 'destroy'])->name('admin.product_variant-delete');
+Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admin.customers');
+Route::get('/admin/customers/edit/{id}', [CustomerController::class, 'edit'])->name('admin.customers-edit');
+Route::put('/admin/customers/update/{id}', [CustomerController::class, 'update'])->name('admin.customers-update');
+Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destroy'])->name('admin.customers-delete');

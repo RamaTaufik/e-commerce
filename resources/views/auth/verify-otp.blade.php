@@ -5,9 +5,11 @@ Verifikasi OTP
 @endsection
 
 @section('alert')
+@if (session('error'))
 <div class="alert alert-danger">
-    <h6 class="m-0 p-0">Warning</h6>
+    <h6 class="m-0 p-0">{{session('error')['resp'][session('error')['validate']['code']]}}</h6>
 </div>
+@endif
 @endsection
 
 @section('content')
@@ -38,7 +40,7 @@ Verifikasi OTP
         <h6 class="m-0 p-0 mb-3">
             Tidak menerima kode? 
             <span id="resend"></span>
-            <a id="resend-link" href="" style="display:none">Kirim ulang</a>
+            <a id="resend-link" href="{{ route('otp.resend') }}" style="display:none" disabled>Kirim ulang</a>
         </h6>
     </form>
 </div>

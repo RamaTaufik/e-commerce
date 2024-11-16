@@ -58,15 +58,15 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'Fname' => ['required', 'string', 'max:255'],
-            'Lname' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'gender' => ['required'],
             'date_of_birth' => ['required'],
         ], [
             'email.unique' => 'Email sudah digunakan',
             'password' => 'Password tidak sesuai',
-            'Fname' => 'Nama depan tidak sesuai',
-            'Lname' => 'Nama belakang tidak sesuai',
+            'first_name' => 'Nama depan tidak sesuai',
+            'last_name' => 'Nama belakang tidak sesuai',
             'gender' => 'Perlu diisi',
             'date_of_birth' => 'Perlu diisi',
         ]);
@@ -89,8 +89,8 @@ class RegisterController extends Controller
 
         Customer::create([
             'user_id' => $user->id,
-            'Fname' => $data['Fname'],
-            'Lname' => $data['Lname'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'gender' => $data['gender'],
             'date_of_birth' => $data['date_of_birth'],
             'phone' => $data['phone'],

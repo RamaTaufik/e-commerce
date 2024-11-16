@@ -23,7 +23,7 @@ class OtpController extends Controller
     {
         $email = $request->input('email');
         $verification_type=$request->input('ver_type');
-        $con = mysqli_connect("localhost","root","","plus_h");
+        $con = mysqli_connect("localhost","root","","plush");
 
         if(mysqli_connect_errno()) {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -65,7 +65,7 @@ class OtpController extends Controller
 
         if($otp_req['code'] === 201) {
             if($verification_type == "register.seller") {
-                return view('auth.re-verify-otp')->with([
+                return view('auth.verify-otp')->with([
                     'otp_req' => $otp_req,
                     'email' => $email
                 ]);
@@ -90,7 +90,7 @@ class OtpController extends Controller
     {
         $email = $request->input('email');
         $verification_type=$request->input('ver_type');
-        $con = mysqli_connect("localhost","root","","plus_h");
+        $con = mysqli_connect("localhost","root","","plush");
 
         if(mysqli_connect_errno()) {
             echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -107,7 +107,7 @@ class OtpController extends Controller
 
         mysqli_close($con);
 
-        $uniqId = $request->input('uniqueId');
+        $otp_req['uniqueId'] = $request->input('uniqueId');
         $otp = $request->input('otp');
         $data['resp'] = [
             200 => 'Email Confirmed',
@@ -117,7 +117,7 @@ class OtpController extends Controller
             400 => 'Invalid OTP given'
         ];
         $data['validate'] =  OtpValidator::validateOtp(
-            new OtpValidateRequestObject($uniqId,$otp)
+            new OtpValidateRequestObject($otp_req['uniqueId'],$otp)
         );
 
         if($data['validate']['code'] === 200){
@@ -125,7 +125,7 @@ class OtpController extends Controller
             return redirect()->route($verification_type, $email);
         };
 
-        return view('auth.reverify-otp')->with($data);
+        return view('auth.verify-otp', compact(['email','otp_req']))->with('error', $data);
     }
 
     /**
@@ -138,7 +138,7 @@ class OtpController extends Controller
         $otp_req = OtpValidator::resendOtp($uniqueId);
 
         if(isset($otp_req['code']) && $otp_req['code'] === 201){
-            return view('auth.reverify-otp')->with($otp_req);
+            return view('auth.verify-otp')->with($otp_req);
         } else {
             dd($otp_req);
         }

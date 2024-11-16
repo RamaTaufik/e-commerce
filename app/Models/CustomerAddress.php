@@ -20,6 +20,11 @@ class CustomerAddress extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(Cities::class);
+    }
+
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);

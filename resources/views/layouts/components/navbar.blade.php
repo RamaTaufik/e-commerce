@@ -71,7 +71,7 @@
                                 <i class="fa-solid fa-user"></i> {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdowm">
-                                <a class="dropdown-item text-smaller" href="{{ route('profile') }}">Pengaturan Akun</a>
+                                <a class="dropdown-item text-smaller" href="{{ route('profile') }}">Profil</a>
                                 <a class="dropdown-item text-smaller text-danger" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
