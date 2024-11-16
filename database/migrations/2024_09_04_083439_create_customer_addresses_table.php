@@ -20,6 +20,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('address_name')->unique();
+            $table->integer('city_id');
+            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('address_id');
             $table->foreign('address_id')->references('id')->on('addresses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('address_detail');

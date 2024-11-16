@@ -72,6 +72,7 @@ class OrderController extends Controller
             $address = CustomerAddress::create([
                 'customer_id' => $customer->id,
                 'address_name' => $request['address_name'],
+                'city_id' => $request['province_city'],
                 'address_id' => $request['subdistrict'],
                 'address_detail' => $request['address_detail'],
             ]);

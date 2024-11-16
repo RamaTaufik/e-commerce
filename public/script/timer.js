@@ -9,10 +9,11 @@ function timer(remaining) {
     s = s < 10 ? '0' + s : s;
     document.getElementById('timer').getElementsByTagName('span')[0].innerHTML = m + ':' + s;
     if(timeOut-remaining < 10) {
-        document.getElementById('resend').innerHTML = "Kirim ulang dalam: " + (10 - (timeOut - remaining));
+        document.getElementById('resend').innerHTML = "Kirim ulang";
     } else {
         document.getElementById('resend').style.display = 'none';
         document.getElementById('resend-link').style.display = 'inline';
+        document.getElementById('resend-link').disabled = false;
     }
     remaining -= 1;
 

@@ -28,8 +28,10 @@ function changeAddress(addresses,cities) {
             selectedAddress = address;
         }
     });
-    document.getElementById('province_city').value = selectedAddress['city']['id'];
-    unlockSelectOption('province','city',cities,selectedAddress['city_id']);
+    var event = new Event("change");
+
+    document.getElementById('province_city').value = selectedAddress['city_id'];
+    document.getElementById('province_city').dispatchEvent(event);
     document.getElementById('address_name').value = selectedAddress['address_name'];
     document.getElementById('address_detail').value = selectedAddress['address_detail'];
 }

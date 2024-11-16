@@ -16,9 +16,26 @@ class ProductController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $product = Product::all()->where('status','public');
+        $product = Product::where('status','public');
+
+        if($request->input('search')) {
+            $product = $product->where('name', 'LIKE', '%'.$request->input('search').'%');
+        }
+
+        if($request->input('sort') == 'terbaru') {
+            $product = $product->orderBy('created_at', 'DESC');
+        } else {
+            $product = $product->orderBy('created_at');
+        }
+
+        if($request->input('pagination')) {
+            $product = $product->paginate($request->input('pagination'));
+        } else {
+            $product = $product->paginate('20');
+        }
+
         foreach($product as $p) {
             $p['category'] = $p->category()->pluck('name')->first();
             $p['total_stock'] = $p->productVariant->sum('stock');
@@ -26,7 +43,7 @@ class ProductController extends Controller
 
         $category = Category::all();
 
-        return view('admin.product', compact(['product','category']));
+        return view('admin.product', compact(['product','category','request']));
     }
 
     protected function archive()
