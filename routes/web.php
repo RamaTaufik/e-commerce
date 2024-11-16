@@ -14,7 +14,9 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', function() {
+    return redirect()->route('home');
+});
 
 Auth::routes();
 Route::get('/register-account/{email}', [RegisterController::class, 'registerAccount'])->name('register.customer');
@@ -69,3 +71,4 @@ Route::get('/admin/customers', [CustomerController::class, 'index'])->name('admi
 Route::get('/admin/customers/edit/{id}', [CustomerController::class, 'edit'])->name('admin.customers-edit');
 Route::put('/admin/customers/update/{id}', [CustomerController::class, 'update'])->name('admin.customers-update');
 Route::delete('/admin/customers/delete/{id}', [CustomerController::class, 'destroy'])->name('admin.customers-delete');
+Route::get('/admin/report', [AdminController::class, 'report'])->name('admin.report');

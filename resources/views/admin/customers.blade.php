@@ -13,17 +13,24 @@ Kelola Customer ● Plus-H ADMIN
             <div class="row">
                 <div class="col-3">
                     <label for="search">Filter</label>
-                    <input type="text" name="search" id="search" class="form-control" value="{{$request->input('search') ?? ''}}" placeholder="Cari nama">
                 </div>
                 <div class="col-3">
                     <label for="sort">Urutkan</label>
+                </div>
+                <div class="col-3">
+                    <label for="pagination">Pagination</label>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <input type="text" name="search" id="search" class="form-control" value="{{$request->input('search') ?? ''}}" placeholder="Cari nama">
+                </div>
+                <div class="col-3">
                     <select name="sort" id="sort" class="form-select">
                         <option value="terlama" {{$request->input('sort') == 'terlama' ? 'selected': ''}}>Terlama</option>
                         <option value="terbaru" {{$request->input('sort') == 'terbaru' ? 'selected': ''}}>Terbaru</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <label for="pagination">Pagination</label>
                     <select name="pagination" id="pagination" class="form-select">
                         <option value="20" {{$request->input('pagination') == '20' ? 'selected': ''}}>20</option>
                         <option value="50" {{$request->input('pagination') == '50' ? 'selected': ''}}>50</option>

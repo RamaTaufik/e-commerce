@@ -157,26 +157,32 @@ Kelola Produk ● Plus-H ADMIN
         </li>
     </ul>
     <div class="container-fluid pt-2 border border-top-0">
-        
         <form action="{{ route('admin.product') }}">
             <div class="row">
                 <div class="col-3">
                     <label for="search">Filter</label>
-                    <input type="text" name="search" id="search" class="form-control" value="{{$request->input('search') ?? ''}}" placeholder="Cari nama">
                 </div>
                 <div class="col-3">
                     <label for="sort">Urutkan</label>
-                    <select name="sort" id="sort" class="form-select">
-                        <option value="terlama" {{$request->input('sort') == 'terlama' ? 'selected': ''}}>Terlama</option>
-                        <option value="terbaru" {{$request->input('sort') == 'terbaru' ? 'selected': ''}}>Terbaru</option>
-                    </select>
                 </div>
                 <div class="col-3">
                     <label for="pagination">Pagination</label>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <input type="text" name="search" id="search" class="form-control" value="{{$request->input('search') ?? ''}}" placeholder="Cari nama">
+                </div>
+                <div class="col-3">
                     <select name="pagination" id="pagination" class="form-select">
                         <option value="20" {{$request->input('pagination') == '20' ? 'selected': ''}}>20</option>
                         <option value="50" {{$request->input('pagination') == '50' ? 'selected': ''}}>50</option>
                         <option value="100" {{$request->input('pagination') == '100' ? 'selected': ''}}>100</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="sort" id="sort" class="form-select">
+                        <option value="terlama" {{$request->input('sort') == 'terlama' ? 'selected': ''}}>Terlama</option>
+                        <option value="terbaru" {{$request->input('sort') == 'terbaru' ? 'selected': ''}}>Terbaru</option>
                     </select>
                 </div>
                 <div class="col-3">
@@ -228,7 +234,7 @@ Kelola Produk ● Plus-H ADMIN
 @section('script')
 <script>
     var table = document.getElementById("productData");
-    
+
     const data_list = ["Kategori","Ukuran","Dimensi","Berat","Material","Harga","Stok","Warna"];
 
     function detail(product,variants,images) {
@@ -254,7 +260,7 @@ Kelola Produk ● Plus-H ADMIN
                 var col_separator = document.createElement("td");
                 var col_value = document.createElement("td");
                 col_separator.innerHTML = ":";
-                
+
                 col.innerHTML = data_list[i];
                 col_value.innerHTML = item;
                 row.append(col);

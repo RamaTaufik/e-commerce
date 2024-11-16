@@ -69,7 +69,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin') }}" class="nav-link h5  {{ $page == 'report' ? 'active' : ''; }}">
+                <a href="{{ route('admin.report') }}" class="nav-link h5  {{ $page == 'report' ? 'active' : ''; }}">
                     <strong><i class="fa-solid fa-database me-2"></i>Laporan</strong>
                 </a>
             </li>

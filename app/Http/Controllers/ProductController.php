@@ -46,15 +46,32 @@ class ProductController extends Controller
         return view('admin.product', compact(['product','category','request']));
     }
 
-    protected function archive()
+    protected function archive(Request $request)
     {
-        $product = Product::all()->where('status','draft');
+        $product = Product::where('status','draft');
+
+        if($request->input('search')) {
+            $product = $product->where('name', 'LIKE', '%'.$request->input('search').'%');
+        }
+
+        if($request->input('sort') == 'terbaru') {
+            $product = $product->orderBy('created_at', 'DESC');
+        } else {
+            $product = $product->orderBy('created_at');
+        }
+
+        if($request->input('pagination')) {
+            $product = $product->paginate($request->input('pagination'));
+        } else {
+            $product = $product->paginate('20');
+        }
+
         foreach($product as $p) {
             $p['category'] = $p->category()->pluck('name')->first();
             $p['total_variant'] = count($p->productVariant);
         }
 
-        return view('admin.product-archive', compact('product'));
+        return view('admin.product-archive', compact(['product','request']));
     }
 
     protected function publishing($id)
@@ -94,7 +111,7 @@ class ProductController extends Controller
             'material' => $request['material'],
             'status' => 'draft',
         ]);
-        
+
         $request['product_id'] = $product->id;
         $request['variation'] = 'Base';
 
@@ -113,7 +130,7 @@ class ProductController extends Controller
             $dir = 'image/products/'.$request->product_id.'-'.$serial.'/';
             if(!file_exists($dir) && !is_dir($dir)) {
                 mkdir($dir);
-            } 
+            }
             $image = $request->file('image');
             foreach($image as $img) {
                 $fileName = (count(scandir(public_path($dir)))-1).'.'.$img->getClientOriginalExtension();
@@ -133,7 +150,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $productVariant = $product->productVariant;
         $category = Category::all();
-        
+
         $product['total_stock'] = $productVariant->pluck('stock')->sum();
 
         return view('admin.product-edit', compact(['product','productVariant','category']));

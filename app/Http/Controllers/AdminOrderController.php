@@ -14,30 +14,62 @@ class AdminOrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::where('status','Processing')->get();
+        $orders = Order::where('status','Processing');
+
+        if($request->input('search')) {
+            $orders = $orders->where('name', 'LIKE', '%'.$request->input('search').'%');
+        }
+
+        if($request->input('from')) {
+            $orders = $orders->where('created_at', '>', $request->input('from'));
+        }
+
+        if($request->input('pagination')) {
+            $orders = $orders->paginate($request->input('pagination'));
+        } else {
+            $orders = $orders->paginate('20');
+        }
+
         $orderItems = [];
 
         foreach($orders as $order) {
             $orderItems[$order->order_code] = OrderItem::where('order_code',$order->order_code)->get();
         }
 
-        return view('admin.order', compact(['orders','orderItems']));
+        return view('admin.order', compact(['orders','orderItems','request']));
     }
 
-    public function shipment()
+    public function shipment(Request $request)
     {
         $orders = Order::where('status','!=','Processing')
                        ->where('status','!=','Cancelled')
                        ->where('status','!=','Returning')->get();
+
+                       $orders = Order::where('status','Processing');
+
+        if($request->input('search')) {
+            $orders = $orders->where('name', 'LIKE', '%'.$request->input('search').'%');
+        }
+
+        if($request->input('from')) {
+            $orders = $orders->where('created_at', '>', $request->input('from'));
+        }
+
+        if($request->input('pagination')) {
+            $orders = $orders->paginate($request->input('pagination'));
+        } else {
+            $orders = $orders->paginate('20');
+        }
+
         $orderItems = [];
 
         foreach($orders as $order) {
             $orderItems[$order->order_code] = OrderItem::where('order_code',$order->order_code)->get();
         }
 
-        return view('admin.order-shipment', compact('orders','orderItems'));
+        return view('admin.order-shipment', compact(['orders','orderItems','request']));
     }
 
     public function ship($code)

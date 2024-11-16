@@ -125,6 +125,9 @@ class HomeController extends Controller
                         'stock' => $product->stock - $item->qty,
                     ]);
                 }
+
+                $cart = [];
+                session()->put('cart', $cart);
             }
         }
     }

@@ -33,16 +33,23 @@ Verifikasi OTP
                 </div>
             </div>
         </div>
-        <h6 class="m-0 p-0 mb-3" id="timer">
-            Kode akan kadaluarsa dalam 
-            <span class="text-danger"></span>
-        </h6>
-        <h6 class="m-0 p-0 mb-3">
-            Tidak menerima kode? 
-            <span id="resend"></span>
-            <a id="resend-link" href="{{ route('otp.resend') }}" style="display:none" disabled>Kirim ulang</a>
-        </h6>
     </form>
+    <h6 class="m-0 p-0 mb-3" id="timer">
+        Kode akan kadaluarsa dalam
+        <span class="text-danger"></span>
+    </h6>
+    <h6 class="m-0 p-0 mb-3">
+        Tidak menerima kode?
+        <span id="resend"></span>
+        <form action="{{ route('otp.resend') }}" method="post">
+            @csrf
+            @method('POST')
+            <input name="email" type="hidden" value="{{$email}}">
+            <input id="uniqueId" name="uniqueId" type="hidden" value="{{$otp_req['uniqueId']}}">
+            <input type="hidden" name="ver_type" value="register.customer">
+            <button type="submit" id="resend-link" class="btn btn-link" style="display:none" disabled>Kirim ulang</button>
+        </form>
+    </h6>
 </div>
 @endsection
 

@@ -20,7 +20,40 @@ Kelola Produk ● Plus-H ADMIN
         </li>
     </ul>
     <div class="container-fluid pt-2 border border-top-0">
-        <button class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus"></i> Tambah</button>
+        <form action="{{ route('admin.product-archive') }}">
+            <div class="row">
+                <div class="col-3">
+                    <label for="search">Filter</label>
+                </div>
+                <div class="col-3">
+                    <label for="sort">Urutkan</label>
+                </div>
+                <div class="col-3">
+                    <label for="pagination">Pagination</label>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <input type="text" name="search" id="search" class="form-control" value="{{$request->input('search') ?? ''}}" placeholder="Cari nama">
+                </div>
+                <div class="col-3">
+                    <select name="pagination" id="pagination" class="form-select">
+                        <option value="20" {{$request->input('pagination') == '20' ? 'selected': ''}}>20</option>
+                        <option value="50" {{$request->input('pagination') == '50' ? 'selected': ''}}>50</option>
+                        <option value="100" {{$request->input('pagination') == '100' ? 'selected': ''}}>100</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="sort" id="sort" class="form-select">
+                        <option value="terlama" {{$request->input('sort') == 'terlama' ? 'selected': ''}}>Terlama</option>
+                        <option value="terbaru" {{$request->input('sort') == 'terbaru' ? 'selected': ''}}>Terbaru</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <button type="submit" class="btn btn-secondary">Cari</button>
+                    <button class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus"></i> Tambah</button>
+                </div>
+            </div>
+        </form>
         <table class="table">
             <thead class="align-middle">
                 <tr>

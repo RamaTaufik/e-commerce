@@ -35,7 +35,7 @@ class OrderController extends Controller
     public function checkOngkir(Request $request)
     {
         $total['weight'] = 0;
-        
+
         foreach($request->cart_item as $cartItem) {
             $variant = ProductVariant::find($cartItem);
             $total['weight'] += session('cart')[$cartItem]['qty']*$variant->weight_in_gram;
@@ -62,12 +62,12 @@ class OrderController extends Controller
         $customer = Customer::where('user_id',Auth::id())->first();
         $address = CustomerAddress::find($request['myAddress']);
         if($address == NULL) {
-            $request->validate([
-                'address_name' => ['required','string','unique:customer_addresses,address_name'],
-            ],[
-                'address_name' => 'Nama alamat tidak sesuai',
-                'address_name.unique' => 'Sudah ada alamat dengan nama tersebut',
-            ]);
+            // $request->validate([
+            //     'address_name' => ['required','string','unique:customer_addresses,address_name'],
+            // ],[
+            //     'address_name' => 'Nama alamat tidak sesuai',
+            //     'address_name.unique' => 'Sudah ada alamat dengan nama tersebut',
+            // ]);
 
             $address = CustomerAddress::create([
                 'customer_id' => $customer->id,
@@ -94,7 +94,7 @@ class OrderController extends Controller
             'payment_status' => 'Unpaid',
             'status' => 'processing',
         ]);
-        
+
         foreach($request->cart_item as $cartItem) {
             if(!OrderItem::where('order_code',$order->order_code)->where('product_variant_code',$cartItem)->exists()) {
                 $cart['items'][$cartItem] = OrderItem::create([

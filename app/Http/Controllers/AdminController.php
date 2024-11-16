@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class AdminController extends Controller
 {
@@ -14,5 +16,33 @@ class AdminController extends Controller
     public function index()
     {
         return view('admin.home');
+    }
+
+    public function report(Request $request)
+    {
+        $orders = Order::where('order_date', '>', "0000-00-00");
+        if($request->input('timespan') != 'all') {
+            $orders = Order::where('order_date', '>', date_sub(now(), date_interval_create_from_date_string($request->input('timespan').' days')));
+        }
+
+        $orderItems = OrderItem::whereIn('order_code', $orders->pluck('order_code'));
+        $statistics = [];
+
+        $statistics['net_sum'] = number_format($orders->sum('total_price'),0,'.',',');
+        $statistics['net_avg'] = number_format($orders->avg('total_price'),0,'.',',');
+        $statistics['done'] = $orders->count() - $orders->where('status', 'cancelled')->count();
+        $statistics['cancelled'] = $orders->where('status', 'cancelled')->count();
+        $statistics['total'] = $statistics['done'] + $statistics['cancelled'];
+        $statistics['qty_sum'] = number_format($orderItems->sum('qty'),0,'.',',');
+        $statistics['qty_avg'] = number_format($orderItems->avg('qty'),1,'.',',');
+
+        $statistics['100'] = [
+            'max' => '',
+            'total_qty' => '',
+            'qty' => '',
+            'total' => '',
+        ];
+
+        return view('admin.report', compact(['statistics','request']));
     }
 }

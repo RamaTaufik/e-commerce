@@ -31,7 +31,7 @@ Keranjang ● Plus-H
                         <tr style="height:5px"></tr>
                         <tr class="shadow align-middle">
                             <td class="px-3 rounded-start-4">
-                                <input type="checkbox" name="cart_item[]" id="{{$cartItem['code']}}" value="{{$cartItem['code']}}" onchange="check()">
+                                <input type="checkbox" name="cart_item[]" id="{{$cartItem['code']}}" value="{{$cartItem['code']}}" onchange="check(this,'{{$cart[$cartItem['code']]['name']}}',{{$cartItem['qty']}},{{$cart[$cartItem['code']]['price']}})">
                             </td>
                             <td class="border-start">
                                 <div class="d-flex align-items-center">
@@ -46,8 +46,8 @@ Keranjang ● Plus-H
                             </td>
                             <td class="border-start">
                                 <h6 class="m-0 p-0 text-center">
-                                    <a onclick="change('qty{{$loop->iteration}}',-1,'{{$cartItem['code']}}')" class="text-secondary"><i class="fa-solid fa-circle-minus"></i></a> 
-                                    <span id="qty{{$loop->iteration}}" class="qty">{{$cartItem['qty']}}</span> 
+                                    <a onclick="change('qty{{$loop->iteration}}',-1,'{{$cartItem['code']}}')" class="text-secondary"><i class="fa-solid fa-circle-minus"></i></a>
+                                    <span id="qty{{$loop->iteration}}" class="qty">{{$cartItem['qty']}}</span>
                                     <a onclick="change('qty{{$loop->iteration}}',1,'{{$cartItem['code']}}')" class="text-secondary"><i class="fa-solid fa-circle-plus"></i></a>
                                 </h6>
                                 <p class="m-0 p-0 text-center">Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</p>
@@ -69,14 +69,10 @@ Keranjang ● Plus-H
             </div>
             <div class="col-md-4">
                 <div class="card border-0 p-3 shadow position-sticky" style="top:120px;">
-                    @if(session()->has('cart'))
-                        @foreach (session('cart') as $cartItem)
-                        <div class="d-flex justify-content-between">
-                            <h6 class="text-truncate">{{$cart[$cartItem['code']]['name']}}</h6>
-                            <h6 class="text-secondary text-nowrap">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6>
-                        </div>
-                        @endforeach
-                    @endif
+                    <div id="sub_total">
+                        {{-- <h6 class="text-truncate">{{$cart[$cartItem['code']]['name']}}</h6>
+                        <h6 class="text-secondary text-nowrap">{{$cart[$cartItem['code']]['qty']}} x Rp{{number_format($cart[$cartItem['code']]['price'],0,'.',',')}}</h6> --}}
+                    </div>
                     @guest
                     <div>
                         <a href="{{ route('login') }}" class="w-100 btn btn-primary">Pesan</a>
@@ -84,7 +80,7 @@ Keranjang ● Plus-H
                     @else
                     <div>
                         {{-- <h4>Total</h4><h4 class="text-secondary">Rp{{number_format($total,0,'.',',')}}</h4> --}}
-                        <select name="myAddress" id="myAddress" class="form-select my-2" 
+                        <select name="myAddress" id="myAddress" class="form-select my-2"
                          onchange="changeAddress({{json_encode($myAddresses)}},{{json_encode($addresses)}})">
                             @if (count($myAddresses) > 0)
                             <option value="" hidden disabled selected> Pilih alamat pengiriman</option>
@@ -94,7 +90,7 @@ Keranjang ● Plus-H
                             @endif
                             <option value="new">Alamat Baru</option>
                         </select>
-                        <input type="text" name="address_name" id="address_name" class="form-control mb-2"" placeholder="'kantor', 'rumah', dll.">
+                        <input type="text" name="address_name" id="address_name" class="form-control mb-2" placeholder="'kantor', 'rumah', dll.">
                         <select  name="province_city" id="province_city" class="form-select mb-2">
                             <option value="" hidden selected disabled>Pilih Kabupaten/Kota</option>
                             @foreach ($addresses as $address)
@@ -114,9 +110,13 @@ Keranjang ● Plus-H
                             <option value="{{$shipment->id}}">{{strtoupper($shipment->shipment_name)}}</option>
                             @endforeach
                         </select>
-                        <select name="ongkir" id="ongkir" class="form-select mb-3">
+                        <select name="ongkir" id="ongkir" class="form-select mb-2">
                             <option value="" hidden disabled selected> Pilih Paket Pengiriman</option>
                         </select>
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5>Total :</h5>
+                            <span class="text-secondary" id="total_price"></span>
+                        </div>
                         <input type="submit" form="cart" formaction="{{ route('order.checkout') }}" class="w-100 btn btn-primary" value="Pesan" />
                     </div>
                     @endguest
@@ -151,15 +151,38 @@ Keranjang ● Plus-H
 <script>
     let cartItems = document.getElementsByName("cart_item[]");
     let allCheckbox = document.getElementById("all");
+    let total_price = 0;
 
-    function check() {
+    function check(element,product,qty,price) {
+        if(document.getElementById(element.id).checked == true) {
+            let main = document.getElementById("sub_total");
+            let sub = document.createElement("div");
+            let sub_product = document.createElement("span");
+            sub_product.innerHTML = product;
+            sub_product.classList.add("text_truncate");
+            let sub_qtyXprice = document.createElement("span");
+            sub_qtyXprice.innerHTML = qty + " x Rp" + price.toLocaleString();
+
+            sub.id = "sub-" + element.id;
+            sub.classList.add("w-100","d-flex","justify-content-between");
+            sub.appendChild(sub_product);
+            sub.appendChild(sub_qtyXprice);
+
+            main.appendChild(sub);
+            total_price += qty * price;
+        } else {
+            document.getElementById("sub-" + element.id).remove();
+            total_price -= qty * price;
+        }
+        document.getElementById("total_price").innerHTML = "Rp" + total_price.toLocaleString();
+
         for(let i = 0; i < cartItems.length; i++) {
             if(!cartItems[i].checked) {
                 allCheckbox.checked = false;
                 return;
             }
             allCheckbox.checked = true;
-        };
+        }
     }
 
     function checkAll() {
