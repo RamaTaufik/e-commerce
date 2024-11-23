@@ -90,7 +90,7 @@ Profil ● Plus-H
                         <select name="myAddress" id="myAddress" class="form-select my-2" 
                          onchange="changeAddress({{json_encode($myAddresses)}},{{json_encode($addresses)}})">
                             @if (count($myAddresses) > 0)
-                            <option value="" hidden disabled selected> Pilih alamat pengiriman</option>
+                            <option value="new" hidden disabled selected> Pilih alamat pengiriman</option>
                                 @foreach ($myAddresses as $myAddress)
                                 <option value="{{$myAddress->id}}">{{$myAddress->address_name}}</option>
                                 @endforeach

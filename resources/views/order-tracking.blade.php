@@ -9,16 +9,24 @@ Tracking Pesanan ● Plus-H
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <form action="{{ route('order.cancel') }}" method="post">
+                <form action="{{ route('order.cancel') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <p class="m-0 text-center fs-3">Yakin ingin membatalkan pesanan?</p>
+                    <p class="m-0 text-center fs-3" id="cancelTitle">Yakin ingin membatalkan pesanan?</p>
+                    <p class="m-0 p-0 text-center text-danger">
+                        Keputusan akhir penerimaan request pembatalan berada di tangan kami,
+                        dan kami bisa saja menolak request pembatalan jika tidak memungkinkan.
+                    </p>
                     <div class="my-3">
                         <label for="note">Beri tahu kami alasanmu</label>
-                        <input type="text" class="form-control" name="note" id="note" placeholder="'Saya berubah pikiran','Duit saya dimakan tikus'">
+                        <input type="text" class="form-control" name="note" id="note" placeholder="'Saya berubah pikiran','Duit saya dimakan tikus'" required>
+                    </div>
+                    <div class="my-3 d-none" id="returnImageProof">
+                        <label for="note">Bukti foto produk</label>
+                        <input type="file" class="form-control" name="returnImageProof">
                     </div>
                     <input type="hidden" name="order_code" id="cancelOrderCode">
                     <button type="submit" class="btn btn-danger w-100">Batalkan Pesanan</button>
@@ -82,7 +90,7 @@ Tracking Pesanan ● Plus-H
                             <div class="mt-4">
                             <h5 class="m-0 p-0">Riwayat Pengiriman</h5>
                                 <div class="border-start position-relative">
-                                    @if ($order->status != 'Processing')
+                                    @if (($order->status != 'Processing' && $order->status != 'Cancelled') || ($order->status == 'Cancelling' && !file_exists(asset('image/return_proof/'.$order->order_code.'/proof.png'))))
                                         @if ($order->status == 'Arrived' || $order->status == 'Confirmed')
                                         <div class="position-absolute mt-3 rounded-circle bg-dark-subtle start-0 translate-middle" style="width:10px;aspect-ratio:1/1;"></div>
                                         <p class="m-0 p-0 mt-1 ms-3 text-secondary">
@@ -129,7 +137,7 @@ Tracking Pesanan ● Plus-H
                             @else
                                 @if ($order->status == 'Arrived')
                                 <a href="#confirmModal" class="btn btn-success ms-auto" data-bs-toggle="modal" onclick="changeOrderStatus('confirm',{{json_encode($order->order_code)}})">Konfirmasi Sampai</a>
-                                <a href="#cancelModal" class="btn btn-danger ms-auto" data-bs-toggle="modal" onclick="changeOrderStatus('cancel',{{json_encode($order->order_code)}})">Batalkan Pesanan</a>
+                                <a href="#cancelModal" class="btn btn-danger ms-auto" data-bs-toggle="modal" onclick="changeOrderStatus('cancel',{{json_encode($order->order_code)}},{{json_encode($order->status)}})">Request Retur</a>
                                 @endif
                             @endif
                         </div>
@@ -151,8 +159,12 @@ Tracking Pesanan ● Plus-H
 
 @section('script')
 <script>
-    function changeOrderStatus(action,orderCode) {
+    function changeOrderStatus(action,orderCode,status = null) {
         document.getElementById(action + 'OrderCode').value = orderCode;
+        if(status == 'Arrived') {
+            document.getElementById('returnImageProof').classList.remove("d-none");
+            document.getElementById('cancelTitle').innerHTML = "Yakin ingin mengembalikan pesanan?";
+        }
     }
 </script>
 @endsection

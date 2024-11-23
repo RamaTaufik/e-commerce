@@ -15,13 +15,19 @@ class AdminController extends Controller
 
     public function index()
     {
-        return view('admin.home');
+        $card['processing'] = Order::where('status', 'Processing')->count();
+        $card['cancelling'] = Order::where('status', 'Cancelling')->count();
+        $card['this_month_omzet'] = number_format(Order::where('order_date', '>', date('Y-m-01'))->sum('total_price'));
+
+        return view('admin.home', compact(['card']));
     }
 
     public function report(Request $request)
     {
-        $orders = Order::where('order_date', '>', "0000-00-00");
-        if($request->input('timespan') != 'all') {
+        $orders = Order::where('order_date', '>', '0000-00-00');
+        if($request->input('timespan') == NULL) {
+            $orders = Order::where('order_date', '>', date_sub(now(), date_interval_create_from_date_string('7 days')));
+        } else if($request->input('timespan') != 'all') {
             $orders = Order::where('order_date', '>', date_sub(now(), date_interval_create_from_date_string($request->input('timespan').' days')));
         }
 

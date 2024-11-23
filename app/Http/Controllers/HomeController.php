@@ -45,7 +45,7 @@ class HomeController extends Controller
     {
         $filter['index'] = $request['index'];
         $filter['category'] = $request['category_code'];
-        $filter['minPrice'] = $request['minPrice'];
+        $filter['minPrice'] = $request['minPrice'] ?? 0;
         $filter['maxPrice'] = $request['maxPrice'];
         $product = Product::where('status', 'public')
                           ->where('name', 'LIKE', '%'.$filter['index'].'%');

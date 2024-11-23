@@ -50,7 +50,6 @@ Kelola Pesanan ● Plus-H ADMIN
                 </div>
                 <div class="col-3">
                     <button type="submit" class="btn btn-secondary">Cari</button>
-                    <button class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa-solid fa-plus"></i> Tambah</button>
                 </div>
             </div>
         </form>

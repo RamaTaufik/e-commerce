@@ -182,16 +182,20 @@ class OrderController extends Controller
     public function cancel(Request $request)
     {
         $order = order::find($request->order_code);
-        $status = 'Returning';
-
-        if($order->status == 'Processing') {
-            $status = 'Cancelled';
-        }
-
         $order->update([
-            'status' => $status,
+            'status' => 'Cancelling',
             'note' => $request->note,
         ]);
+
+        if($request->hasFile('returnImageProof')) {
+            $dir = 'image/return_proof/'.$request->order_code;
+            if(!file_exists($dir) && !is_dir($dir)) {
+                mkdir($dir);
+            } 
+            $image = $request->file('returnImageProof')->getPathName();
+            $fileName = 'proof.png';
+            rename($image, public_path($dir).'/'.$fileName);
+        }
 
         return back()->with('Pesanan berhasil dibatalkan');
     }

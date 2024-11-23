@@ -55,7 +55,7 @@ Route::get('/admin/order/shipment', [AdminOrderController::class, 'shipment'])->
 Route::get('/admin/order/ship/{id}', [AdminOrderController::class, 'ship'])->name('admin.order-ship');
 Route::get('/admin/order/arrived/{id}', [AdminOrderController::class, 'arrived'])->name('admin.order-arrived');
 Route::get('/admin/order/cancelled', [AdminOrderController::class, 'cancelled'])->name('admin.order-cancelled');
-Route::get('/admin/order/resend/{order}', [AdminOrderController::class, 'resend'])->name('admin.order-resend');
+Route::post('/admin/order/cancelConfirm/{order}', [AdminOrderController::class, 'confirmCancel'])->name('admin.order-cancel_confirm');
 Route::get('/admin/product', [ProductController::class, 'index'])->name('admin.product');
 Route::get('/admin/product/archive', [ProductController::class, 'archive'])->name('admin.product-archive');
 Route::get('/admin/product/archiving/{id}', [ProductController::class, 'archiving'])->name('admin.product-archiving');

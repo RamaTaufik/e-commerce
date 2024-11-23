@@ -45,6 +45,7 @@
     </div>
 
     <script src="{{ asset('script/fa.js') }}"></script>
+    <script src="{{ asset('script/bootstrap.bundle.min.js') }}"></script>
     @yield('script')
 </body>
 </html>
