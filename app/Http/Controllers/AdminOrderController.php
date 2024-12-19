@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
+use App\Models\Review;
 
 class AdminOrderController extends Controller
 {
@@ -139,15 +140,24 @@ class AdminOrderController extends Controller
         return redirect()->route('admin.order-shipment');
     }
 
-    public function reviews()
+    public function reviews(Request $request)
     {
-        $orders = Order::where('status','Processing')->get();
-        $orderItems = [];
+        // if($request->input('search')) {
+        //     $orders = $orders->where('name', 'LIKE', '%'.$request->input('search').'%');
+        // }
 
-        foreach($orders as $order) {
-            $orderItems[$order->order_code] = OrderItem::where('order_code',$order->order_code)->get();
+        if($request->input('from')) {
+            $reviews = Review::where('created_at', '>', $request->input('from'));
+        } else {
+            $reviews = Review::where('created_at', '>', '0000-00-00');
         }
 
-        return view('admin.order-reviews', compact(['orders','orderItems']));
+        if($request->input('pagination')) {
+            $reviews = $reviews->paginate($request->input('pagination'));
+        } else {
+            $reviews = $reviews->paginate('20');
+        }
+
+        return view('admin.order-reviews', compact(['reviews','request']));
     }
 }

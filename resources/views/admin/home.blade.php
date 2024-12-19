@@ -34,11 +34,28 @@ Dashboard ● Plus-H ADMIN
             </div>
         </div>
         <div class="col-12 mt-4">
+            <canvas id="favoriteChart" style="width:100%;"></canvas>
+            <script>
+                import Chart from 'chart.js/auto'
+
+                new Chart(document.getElementById("favoriteChart"), {
+                    type: "bar",
+                    data: {
+                        labels: ["italy","france"],
+                        datasets: [{
+                            backgroundColor: "#fdd411",
+                            data : [89,44],
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: "Statistik Barang Terfavorit",
+                        }
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
-@endsection
-
-@section('script')
-<script src="{{ asset('script/chart.js') }}"></script>
 @endsection

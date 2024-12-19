@@ -15,6 +15,9 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('style/style.css') }}">
+    
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> --}}
+    <script type="module" src="{{asset('script/chart.js')}}"></script>
 
     <style>
         body {

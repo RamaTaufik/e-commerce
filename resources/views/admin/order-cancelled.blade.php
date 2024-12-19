@@ -60,7 +60,7 @@ Pembatalan Pesanan ● Plus-H ADMIN
                 <tr>
                     <td>{{$order->order_code}}</td>
                     <td>
-                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#orderDetailModal" onclick="detail({{json_encode($orderItems[$order->order_code])}} @if(file_exists(asset('image/return_proof/'.$order->order_code.'/proof.png'))) , '{{ asset('image/return_proof/'.$order->order_code.'/proof.png') }}' @endif)">
+                        <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#orderDetailModal" onclick="detail({{json_encode($orderItems[$order->order_code])}} @if(1==1) , '{{ asset('image/return_proof/'.$order->order_code.'/proof.png') }}' @endif)">
                             Lihat detail <i class="fa-solid fa-eye"></i>
                         </button>
                     </td>

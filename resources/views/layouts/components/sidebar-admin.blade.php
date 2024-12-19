@@ -43,7 +43,7 @@
                     <a href="{{ route('admin.order-cancelled') }}" class="nav-link {{ $page == 'order.cancel' ? 'active' : ''; }}">Pembatalan Pesanan</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'order.review' ? 'active' : ''; }}">Ulasan Pembeli</a>
+                    <a href="{{ route('admin.order-reviews') }}" class="nav-link {{ $page == 'order.review' ? 'active' : ''; }}">Ulasan Pembeli</a>
                 </li>
             </div>
             <li class="nav-item">
@@ -60,7 +60,7 @@
                     <a href="{{ route('admin.product-archive') }}" class="nav-link {{ $page == 'product.archive' ? 'active' : ''; }}">Arsip Produk</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/statistic-selling" class="nav-link {{ $page == 'product.review' ? 'active' : ''; }}">Ulasan Produk</a>
+                    <a href="" class="nav-link {{ $page == 'product.review' ? 'active' : ''; }}">Ulasan Produk</a>
                 </li>
             </div>
             <li class="nav-item">
